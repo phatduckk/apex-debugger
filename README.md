@@ -12,12 +12,21 @@ A Chrome extension that adds a **live debug overlay** to the [Neptune Apex Fusio
 
 When you're editing an outlet program in Apex Fusion, the extension reads your Apex's live status and highlights every line:
 
-| Color | Meaning |
-|-------|---------|
-| 🟢 Green | This condition is **currently true** (firing) |
-| 🔴 Red | This condition is **currently false** (not firing) |
-| ⬜ Grey | This condition **can't be evaluated** (e.g. `Min Time`, `When`, `OSC`) |
-| _(no color)_ | Neutral statement (`Fallback`, `Set`, blank lines) |
+**Gutter** (line number column) — colored for every line:
+
+| Gutter color | Meaning |
+|---|---|
+| 🟢 Green | Condition is currently **true** |
+| 🔴 Red | Condition is currently **false** |
+| ⬜ Grey | Can't be evaluated (e.g. `Min Time`, `When`, `OSC`) |
+| _(no color)_ | Neutral statement (`Fallback`, `Set [profile]`, blank lines) |
+
+**Line background** — highlighted only for the single winning statement (last true condition):
+
+| Line color | Meaning |
+|---|---|
+| 🟢 Green background | Winning statement → outlet will be **ON** |
+| 🔴 Red background | Winning statement → outlet will be **OFF** |
 
 This makes it easy to understand your programs at a glance — especially complex multi-condition chains where the "last true statement wins" rule can be tricky to reason about.
 
