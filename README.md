@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="icons/icon128.png" width="128" alt="Apex Debugger icon">
+</p>
+
 # Apex Debugger
 
 A Chrome extension that adds a **live debug overlay** to the [Neptune Apex Fusion](https://apex.local) output configuration editor. Each line of your outlet programming is color-coded in real time based on live data from your Apex controller — so you can instantly see which conditions are firing and which aren't.
