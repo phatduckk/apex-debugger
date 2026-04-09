@@ -17,6 +17,8 @@ When you're editing an outlet program in Apex Fusion, the extension reads your A
 
 This makes it easy to understand your programs at a glance — especially complex multi-condition chains where the "last true statement wins" rule can be tricky to reason about.
 
+![Apex Debugger overlay showing color-coded outlet program lines](img/debugger-screenshot.png)
+
 ### Supported Statement Types
 
 The extension can evaluate:
@@ -53,8 +55,13 @@ You'll download the extension files from GitHub and load them manually into Chro
 2. In the address bar, type `chrome://extensions` and press Enter
 3. In the top-right corner of that page, turn on **Developer mode** (toggle switch)
 4. Click the **Load unpacked** button that appears
+
+   ![Chrome extensions page showing Developer mode toggle and Load unpacked button](img/chrome-extensions-header.png)
+
 5. Navigate to the `apex-debugger-main` folder you unzipped and select it
-6. The **Apex Debugger** extension will appear in your list — you're done!
+6. The **Apex Debugger** extension will appear in your list — click **Enable** if it isn't already active
+
+   ![Apex Debugger extension card with Enable button](img/enable-extension.png)
 
 > **Note:** The extension only runs while it's loaded here. Don't delete the folder after installing or Chrome will lose track of it.
 
@@ -68,10 +75,17 @@ The extension needs to know the address of your Apex controller on your local ne
 
 1. In Chrome, click the **puzzle piece icon** (🧩) in the top-right toolbar to open your extensions list
 2. Find **Apex Debugger** and click the **three-dot menu** (⋮) next to it
-3. Click **Options** — a small settings panel will appear
-4. In the **Apex Hostname** field, enter your controller's hostname or IP address:
+3. Click **Options**
+
+   ![Chrome extension menu showing the Options item](img/goto-extension-options.png)
+
+4. A small settings panel will appear — in the **Apex Hostname** field, enter your controller's hostname or IP address:
+
+   ![Apex Debugger options panel with hostname field](img/option-modal.png)
+
    - Most users: `apex.local`
    - If you know your controller's IP: e.g. `192.168.1.50`
+
 5. Click **Save** (or press Enter)
 
 You can find your Apex's IP address in your router's admin panel, or in the Fusion app under **System → Network**.
