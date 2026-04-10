@@ -719,9 +719,9 @@
     const right = document.getElementById('apex-probe-right');
     if (!right) return;
     right.innerHTML = prog.split('\n')
-      .filter(line => !/^tdata\b/i.test(line.trim()))
-      .map((line, i) => {
-        const n = i + 1;
+      .map((line, i) => ({ line, n: i + 1 }))
+      .filter(({ line }) => !/^tdata\b/i.test(line.trim()))
+      .map(({ line, n }) => {
         const cls = 'apex-prog-line' + (n === matchLineNum ? ' match' : '');
         return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name)}</span>`;
       }).join('');
@@ -907,7 +907,7 @@
       el.insertAdjacentElement('beforebegin', icon);
     });
     document.querySelectorAll('.dash-switch-config').forEach(el => {
-      if (el.previousElementSibling?.classList.contains('apex-dash-icon')) return;
+      if (el.firstElementChild?.classList.contains('apex-dash-icon')) return;
       const icon = makeIcon();
       icon.style.cursor = 'pointer';
       icon.addEventListener('click', e => {
@@ -915,18 +915,18 @@
         const name = el.closest('.dash-switch')?.querySelector('.dash-switch-name')?.innerHTML ?? '';
         openProbePanel(name);
       });
-      el.insertAdjacentElement('beforebegin', icon);
+      el.insertAdjacentElement('afterbegin', icon);
     });
     document.querySelectorAll('.dash-probe-info-config').forEach(el => {
-      if (el.firstElementChild?.classList.contains('apex-dash-icon')) return;
+      if (el.querySelector('.apex-dash-icon')) return;
       const icon = makeIcon();
-      icon.style.cursor = 'pointer';
+      icon.style.cssText += ';position:absolute;left:0;top:50%;transform:translateY(-50%);margin:0;cursor:pointer;';
       icon.addEventListener('click', e => {
         e.stopPropagation();
         const name = el.closest('.dash-probe')?.querySelector('.dash-probe-info-name')?.innerHTML ?? '';
         openProbePanel(name);
       });
-      el.insertAdjacentElement('afterbegin', icon);
+      el.appendChild(icon);
     });
   }
 
