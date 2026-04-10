@@ -65,6 +65,25 @@
       margin-bottom: 12px;
       margin-top: -8px;
     }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: #e07820;
+      cursor: pointer;
+      margin: 0;
+    }
+    .checkbox-row label {
+      margin: 0;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -72,6 +91,10 @@
   <label for="hostname">Apex Hostname</label>
   <input type="text" id="hostname" placeholder="apex.local" spellcheck="false">
   <p class="hint">The hostname or IP address of your Apex controller (e.g. apex.local or 192.168.1.50)</p>
+  <div class="checkbox-row">
+    <input type="checkbox" id="beefMode">
+    <label for="beefMode">Beef Mode</label>
+  </div>
   <button id="save">Save</button>
   <p id="status"></p>
   <script src="options.js"></script>
