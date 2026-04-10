@@ -10,7 +10,8 @@
   let lastCtx    = null;
   let lastSeason = null;
   let editorObserver = null;
-  let helpOpen = false;
+  let helpOpen  = false;
+  let probeOpen = false;
   let lastUrl    = location.href;
 
   const HELP_MIN_H   = 160;
@@ -469,17 +470,29 @@
       }
       #apex-help-close:hover { color: #fff; }
       #apex-help-body { overflow-y: auto; flex: 1; padding: 10px 16px 16px; background: #f5f5f5; }
-      #apex-help-body h3 {
+      #apex-probe-body { display: flex; flex: 1; overflow: hidden; background: #f5f5f5; }
+      #apex-probe-left { overflow-y: auto; padding: 10px 16px 16px; width: 40%; flex-shrink: 0; }
+      #apex-probe-divider { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
+      #apex-probe-divider:hover, #apex-probe-divider.dragging { background: #aaa; }
+      #apex-probe-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #fff; font-family: monospace; font-size: 12px; line-height: 1.7; }
+      #apex-probe-right p { color: #bbb; margin: 0; font-family: system-ui, sans-serif; }
+      .apex-probe-row { cursor: pointer; }
+      .apex-probe-row:hover td { background: rgba(0,119,204,0.06) !important; }
+      .apex-probe-row.active td { background: rgba(0,119,204,0.13) !important; }
+      #apex-probe-left th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: #999; font-weight: 700; padding: 0 10px 6px 0; border-bottom: 1px solid #ddd; }
+      .apex-prog-line { display: block; padding: 1px 4px; border-radius: 2px; white-space: pre; }
+      .apex-prog-line.match { background: rgba(224,120,32,0.15); }
+      #apex-help-body h3, #apex-probe-body h3 {
         color: #e07820; margin: 14px 0 5px; font-size: 11px;
         text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
         border-bottom: 1px solid #ddd; padding-bottom: 3px;
       }
-      #apex-help-body h3:first-child { margin-top: 0; }
-      #apex-help-body table { border-collapse: collapse; width: 100%; margin-bottom: 4px; }
-      #apex-help-body td { padding: 3px 10px 3px 0; vertical-align: top; line-height: 1.45; color: #333; }
-      #apex-help-body td:first-child { white-space: nowrap; font-family: monospace; font-size: 12px; color: #2a6496; padding-right: 16px; }
-      #apex-help-body tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
-      #apex-help-body td code { font-family: monospace; color: #c0392b; }
+      #apex-help-body h3:first-child, #apex-probe-body h3:first-child { margin-top: 0; }
+      #apex-help-body table, #apex-probe-body table { border-collapse: collapse; width: 100%; margin-bottom: 4px; }
+      #apex-help-body td, #apex-probe-body td { padding: 3px 10px 3px 0; vertical-align: top; line-height: 1.45; color: #333; }
+      #apex-help-body td:first-child, #apex-probe-body td:first-child { white-space: nowrap; font-family: monospace; font-size: 12px; color: #2a6496; padding-right: 16px; }
+      #apex-help-body tr:nth-child(even) td, #apex-probe-body tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+      #apex-help-body td code, #apex-probe-body td code { font-family: monospace; color: #c0392b; }
       #apex-gutter-tip {
         position: fixed; z-index: 999998; pointer-events: none; display: none;
         background: #222; color: #eee;
@@ -493,6 +506,39 @@
         border-radius: 2px; vertical-align: middle; margin-right: 5px;
         border: 1px solid rgba(0,0,0,0.15);
       }
+      #apex-probe-panel {
+        position: fixed; bottom: 0; left: 0; right: 0;
+        height: ${HELP_DEF_H}px;
+        background: #fff; color: #333;
+        font-family: system-ui, sans-serif; font-size: 13px;
+        z-index: 999999;
+        display: flex; flex-direction: column;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.18);
+        transform: translateY(100%);
+        transition: transform 0.2s ease;
+        border-top: 2px solid #d0d0d0;
+      }
+      #apex-probe-panel.open { transform: translateY(0); }
+      #apex-probe-handle {
+        height: 8px; background: #e8e8e8; cursor: ns-resize;
+        flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      }
+      #apex-probe-handle:hover { background: #ddd; }
+      #apex-probe-handle::after {
+        content: ''; width: 36px; height: 3px;
+        background: #bbb; border-radius: 2px;
+      }
+      #apex-probe-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 6px 14px; background: #222; flex-shrink: 0;
+      }
+      #apex-probe-header span { display: flex; align-items: center; gap: 7px; font-weight: 400; font-size: 14px; color: #9a9a9a; letter-spacing: normal; text-transform: none; }
+      #apex-probe-close {
+        background: none; border: none; color: #888;
+        font-size: 18px; cursor: pointer; padding: 0 2px; line-height: 1;
+      }
+      #apex-probe-close:hover { color: #fff; }
+      #apex-probe-body { overflow-y: auto; flex: 1; padding: 10px 16px 16px; background: #f5f5f5; }
       #apex-debug-toggle, #apex-debug-help {
         background-color: rgba(71,73,73,0.65) !important;
         border-color: rgba(71,73,73,0.65) !important;
@@ -570,7 +616,7 @@
       '<div id="apex-help-body">' + HELP_CONTENT + '</div>';
     document.body.appendChild(panel);
     document.getElementById('apex-help-close').addEventListener('click', closeHelpPanel);
-    document.getElementById('apex-help-handle').addEventListener('mousedown', startPanelResize);
+    document.getElementById('apex-help-handle').addEventListener('mousedown', makePanelResizer(panel));
   }
 
   function openHelpPanel() {
@@ -591,21 +637,175 @@
     helpOpen ? closeHelpPanel() : openHelpPanel();
   }
 
-  function startPanelResize(e) {
-    e.preventDefault();
-    const panel = document.getElementById('apex-help-panel');
-    panel.style.transition = 'none';
-    function onMove(ev) {
-      const h = Math.min(Math.max(window.innerHeight - ev.clientY, HELP_MIN_H), HELP_MAX_H());
-      panel.style.height = h + 'px';
+  // ── Probe panel ─────────────────────────────────────────────────────────────
+
+  function injectProbePanel() {
+    if (document.getElementById('apex-probe-panel')) return;
+    const panel = document.createElement('div');
+    panel.id = 'apex-probe-panel';
+    panel.innerHTML =
+      '<div id="apex-probe-handle"></div>' +
+      '<div id="apex-probe-header"><span id="apex-probe-title"></span><button id="apex-probe-close" title="Close">\u00d7</button></div>' +
+      '<div id="apex-probe-body"></div>';
+    document.body.appendChild(panel);
+    document.getElementById('apex-probe-close').addEventListener('click', closeProbePanel);
+    document.getElementById('apex-probe-handle').addEventListener('mousedown', makePanelResizer(panel));
+  }
+
+  async function fetchProbeUsages(name) {
+    try {
+      const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
+      const json = await r.json();
+      const rows = [];
+      const needle = name.toLowerCase();
+      console.log('[apex-debug] fetchProbeUsages: looking for', JSON.stringify(name), 'in', (json.oconf || []).length, 'oconf items');
+      for (const item of (json.oconf || [])) {
+        const lines = (item.prog || '').split('\n');
+        console.log(`[apex-debug] output "${item.name}" — ${lines.length} lines`);
+        lines.forEach((line, i) => {
+          if (/^tdata\b/i.test(line.trim())) return;
+          const match = line.toLowerCase().includes(needle);
+          console.log(`  [${match ? 'MATCH' : '    -'}] ${i + 1}: ${line}`);
+          if (match) {
+            rows.push({ output: item.name, did: item.did, lineNum: i + 1, line: line.trim(), prog: item.prog || '' });
+          }
+        });
+      }
+      return rows;
+    } catch (_) {
+      return [];
     }
-    function onUp() {
-      panel.style.transition = '';
-      document.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseup', onUp);
+  }
+
+  function esc(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function highlightLine(raw, probeName) {
+    const escapedProbe = probeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp([
+      `(?<probe>${escapedProbe})`,
+      `(?<kw>\\b(?:If|Then|Set|Fallback|OSC|Defer|Min\\s+Time|When)\\b)`,
+      `(?<on>\\bON\\b)`,
+      `(?<off>\\bOFF\\b)`,
+      `(?<type>\\b(?:Output|Outlet|Input|Time|DOW|Sun|Moon|Error|FeedA|FeedB|FeedC|FeedD|Power|Apex|EB|Percent)\\b)`,
+      `(?<rt>RT\\+[-\\d.]*)`,
+      `(?<op>\\b(?:OPEN|CLOSED|to)\\b|[><]=?)`,
+      `(?<time>\\d{1,2}:\\d{2}(?::\\d{2})?)`,
+      `(?<num>\\d+\\.?\\d*)`,
+    ].join('|'), 'gi');
+    const styles = {
+      probe: 'color:#e07820;font-weight:700',
+      kw:    'color:#0077cc;font-weight:500',
+      on:    'color:#27ae60;font-weight:600',
+      off:   'color:#e74c3c;font-weight:600',
+      type:  'color:#7e57c2',
+      rt:    'color:#e07820',
+      op:    'color:#999',
+      time:  'color:#16a085',
+      num:   'color:#16a085',
+    };
+    let out = '', last = 0, m;
+    while ((m = re.exec(raw)) !== null) {
+      out += esc(raw.slice(last, m.index));
+      last = re.lastIndex;
+      const type = Object.keys(m.groups).find(k => m.groups[k] !== undefined);
+      out += `<span style="${styles[type]}">${esc(m[0])}</span>`;
     }
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', onUp);
+    return out + esc(raw.slice(last));
+  }
+
+  function renderProbePreview(prog, matchLineNum, name) {
+    const right = document.getElementById('apex-probe-right');
+    if (!right) return;
+    right.innerHTML = prog.split('\n')
+      .filter(line => !/^tdata\b/i.test(line.trim()))
+      .map((line, i) => {
+        const n = i + 1;
+        const cls = 'apex-prog-line' + (n === matchLineNum ? ' match' : '');
+        return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name)}</span>`;
+      }).join('');
+    right.querySelector('.match')?.scrollIntoView({ block: 'center' });
+  }
+
+  function openProbePanel(name) {
+    injectProbePanel();
+    document.getElementById('apex-probe-title').textContent = name;
+    const body = document.getElementById('apex-probe-body');
+    body.innerHTML = '<div id="apex-probe-left"><p style="color:#888;margin:0">Loading\u2026</p></div><div id="apex-probe-divider"></div><div id="apex-probe-right"><p>Click a row to preview</p></div>';
+    document.getElementById('apex-probe-divider').addEventListener('mousedown', e => {
+      e.preventDefault();
+      const divider = e.currentTarget;
+      const left = document.getElementById('apex-probe-left');
+      const panel = document.getElementById('apex-probe-body');
+      divider.classList.add('dragging');
+      function onMove(ev) {
+        const panelRect = panel.getBoundingClientRect();
+        const newW = Math.min(Math.max(ev.clientX - panelRect.left, 150), panelRect.width - 150);
+        left.style.width = newW + 'px';
+      }
+      function onUp() {
+        divider.classList.remove('dragging');
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+    requestAnimationFrame(() => document.getElementById('apex-probe-panel').classList.add('open'));
+    probeOpen = true;
+    fetchProbeUsages(name).then(rows => {
+      const left = document.getElementById('apex-probe-left');
+      if (!left) return;
+      if (!rows.length) {
+        left.innerHTML = '<p style="color:#888;margin:0">No references found.</p>';
+        return;
+      }
+      left.innerHTML =
+        '<table>' +
+        '<thead><tr><th>Output</th><th>#</th><th>Code</th></tr></thead>' +
+        '<tbody>' +
+        rows.map((r, i) =>
+          `<tr class="apex-probe-row" data-i="${i}">` +
+          `<td><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank">${esc(r.output)}</a></td>` +
+          `<td style="color:#bbb;text-align:right;padding-right:12px">${r.lineNum}</td>` +
+          `<td><code>${highlightLine(r.line, name)}</code></td>` +
+          `</tr>`
+        ).join('') +
+        '</tbody></table>';
+      left.querySelectorAll('.apex-probe-row').forEach(tr => {
+        tr.addEventListener('click', () => {
+          left.querySelectorAll('.apex-probe-row').forEach(r => r.classList.remove('active'));
+          tr.classList.add('active');
+          const r = rows[+tr.dataset.i];
+          renderProbePreview(r.prog, r.lineNum, name);
+        });
+      });
+    });
+  }
+
+  function closeProbePanel() {
+    const panel = document.getElementById('apex-probe-panel');
+    if (panel) panel.classList.remove('open');
+    probeOpen = false;
+  }
+
+  function makePanelResizer(panel) {
+    return function(e) {
+      e.preventDefault();
+      panel.style.transition = 'none';
+      function onMove(ev) {
+        const h = Math.min(Math.max(window.innerHeight - ev.clientY, HELP_MIN_H), HELP_MAX_H());
+        panel.style.height = h + 'px';
+      }
+      function onUp() {
+        panel.style.transition = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    };
   }
 
   // ── Toggle ─────────────────────────────────────────────────────────────────
@@ -682,6 +882,36 @@
     updateButtonVisibility();
   }
 
+  // ── Dashboard icons ────────────────────────────────────────────────────────
+
+  const DASH_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor"><path d="M29.83,20l.34-2L25,17.15V13c0-.08,0-.15,0-.23l5.06-1.36-.51-1.93-4.83,1.29A9,9,0,0,0,20,5V2H18V4.23a8.81,8.81,0,0,0-4,0V2H12V5a9,9,0,0,0-4.71,5.82L2.46,9.48,2,11.41,7,12.77c0,.08,0,.15,0,.23v4.15L1.84,18l.32,2L7,19.18a8.9,8.9,0,0,0,.82,3.57L3.29,27.29l1.42,1.42,4.19-4.2a9,9,0,0,0,14.2,0l4.19,4.2,1.42-1.42-4.54-4.54A8.9,8.9,0,0,0,25,19.18ZM15,25.92A7,7,0,0,1,9,19V13h6ZM9.29,11a7,7,0,0,1,13.42,0ZM23,19a7,7,0,0,1-6,6.92V13h6Z"/></svg>';
+
+  function injectDashIcons() {
+    if (!location.pathname.startsWith('/apex/dash')) return;
+    function makeIcon() {
+      const icon = document.createElement('span');
+      icon.className = 'apex-dash-icon';
+      icon.style.cssText = 'display:inline-flex;align-items:center;vertical-align:middle;color:rgb(153,153,153);margin-right:4px;cursor:default;';
+      icon.innerHTML = DASH_ICON_SVG;
+      return icon;
+    }
+    document.querySelectorAll('.dash-selector-config').forEach(el => {
+      if (el.previousElementSibling?.classList.contains('apex-dash-icon')) return;
+      const icon = makeIcon();
+      icon.style.cursor = 'pointer';
+      icon.addEventListener('click', e => {
+        e.stopPropagation();
+        const name = el.closest('.dash-selector')?.querySelector('.dash-selector-name')?.innerHTML ?? '';
+        openProbePanel(name);
+      });
+      el.insertAdjacentElement('beforebegin', icon);
+    });
+    document.querySelectorAll('.dash-probe-info-config').forEach(el => {
+      if (el.firstElementChild?.classList.contains('apex-dash-icon')) return;
+      el.insertAdjacentElement('afterbegin', makeIcon());
+    });
+  }
+
   // ── Navigation reset ───────────────────────────────────────────────────────
 
   function onNavigate() {
@@ -700,9 +930,10 @@
     injectStyles();
     initGutterTooltip();
 
-    const observer = new MutationObserver(injectButton);
+    const observer = new MutationObserver(() => { injectButton(); injectDashIcons(); });
     observer.observe(document.body, { childList: true, subtree: true });
 
     injectButton();
+    injectDashIcons();
   });
 })();

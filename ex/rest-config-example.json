@@ -1,119 +1,3184 @@
-{"oconf":[{"name":"WE-0to10","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"variable","did":"base_Var1","gid":"","gtype":"0","ID":"0","prog":"Set 0\nIf FeedA 035 Then 0\nIf FeedA 025 Then 0\nIf FeedA 000 Then 30\nIf FeedC 000 Then 20\n","extra":{}
-},{"name":"VarSpd2_I2","icon":"Left/Right Arrows","ctype":"Always","log":false,"inuse":true,"type":"variable","did":"base_Var2","gid":"","gtype":"0","ID":"1","prog":"Fallback OFF \nSet OFF \n","extra":{}
-},{"name":"VarSpd3_I3","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"variable","did":"base_Var3","gid":"","gtype":"0","ID":"2","prog":"Set CorStandard\n","extra":{}
-},{"name":"SkimmerPump","icon":"Spigot","ctype":"Advanced","log":false,"inuse":true,"type":"variable","did":"base_Var4","gid":"","gtype":"0","ID":"3","prog":"Fallback OFF \ntdata 00:00:00,0,0,62,0,0,0,0,0,0,0,0,0,0\nIf FeedA 035 Then SkimmerVLow\n","extra":{}
-},{"name":"SndAlm_I6","icon":"Sound B","ctype":"Advanced","log":false,"inuse":true,"type":"alert","did":"base_Alarm","gid":"","gtype":"0","ID":"4","prog":"Set OFF \n","extra":{}
-},{"name":"SndWrn_I7","icon":"Sound A","ctype":"Advanced","log":false,"inuse":true,"type":"alert","did":"base_Warn","gid":"","gtype":"0","ID":"5","prog":"Set OFF \n","extra":{}
-},{"name":"Main_Alarm","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"alert","did":"base_email","gid":"","gtype":"0","ID":"6","prog":"Set OFF \nIf Output Skimmer_full = ON Then ON \nIf Error NSW_Pump Then ON \nIf Output ATK_Lo_Alarm = ON Then ON \nIf Output DDR_Low = ON Then ON \nIf pH > 8.60 Then ON \nIf pH < 7.70 Then ON \nIf Temp > 81.9 Then ON \nIf Temp < 75.5 Then ON \nIf Salt > 36.6 Then ON \nIf Salt < 21.0 Then ON \nIf Ext_Lo OPEN Then ON \nIf Output ATO_EMPTY = ON Then ON \nIf ATOLOW OPEN Then ON \nIf Output SumpAlarm = ON Then ON \nIf Error Return_UV Then ON \nIf Error Return_Etc Then ON \nIf Error FRAG_ATO_PMP Then ON \nIf ATO_LL > 13.4 Then ON \nIf Output RES_BAD = ON Then ON \nIf Error Apex Then ON \n","extra":{}
-},{"name":"Inkbird","icon":"Thermometer","ctype":"Heater","log":true,"inuse":true,"type":"outlet","did":"9_1","gid":"","gtype":"0","ID":"8","prog":"Fallback ON \nIf Temp < 77.5 Then ON \nIf Temp > 80.0 Then OFF \n","extra":{}
-},{"name":"Reactor","icon":"Spigot","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"9_2","gid":"","gtype":"0","ID":"9","prog":"Fallback ON \nSet ON \nIf PO4 < 0.07 Then Pump_60_30\nIf PO4 < 0.04 Then Pump_60_60\nIf PO4 < 0.02 Then Pump_05_55\nIf PO4 = 0.00 Then OFF \n","extra":{}
-},{"name":"Fan","icon":"Fan","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"9_3","gid":"","gtype":"0","ID":"10","prog":"Fallback OFF \nSet OFF \nIf Temp > 78.5 Then ON \nIf pH > 8.50 Then OFF \nDefer 000:02 Then ON \nDefer 000:10 Then OFF \n","extra":{}
-},{"name":"Tunze_ATO","icon":"Spigot","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"9_4","gid":"","gtype":"0","ID":"11","prog":"Fallback ON \nSet ON \nIf Ret_hi CLOSED Then OFF \nIf Rtn_lv > 8.6 Then OFF \nMin Time 005:00 Then ON \n","extra":{}
-},{"name":"UV","icon":"Light B","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"9_5","gid":"","gtype":"0","ID":"12","prog":"Fallback OFF \nSet ON \nIf Output Return_UV = OFF Then OFF \nIf Output Return_UV Percent < 37 Then OFF \nIf Error Return_UV Then OFF \nDefer 010:00 Then ON \n","extra":{}
-},{"name":"ReefMat","icon":"Spigot","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"9_6","gid":"","gtype":"0","ID":"13","prog":"Fallback ON \nSet ON \n","extra":{}
-},{"name":"Sump_Flow","icon":"Fan","ctype":"Always","log":true,"inuse":true,"type":"outlet","did":"9_7","gid":"","gtype":"0","ID":"14","prog":"Fallback ON \nSet ON \n","extra":{}
-},{"name":"Stand_Light","icon":"Light B","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"9_8","gid":"","gtype":"0","ID":"15","prog":"Fallback OFF \nSet OFF \nIf DoorSw OPEN Then ON \nDefer 000:05 Then OFF \n","extra":{}
-},{"name":"top_dc24","icon":"Up/Down Arrows","ctype":"Always","log":true,"inuse":true,"type":"24v","did":"9_9","gid":"","gtype":"0","ID":"16","prog":"Fallback ON \nSet ON \n","extra":{}
-},{"name":"LinkB_9_10","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"24v","did":"9_10","gid":"","gtype":"0","ID":"17","prog":"Set OFF \n","extra":{}
-},{"name":"AWC_ADD","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"dqd","did":"3_1","gid":"doserqd_3","gtype":"0","ID":"18","prog":"Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n","extra":{}
-},{"name":"Return_Etc","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"cor|20","did":"11_1","gid":"","gtype":"0","ID":"19","prog":"Fallback OFF \ntdata 00:00:00,0,0,50,0,0,0,0,0,0,0,0,0,0\n","extra":{"max":100,"min":10,"calState":0}
-},{"name":"WaveEngine","icon":"Fan","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"4_1","gid":"","gtype":"0","ID":"20","prog":"Fallback ON \nSet ON \nIf Output Return_UV Percent < 40 Then OFF \nIf Time 21:00 to 10:29 Then OFF \nIf pH > 8.60 Then OFF \n","extra":{}
-},{"name":"Bottom2","icon":"Fan","ctype":"Always","log":false,"inuse":true,"type":"outlet","did":"4_2","gid":"","gtype":"0","ID":"21","prog":"Fallback OFF \nSet OFF \n","extra":{}
-},{"name":"RetPump_4_3","icon":"Up/Down Arrows","ctype":"Return Pump","log":true,"inuse":true,"type":"outlet","did":"4_3","gid":"","gtype":"0","ID":"22","prog":"Fallback ON \nSet ON \nIf FeedA 000 Then OFF \n","extra":{}
-},{"name":"Heater_4_4","icon":"Thermometer","ctype":"Heater","log":true,"inuse":true,"type":"outlet","did":"4_4","gid":"","gtype":"0","ID":"23","prog":"Fallback OFF \nIf Temp < 78.0 Then ON \nIf Temp > 79.0 Then OFF \n","extra":{}
-},{"name":"Skimmer_4_5","icon":"Left/Right Arrows","ctype":"Skimmer","log":true,"inuse":true,"type":"outlet","did":"4_5","gid":"","gtype":"0","ID":"24","prog":"Fallback OFF \nSet ON \nIf FeedA 000 Then OFF \nDefer 005:00 Then ON \n","extra":{}
-},{"name":"Pump_4_6","icon":"Spigot","ctype":"Always","log":true,"inuse":true,"type":"outlet","did":"4_6","gid":"","gtype":"0","ID":"25","prog":"Fallback ON \nSet ON \n","extra":{}
-},{"name":"Axis","icon":"Left/Right Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"4_7","gid":"","gtype":"0","ID":"26","prog":"Fallback ON \nSet ON \n","extra":{}
-},{"name":"Skimmer","icon":"Hourglass","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"4_8","gid":"","gtype":"0","ID":"27","prog":"Fallback ON \nSet ON \nIf Output RunSkimmer = OFF Then OFF \nIf SkimSW OPEN Then OFF \nDefer 000:01 Then ON \n","extra":{}
-},{"name":"LinkA_4_9","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"24v","did":"4_9","gid":"","gtype":"0","ID":"28","prog":"Set OFF \n","extra":{}
-},{"name":"LinkB_4_10","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"24v","did":"4_10","gid":"","gtype":"0","ID":"29","prog":"Set OFF \n","extra":{}
-},{"name":"Return_UV","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"cor|20","did":"5_1","gid":"","gtype":"0","ID":"30","prog":"Fallback OFF \ntdata 23:59:00,0,0,55,0,0,0,0,0,0,0,0,0,0\n","extra":{"max":100,"min":10,"calState":0}
-},{"name":"Vortech3","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"MXMPump|Ecotech|Vortech","did":"20_1","gid":"0","gtype":"0","ID":"31","prog":"Fallback OFF \ntdata 00:00:00,0,0,100,11,2,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf FeedB 000 Then FeedSlow\nIf Output AllVortechs = OFF Then OFF \n","extra":{"temperature":false,"gph":{"min":0.0,"max":100.0},"modes":[{"id":1,"name":"Reef"},{"id":0,"name":"Constant"},{"id":2,"name":"Lagoon"},{"id":3,"name":"Pulse"},{"id":7,"name":"Tidal"},{"id":8,"name":"Nutrient"},{"id":10,"name":"Sync"},{"id":11,"name":"AntiSync"}]}
-},{"name":"Vortech2","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"MXMPump|Ecotech|Vortech","did":"20_2","gid":"0","gtype":"0","ID":"32","prog":"Fallback OFF \ntdata 00:00:00,0,0,38,8,0,0,0,0,0,0,0,0,0\ntdata 08:00:00,0,0,53,1,0,0,0,0,0,0,0,0,0\ntdata 12:30:00,0,0,50,7,0,0,0,0,0,0,0,0,0\ntdata 16:45:00,0,0,60,1,0,0,0,0,0,0,0,0,0\ntdata 21:00:00,0,0,50,1,0,0,0,0,0,0,0,0,0\ntdata 22:00:00,0,0,40,8,0,0,0,0,0,0,0,0,0\ntdata 23:55:00,0,0,40,8,0,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedOff\nIf FeedB 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf Output AllVortechs = OFF Then OFF \n","extra":{"temperature":false,"gph":{"min":0.0,"max":100.0},"modes":[{"id":1,"name":"Reef"},{"id":0,"name":"Constant"},{"id":2,"name":"Lagoon"},{"id":3,"name":"Pulse"},{"id":7,"name":"Tidal"},{"id":8,"name":"Nutrient"},{"id":10,"name":"Sync"},{"id":11,"name":"AntiSync"}]}
-},{"name":"Vortech1","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"MXMPump|Ecotech|Vortech","did":"20_3","gid":"0","gtype":"0","ID":"33","prog":"Fallback OFF \ntdata 00:00:00,0,0,38,8,0,0,0,0,0,0,0,0,0\ntdata 08:00:00,0,0,53,1,0,0,0,0,0,0,0,0,0\ntdata 12:30:00,0,0,50,7,0,0,0,0,0,0,0,0,0\ntdata 16:45:00,0,0,60,1,0,0,0,0,0,0,0,0,0\ntdata 21:00:00,0,0,50,1,0,0,0,0,0,0,0,0,0\ntdata 22:00:00,0,0,40,8,0,0,0,0,0,0,0,0,0\ntdata 23:55:00,0,0,40,8,0,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedOff\nIf FeedB 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf Output AllVortechs = OFF Then OFF \n","extra":{"temperature":false,"gph":{"min":0.0,"max":100.0},"modes":[{"id":1,"name":"Reef"},{"id":0,"name":"Constant"},{"id":2,"name":"Lagoon"},{"id":3,"name":"Pulse"},{"id":7,"name":"Tidal"},{"id":8,"name":"Nutrient"},{"id":10,"name":"Sync"},{"id":11,"name":"AntiSync"}]}
-},{"name":"Vortech4","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"MXMPump|Ecotech|Vortech","did":"20_4","gid":"0","gtype":"0","ID":"34","prog":"Fallback OFF \ntdata 00:00:00,0,0,100,11,3,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf FeedB 000 Then FeedSlow\nIf Output AllVortechs = OFF Then OFF \n","extra":{"temperature":false,"gph":{"min":0.0,"max":100.0},"modes":[{"id":1,"name":"Reef"},{"id":0,"name":"Constant"},{"id":2,"name":"Lagoon"},{"id":3,"name":"Pulse"},{"id":7,"name":"Tidal"},{"id":8,"name":"Nutrient"},{"id":10,"name":"Sync"},{"id":11,"name":"AntiSync"}]}
-},{"name":"PowerStrip","icon":"Light A","ctype":"Always","log":false,"inuse":true,"type":"outlet","did":"2_1","gid":"","gtype":"0","ID":"35","prog":"Fallback ON \nSet ON \n","extra":{}
-},{"name":"NSW_Heater","icon":"Thermometer","ctype":"Advanced","log":false,"inuse":true,"type":"outlet","did":"2_2","gid":"","gtype":"0","ID":"36","prog":"Fallback OFF \nSet OFF \nIf NSW_Hi OPEN Then OFF \nIf Output Mix_NSW = ON Then ON \n","extra":{}
-},{"name":"RunSkimmer","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"virtual","did":"Cntl_A1","gid":"","gtype":"0","ID":"37","prog":"Set ON \nIf Output Return_Etc = OFF Then OFF \nIf Output Return_UV = OFF Then OFF \nIf Error Return_Etc Then OFF \nIf Error Return_UV Then OFF \nIf Output Return_Etc Percent < 40 Then OFF \nIf Output Return_UV Percent < 40 Then OFF \n","extra":{}
-},{"name":"AllVortechs","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"virtual","did":"Cntl_A2","gid":"","gtype":"0","ID":"38","prog":"Set ON \nFallback ON \n","extra":{}
-},{"name":"Feeder_Right","icon":"Bars","ctype":"Feeder","log":true,"inuse":true,"type":"afs","did":"8_1","gid":"","gtype":"0","ID":"39","prog":"OSC 000:00/000:30/000:30 Then ON \nIf Time 00:00 to 11:30 Then OFF \nIf Time 11:32 to 00:00 Then OFF \nIf FeedD 000 Then ON \n","extra":{}
-},{"name":"Alkalinity","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"dos","did":"12_1","gid":"doser_12","gtype":"0","ID":"40","prog":"Fallback OFF \ntdata 00:00:00,2,21,1,114,18,0,5,159,3,72,0,100,50\nIf Alkx18 > 8.60 Then OFF \n","extra":{}
-},{"name":"Calcium","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"dos","did":"12_2","gid":"doser_12","gtype":"0","ID":"41","prog":"Fallback OFF \ntdata 00:00:00,2,21,1,74,18,1,5,159,1,194,0,80,10\nIf Cax18 > 480 Then OFF \n","extra":{}
-},{"name":"LinkA_13_1","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":false,"type":"24v","did":"13_1","gid":"","gtype":"0","ID":"42","prog":"Set OFF \n","extra":{}
-},{"name":"LinkB_13_2","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":false,"type":"24v","did":"13_2","gid":"","gtype":"0","ID":"43","prog":"Set OFF \n","extra":{}
-},{"name":"Trident_18_3","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"selector","did":"18_3","gid":"","gtype":"0","ID":"44","prog":"OSC 000:00/001:00/719:00 Then ON \n","extra":{}
-},{"name":"Alk_18_4","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"selector","did":"18_4","gid":"","gtype":"0","ID":"45","prog":"OSC 360:00/001:00/359:00 Then ON \n","extra":{}
-},{"name":"ATO_EMPTY","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"virtual","did":"Cntl_A16","gid":"","gtype":"0","ID":"46","prog":"Set OFF \nFallback OFF \nIf ATOLOW OPEN Then ON \nIf ATO_LL < 1.0 Then ON \n","extra":{}
-},{"name":"TMP_DELETE","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"virtual","did":"Cntl_B1","gid":"","gtype":"0","ID":"47","prog":"Set OFF \nIf ATO_LO OPEN Then ON \n","extra":{}
-},{"name":"AWC_REM","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"dqd","did":"3_2","gid":"doserqd_3","gtype":"0","ID":"48","prog":"Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n","extra":{}
-},{"name":"LinkA_21_1","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":false,"type":"24v","did":"21_1","gid":"","gtype":"0","ID":"49","prog":"Set OFF \n","extra":{}
-},{"name":"ATK_Lo_Alarm","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"virtual","did":"Cntl_A3","gid":"","gtype":"0","ID":"50","prog":"Set OFF \nIf Ret_Lo OPEN Then ON \nIf Ret_Lo CLOSED Then OFF \nIf Error LinkA_14_1 Then ON \nDefer 060:00 Then ON \n","extra":{}
-},{"name":"NSW_Pump","icon":"Spigot","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"2_3","gid":"","gtype":"0","ID":"51","prog":"Fallback OFF \nSet OFF \nIf SWPump CLOSED Then ON \nIf Master OPEN Then OFF \n","extra":{}
-},{"name":"RO_AUTOFILL","icon":"Bell","ctype":"Advanced","log":true,"inuse":true,"type":"virtual","did":"Cntl_A4","gid":"","gtype":"0","ID":"52","prog":"Fallback OFF \nIf Output ATO_EMPTY = ON Then ON \nWhen On > 095:00 Then OFF \nIf ATOMAX CLOSED Then OFF \nIf ATO_LL > 13.0 Then OFF \n","extra":{}
-},{"name":"QT_ADD","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"dqd","did":"23_1","gid":"doserqd_23","gtype":"0","ID":"53","prog":"Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n","extra":{}
-},{"name":"QT_Remove","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"dqd","did":"23_2","gid":"doserqd_23","gtype":"0","ID":"54","prog":"Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n","extra":{}
-},{"name":"Alarm_21_2","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":false,"type":"alert","did":"21_2","gid":"","gtype":"0","ID":"55","prog":"Set OFF \n","extra":{}
-},{"name":"RES_BAD","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"virtual","did":"Cntl_B2","gid":"","gtype":"0","ID":"56","prog":"Set OFF \nSet OFF \nIf RES_LV < 7.3 Then ON \nIf Rtn_lv > 7.9 Then ON \nIf Time 00:00 to 06:59 Then OFF \nIf Time 07:01 to 23:59 Then OFF \n","extra":{}
-},{"name":"RO_Booster","icon":"Thermometer","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"2_4","gid":"","gtype":"0","ID":"57","prog":"Set OFF \nFallback OFF \nIf Output SOL_OUT_NSW = ON Then ON \nIf Output SOL_OUT_ATO = ON Then ON \n","extra":{}
-},{"name":"Ozone","icon":"Left/Right Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"outlet","did":"2_5","gid":"","gtype":"0","ID":"58","prog":"Fallback OFF \nSet ON \nIf ORP > 380 Then OFF \nIf Output Skimmer = OFF Then OFF \n","extra":{}
-},{"name":"Pump_2_6","icon":"Spigot","ctype":"Always","log":false,"inuse":false,"type":"outlet","did":"2_6","gid":"","gtype":"0","ID":"59","prog":"Fallback ON \nSet ON \n","extra":{}
-},{"name":"Feeding","icon":"Clock","ctype":"Advanced","log":false,"inuse":true,"type":"virtual","did":"Cntl_A5","gid":"","gtype":"0","ID":"60","prog":"Set OFF \nIf FeedA 000 Then ON \nIf FeedB 000 Then ON \nIf FeedC 000 Then ON \nIf FeedD 000 Then ON \n","extra":{}
-},{"name":"SumpAlarm","icon":"Bell","ctype":"Advanced","log":true,"inuse":true,"type":"virtual","did":"Cntl_A6","gid":"","gtype":"0","ID":"61","prog":"Set OFF \nFallback OFF \nIf Rtn_lv < 8.0 Then ON \nIf Rtn_lv > 9.0 Then ON \nIf FeedA 010 Then OFF \nIf FeedB 035 Then OFF \nIf Output Return_UV Percent > 56 Then ON \nIf Output Return_UV Percent < 40 Then ON \nIf Output Return_Etc Percent > 56 Then ON \nIf Output Return_Etc Percent < 40 Then ON \nDefer 010:00 Then ON \n","extra":{}
-},{"name":"Pulser","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"virtual","did":"Cntl_A7","gid":"","gtype":"0","ID":"62","prog":"Set OFF \nFallback OFF \nOSC 000:30/007:00/053:00 Then ON \n","extra":{}
-},{"name":"NSW_AutoFill","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"virtual","did":"Cntl_A8","gid":"","gtype":"0","ID":"63","prog":"If Output NSW_Trigger = ON Then ON \nIf Output RO_AUTOFILL = ON Then OFF \nDefer 001:00 Then OFF \nWhen On > 500:00 Then OFF \nIf Output NSW_Trigger = OFF Then OFF \nIf NSW_Hi CLOSED Then OFF \n","extra":{}
-},{"name":"NSW_Trigger","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"virtual","did":"Cntl_A9","gid":"","gtype":"0","ID":"64","prog":"Set OFF \nFallback OFF \nWhen On > 432:00 Then OFF \n","extra":{}
-},{"name":"RefLght_2_7","icon":"Left/Right Arrows","ctype":"Light","log":false,"inuse":false,"type":"outlet","did":"2_7","gid":"","gtype":"0","ID":"65","prog":"Fallback ON \nSet OFF \nIf Time 21:00 to 09:00 Then ON \nIf Temp > 81.0 Then OFF \nMin Time 001:00 Then OFF \n","extra":{}
-},{"name":"GPower8","icon":"Up/Down Arrows","ctype":"Always","log":true,"inuse":true,"type":"outlet","did":"2_8","gid":"","gtype":"0","ID":"66","prog":"Fallback OFF \nSet OFF \n","extra":{}
-},{"name":"DDR_Low","icon":"Sound A","ctype":"Advanced","log":true,"inuse":true,"type":"virtual","did":"Cntl_A10","gid":"","gtype":"0","ID":"67","prog":"Set OFF \nIf Alk_Lo OPEN Then ON \nIf CA_Low OPEN Then ON \nIf Time 00:00 to 06:59 Then OFF \nIf Time 07:01 to 23:59 Then OFF \n","extra":{}
-},{"name":"Mix_NSW","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"virtual","did":"Cntl_A11","gid":"","gtype":"0","ID":"68","prog":"Set OFF \nFallback OFF \nIf NSW_Hi CLOSED Then ON \nIf NSW_Lo CLOSED Then ON \nIf Output AWC_Enabled = ON Then OFF \nIf NSW_Lo OPEN Then OFF \nIf NSW_Hi OPEN Then OFF \n","extra":{}
-},{"name":"AWC_Enabled","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"virtual","did":"Cntl_A12","gid":"","gtype":"0","ID":"69","prog":"Set ON \nFallback OFF \nIf Output Mix_NSW = ON Then OFF \nIf Output NSW_AutoFill = ON Then OFF \nIf Output SOL_OUT_NSW = ON Then OFF \nIf FRAG_R > 8.5 Then OFF \nIf Salt < 25.5 Then OFF \nIf Salt > 35.5 Then OFF \nIf Temp < 77.0 Then OFF \nIf NSW_Lo OPEN Then OFF \nIf Rtn_lv < 7.1 Then OFF \nIf Rtn_lv > 8.5 Then OFF \nIf RES_LV < 7.3 Then OFF \nIf RES_LV > 7.8 Then OFF \n","extra":{}
-},{"name":"Alt_Fill","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"virtual","did":"Cntl_A13","gid":"","gtype":"0","ID":"70","prog":"Set ON \nFallback OFF \nIf ATO_LK CLOSED Then OFF \nIf NSW_LK CLOSED Then OFF \nWhen On > 100:00 Then OFF \n","extra":{}
-},{"name":"DT_ATO_PUMP","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"24v","did":"2_9","gid":"","gtype":"0","ID":"71","prog":"Fallback OFF \nSet OFF \nIf Ret_Lo OPEN Then ON \nIf Ret_hi CLOSED Then OFF \nIf Rtn_lv > 8.8 Then OFF \nWhen On > 012:00 Then OFF \nDefer 000:20 Then ON \nDefer 000:20 Then OFF \nMin Time 010:00 Then OFF \n","extra":{}
-},{"name":"FRAG_ATO_PMP","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"24v","did":"2_10","gid":"","gtype":"0","ID":"72","prog":"Fallback OFF \nSet OFF \nIf FRAG_L OPEN Then ON \nIf FRAG_H CLOSED Then OFF \nIf FRAG_R > 8.0 Then OFF \nWhen On > 001:00 Then OFF \nDefer 000:10 Then ON \nDefer 000:04 Then OFF \nMin Time 015:00 Then OFF \n","extra":{}
-},{"name":"TSM","icon":"Fan","ctype":"Advanced","log":false,"inuse":true,"type":"virtual","did":"Cntl_A14","gid":"","gtype":"0","ID":"76","prog":"Fallback OFF \nSet OFF \nOSC 000:00/007:00/053:00 Then ON \n","extra":{}
-},{"name":"LinkA_22_1","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":false,"type":"24v","did":"22_1","gid":"","gtype":"0","ID":"77","prog":"Set OFF \n","extra":{}
-},{"name":"Alarm_22_2","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":false,"type":"alert","did":"22_2","gid":"","gtype":"0","ID":"78","prog":"Set OFF \n","extra":{}
-},{"name":"Trident_6_3","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":true,"type":"selector","did":"6_3","gid":"","gtype":"0","ID":"79","prog":"Fallback OFF \nSet OFF \nIf Time 05:00 to 05:01 Then ON \n","extra":{}
-},{"name":"Skimmer_full","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"virtual","did":"Cntl_A15","gid":"","gtype":"0","ID":"80","prog":"Set OFF \nIf SkimSW OPEN Then ON \nIf Time 00:00 to 06:59 Then OFF \nIf Time 07:01 to 23:59 Then OFF \n","extra":{}
-},{"name":"SOL_INPUT","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"24v","did":"15_1","gid":"","gtype":"0","ID":"81","prog":"Set OFF \nFallback OFF \nIf Output RO_AUTOFILL = ON Then ON \nIf Output NSW_AutoFill = ON Then ON \nIf Output Alt_Fill = ON Then ON \n","extra":{}
-},{"name":"SOL_OUT_NSW","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"24v","did":"15_2","gid":"","gtype":"0","ID":"82","prog":"Set OFF \nIf Output NSW_AutoFill = ON Then ON \nIf Output Alt_Fill = ON Then ON \n","extra":{}
-},{"name":"LinkA_14_1","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":false,"type":"24v","did":"14_1","gid":"","gtype":"0","ID":"83","prog":"Set OFF \n","extra":{}
-},{"name":"Alarm_14_2","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":false,"type":"alert","did":"14_2","gid":"","gtype":"0","ID":"84","prog":"Set OFF \n","extra":{}
-},{"name":"SOL_OUT_ATO","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"24v","did":"10_1","gid":"","gtype":"0","ID":"85","prog":"Set OFF \nFallback OFF \nIf Output RO_AUTOFILL = ON Then ON \n","extra":{}
-},{"name":"Alarm_10_2","icon":"Up/Down Arrows","ctype":"Advanced","log":false,"inuse":false,"type":"alert","did":"10_2","gid":"","gtype":"0","ID":"86","prog":"Set OFF \n","extra":{}
-},{"name":"Wav_Bottom","icon":"Fan","ctype":"Advanced","log":false,"inuse":true,"type":"wav","did":"17_1","gid":"","gtype":"0","ID":"87","prog":"Fallback OFF \ntdata 00:00:00,0,0,50,4,150,0,0,0,0,0,0,0,0\nIf Output Mix_NSW = OFF Then OFF \nIf NSW_Lo OPEN Then OFF \n","extra":{}
-},{"name":"WAV_Top","icon":"Up/Down Arrows","ctype":"Advanced","log":true,"inuse":true,"type":"wav","did":"16_1","gid":"","gtype":"0","ID":"88","prog":"Fallback OFF \ntdata 00:00:00,0,0,50,1,0,0,0,0,0,0,0,0,0\nIf Output Mix_NSW = OFF Then OFF \nIf NSW_Lo OPEN Then OFF \n","extra":{}
-}],"pconf":[{"name":"VortechPuls","ID":1,"type":"vortech","data":{"subType":"Pulse","onTime":  12.00,"max": 55}},
-  {"name":"AfterFeed","ID":2,"type":"vortech","data":{"subType":"Nutrient","max": 62}},
-  {"name":"CorStandard","ID":3,"type":"ramp","data":{"rampTime":1,"min":20,"max":60}},
-  {"name":"FeedSlow","ID":4,"type":"vortech","data":{"subType":"Nutrient","max": 35}},
-  {"name":"Feed_Mix","ID":5,"type":"vortech","data":{"subType":"Nutrient","max": 40}},
-  {"name":"SlowFlow","ID":6,"type":"vortech","data":{"subType":"Lagoon","max":  5}},
-  {"name":"BottomMix","ID":7,"type":"wav","data":{"subType":"Pulse","onTime":  25.00,"max": 75}},
-  {"name":"Pump_60_60","ID":8,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":0,"onTime":60,"offTime1":60}},
-  {"name":"Pump_60_30","ID":9,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":0,"onTime":60,"offTime1":30}},
-  {"name":"Pump_05_55","ID":10,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":0,"onTime":59,"offTime1":1}},
-  {"name":"FeedOff","ID":11,"type":"vortech","data":{"subType":"Nutrient","max": 40}},
-  {"name":"SkimmerLow","ID":12,"type":"pump","data":{"min":30,"max":30,"sync":"Disable","div10":"Disable","offTime0":0,"onTime":0,"offTime1":0}},
-  {"name":"SkimmerVLow","ID":13,"type":"pump","data":{"min":10,"max":10,"sync":"Disable","div10":"Disable","offTime0":0,"onTime":0,"offTime1":0}},
-  {"name":"Ramp20","ID":14,"type":"ramp","data":{"rampTime":0,"min":20,"max":20}},
-  {"name":"PF15","ID":15,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF16","ID":16,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF17","ID":17,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF18","ID":18,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF19","ID":19,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF20","ID":20,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF21","ID":21,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF22","ID":22,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF23","ID":23,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF24","ID":24,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF25","ID":25,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF26","ID":26,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF27","ID":27,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF28","ID":28,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF29","ID":29,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF30","ID":30,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"PF31","ID":31,"type":"pump","data":{"min":0,"max":100,"sync":"Disable","div10":"Disable","offTime0":1,"onTime":1,"offTime1":1}},
-  {"name":"SandBlast","ID":32,"type":"vortech","data":{"subType":"Tidal","max": 60}}],"clock":{"timezone":["-8.00","-7.00"],"date":1775773756,
-  "dst":true,"auto":true}
-,"mconf":[{"abaddr":2,"name":"GPower","hwtype":"EB832","update":false,"updateStat":0,"extra":{"swapAddr":0}},{"abaddr":3,"name":"DQD_DT","hwtype":"DQD","update":false,"updateStat":0,"extra":{"swapAddr":0,"volume": [2000,2000],"volumeLeft": [0,0]}},{"abaddr":4,"name":"PWR_Bottom","hwtype":"EB832","update":false,"updateStat":0,"extra":{"swapAddr":0}},{"abaddr":5,"name":"COR_5","hwtype":"COR","update":false,"updateStat":0,"extra":{"swapAddr":0,"errorMask":103,"max":100,"min":10,"calState":0}},{"abaddr":6,"name":"TNP","hwtype":"TNP","update":false,"updateStat":0,"extra":{"swapAddr":0,"errorMask":65535,"wasteSize":3218.0,"cal":false,"targetPO4":0.00,"targetNO3":50.0,"sampleChange":false,"resetDefaults":false,"primeBlank":false,"prime":[false,false,false,false],"clean":0,"reset":[false,false,false,false,false],"newReagent":[false,false,false],"calConst":[ 0.00, 0.00, 0.00]}},{"abaddr":8,"name":"AFS_8","hwtype":"AFS","update":false,"updateStat":0,"extra":{"swapAddr":0}},{"abaddr":9,"name":"PWR_Top","hwtype":"EB832","update":false,"updateStat":0,"extra":{"swapAddr":0}},{"abaddr":10,"name":"FMM_G2","hwtype":"FMM","update":false,"updateStat":0,"extra":{"swapAddr":0,"auto":[false,false,false,false],"mode": ["optical","optical","optical","optical"],"flowMode":"gph","levelMode":"in"}},{"abaddr":11,"name":"COR_11","hwtype":"COR","update":false,"updateStat":0,"extra":{"swapAddr":0,"errorMask":103,"max":100,"min":10,"calState":0}},{"abaddr":12,"name":"DOS_2Part","hwtype":"DOS","update":false,"updateStat":0,"extra":{"swapAddr":0,"volume": [2000,2000],"volumeLeft": [716,561]}},{"abaddr":13,"name":"1LNK_13","hwtype":"1LNK","update":false,"updateStat":0,"extra":{"swapAddr":0}},{"abaddr":14,"name":"FMM_G1","hwtype":"FMM","update":false,"updateStat":0,"extra":{"swapAddr":0,"auto":[false,false,false,false],"mode": ["optical","LLS-15","LLS-15","optical"],"flowMode":"gph","levelMode":"in"}},{"abaddr":15,"name":"1LNK_15","hwtype":"1LNK","update":false,"updateStat":0,"extra":{"swapAddr":0}},{"abaddr":16,"name":"WAV_16","hwtype":"WAV","update":false,"updateStat":0,"extra":{"swapAddr":0,"homeSet":false,"errorMask":10}},{"abaddr":17,"name":"WAV_17","hwtype":"WAV","update":false,"updateStat":0,"extra":{"swapAddr":0,"homeSet":false,"errorMask":0}},{"abaddr":18,"name":"Trident","hwtype":"TRI","update":false,"updateStat":0,"extra":{"swapAddr":0,"errorMask":65535,"wasteSize":3585.0,"cal":false,"targetAlk": 8.50,"targetCa": 400,"targetMg":1300,"sampleChange":false,"resetDefaults":false,"primeBlank":false,"prime":[false,false,false,false],"clean":0,"reset":[false,false,false,false,false],"newReagent":[false,false,false],"calConst":[62.61,72.89, 8.37]}},{"abaddr":19,"name":"PM2","hwtype":"PM2","update":false,"updateStat":0,"extra":{"swapAddr":0}},{"abaddr":20,"name":"MXM","hwtype":"MXM","update":false,"updateStat":0,"extra":{"swapAddr":0,"status": "\n    (0,15,15)\n   Vortech3(42) - Rev 1.4 Ser #: 4G160033FBRBC4 - OK-1\n   Vortech2(42) - Rev 1.4 Ser #: 76701964875114 - OK-2\n   Vortech1(42) - Rev 1.4 Ser #: 4G160033F9RBBB - OK-3\n   Vortech4(42) - Rev 1.4 Ser #: 76701964881080 - OK-4\n"}},{"abaddr":21,"name":"FMM_Cab","hwtype":"FMM","update":false,"updateStat":0,"extra":{"swapAddr":0,"auto":[false,false,false,false],"mode": ["optical","optical","LLS-15","optical"],"flowMode":"gph","levelMode":"in"}},{"abaddr":22,"name":"FMM_FRAG","hwtype":"FMM","update":false,"updateStat":0,"extra":{"swapAddr":0,"auto":[true,true,false,true],"mode": ["optical","optical","LLS-15","wof"],"flowMode":"gph","levelMode":"in"}},{"abaddr":23,"name":"DQD_QT","hwtype":"DQD","update":false,"updateStat":0,"extra":{"swapAddr":0,"volume": [2000,2000],"volumeLeft": [0,0]}}],"dconf":[{"page":0,"lineEnables":[true,true,true,false,false],"probes":["base_Temp","base_pH","base_Cond","base_ORP"],"outputs":["base_Var1","base_Var2","base_Var3","base_Var4","base_Alarm","base_Warn","base_email","0_0","3_1","3_2","3_3","3_4","3_5","3_6","3_7","3_8"]},{"page":1,"lineEnables":[true,true,false,true,false],"probes":["base_Temp","base_pH","base_pH2","base_Temp"],"outputs":["base_Var1","base_Var2","base_Var3","base_Var4","base_Alarm","base_Warn","base_email","0_0","3_1","3_2","3_3","3_4","3_5","3_6","3_7","3_8"]},{"page":2,"lineEnables":[false,true,true,false,false],"probes":["base_Temp","base_pH","base_Cond","base_pH2"],"outputs":["base_Var1","base_Var2","base_Var3","base_Var4","base_Alarm","base_Warn","base_email","base_Var1","3_1","3_2","3_3","3_4","3_5","3_6","3_7","3_8"]},{"page":3,"lineEnables":[true,false,false,false,false],"probes":["base_Temp","base_pH","base_pH2","3_0"],"outputs":["base_Var1","base_Var2","base_Var3","base_Var4","base_Alarm","base_Warn","base_email","base_Var1","3_1","3_2","3_3","3_4","3_5","3_6","3_7","3_8"]}],"iconf":[{"did":"base_Temp","enable":true,"type":"Temp","name":"Temp","alarm":{},"extra":{"scale":"5e9","offset":"-10","range":"Faren"}},{"did":"base_pH","enable":true,"type":"pH","name":"pH","alarm":{},"extra":{"scale":"10d7","offset":"-38","comp":false}},{"did":"base_pH2","enable":false,"type":"pH","name":"pH2","alarm":{},"extra":{"scale":"13ea","offset":"-175","comp":false}},{"did":"base_ORP","enable":true,"type":"ORP","name":"ORP","alarm":{},"extra":{"scale":"1071","offset":"97"}},{"did":"base_Cond","enable":true,"type":"Cond","name":"Salt","alarm":{},"extra":{"scale":"d40","offset":"-224","comp":0.0,"range":"Salinity"}},{"did":"2_P0","enable":true,"type":"Amps","name":"Alk","alarm":{},"extra":{}},{"did":"2_P1","enable":true,"type":"Amps","name":"Ca","alarm":{},"extra":{}},{"did":"2_P2","enable":true,"type":"Amps","name":"Mg","alarm":{},"extra":{}},{"did":"2_P3","enable":true,"type":"Amps","name":"RO_BoosterA","alarm":{},"extra":{}},{"did":"2_P4","enable":true,"type":"Amps","name":"OzoneA","alarm":{},"extra":{}},{"did":"2_P5","enable":true,"type":"Amps","name":"Pump_2_6A","alarm":{},"extra":{}},{"did":"2_P6","enable":true,"type":"Amps","name":"RefLght_2_7A","alarm":{},"extra":{}},{"did":"2_P7","enable":true,"type":"Amps","name":"GPower8A","alarm":{},"extra":{}},{"did":"2_P8","enable":true,"type":"pwr","name":"PowerStripW","alarm":{},"extra":{}},{"did":"2_P9","enable":true,"type":"pwr","name":"NSW_HeaterW","alarm":{},"extra":{}},{"did":"2_P10","enable":true,"type":"pwr","name":"NSW_PumpW","alarm":{},"extra":{}},{"did":"2_P11","enable":true,"type":"pwr","name":"RO_BoosterW","alarm":{},"extra":{}},{"did":"2_P12","enable":true,"type":"pwr","name":"OzoneW","alarm":{},"extra":{}},{"did":"2_P13","enable":true,"type":"pwr","name":"Pump_2_6W","alarm":{},"extra":{}},{"did":"2_P14","enable":true,"type":"pwr","name":"RefLght_2_7W","alarm":{},"extra":{}},{"did":"2_P15","enable":true,"type":"pwr","name":"GPower8W","alarm":{},"extra":{}},{"did":"2_P16","enable":true,"type":"volts","name":"Volt_2","alarm":{},"extra":{}},{"did":"4_P0","enable":true,"type":"Amps","name":"WaveEngineA","alarm":{},"extra":{}},{"did":"4_P1","enable":true,"type":"Amps","name":"Bottom2A","alarm":{},"extra":{}},{"did":"4_P2","enable":true,"type":"Amps","name":"RetPump_4_3A","alarm":{},"extra":{}},{"did":"4_P3","enable":true,"type":"Amps","name":"Heater_4_4A","alarm":{},"extra":{}},{"did":"4_P4","enable":true,"type":"Amps","name":"Skimmer_4_5A","alarm":{},"extra":{}},{"did":"4_P5","enable":true,"type":"Amps","name":"Pump_4_6A","alarm":{},"extra":{}},{"did":"4_P6","enable":true,"type":"Amps","name":"AxisA","alarm":{},"extra":{}},{"did":"4_P7","enable":true,"type":"Amps","name":"SkimmerA","alarm":{},"extra":{}},{"did":"4_P8","enable":true,"type":"pwr","name":"WaveEngineW","alarm":{},"extra":{}},{"did":"4_P9","enable":true,"type":"pwr","name":"Bottom2W","alarm":{},"extra":{}},{"did":"4_P10","enable":true,"type":"pwr","name":"RetPump_4_3W","alarm":{},"extra":{}},{"did":"4_P11","enable":true,"type":"pwr","name":"Heater_4_4W","alarm":{},"extra":{}},{"did":"4_P12","enable":true,"type":"pwr","name":"Skimmer_4_5W","alarm":{},"extra":{}},{"did":"4_P13","enable":true,"type":"pwr","name":"Pump_4_6W","alarm":{},"extra":{}},{"did":"4_P14","enable":true,"type":"pwr","name":"AxisW","alarm":{},"extra":{}},{"did":"4_P15","enable":true,"type":"pwr","name":"SkimmerW","alarm":{},"extra":{}},{"did":"4_P16","enable":true,"type":"volts","name":"Volt_4","alarm":{},"extra":{}},{"did":"6_0","enable":true,"type":"po4","name":"PO4","alarm":{},"extra":{"scale":"0","offset":"0"}},{"did":"6_1","enable":true,"type":"no3","name":"NO3","alarm":{},"extra":{"scale":"0","offset":"0"}},{"did":"9_P0","enable":true,"type":"Amps","name":"InkbirdA","alarm":{},"extra":{}},{"did":"9_P1","enable":true,"type":"Amps","name":"ReactorA","alarm":{},"extra":{}},{"did":"9_P2","enable":true,"type":"Amps","name":"FanA","alarm":{},"extra":{}},{"did":"9_P3","enable":true,"type":"Amps","name":"Tunze_ATOA","alarm":{},"extra":{}},{"did":"9_P4","enable":true,"type":"Amps","name":"UVA","alarm":{},"extra":{}},{"did":"9_P5","enable":true,"type":"Amps","name":"ReefMatA","alarm":{},"extra":{}},{"did":"9_P6","enable":true,"type":"Amps","name":"Sump_FlowA","alarm":{},"extra":{}},{"did":"9_P7","enable":true,"type":"Amps","name":"Stand_LightA","alarm":{},"extra":{}},{"did":"9_P8","enable":true,"type":"pwr","name":"InkbirdW","alarm":{},"extra":{}},{"did":"9_P9","enable":true,"type":"pwr","name":"ReactorW","alarm":{},"extra":{}},{"did":"9_P10","enable":true,"type":"pwr","name":"FanW","alarm":{},"extra":{}},{"did":"9_P11","enable":true,"type":"pwr","name":"Tunze_ATOW","alarm":{},"extra":{}},{"did":"9_P12","enable":true,"type":"pwr","name":"UVW","alarm":{},"extra":{}},{"did":"9_P13","enable":true,"type":"pwr","name":"ReefMatW","alarm":{},"extra":{}},{"did":"9_P14","enable":true,"type":"pwr","name":"Sump_FlowW","alarm":{},"extra":{}},{"did":"9_P15","enable":true,"type":"pwr","name":"Stand_LightW","alarm":{},"extra":{}},{"did":"9_P16","enable":true,"type":"volts","name":"Volt_9","alarm":{},"extra":{}},{"did":"14_P1","enable":true,"type":"in","name":"RES_LV","alarm":{},"extra":{}},{"did":"14_P2","enable":true,"type":"in","name":"ATO_LL","alarm":{},"extra":{}},{"did":"18_0","enable":true,"type":"alk","name":"Alkx18","alarm":{},"extra":{"scale":"0","offset":"0"}},{"did":"18_1","enable":true,"type":"ca","name":"Cax18","alarm":{},"extra":{"scale":"0","offset":"0"}},{"did":"18_2","enable":true,"type":"mg","name":"Mgx18","alarm":{},"extra":{"scale":"0","offset":"0"}},{"did":"19_0","enable":false,"type":"Temp","name":"TmpJnk","alarm":{},"extra":{"scale":"1000","offset":"-20","range":"Faren"}},{"did":"19_1","enable":true,"type":"Cond","name":"Condx19","alarm":{},"extra":{"scale":"1133","offset":"91","comp":0.0,"range":"Salinity"}},{"did":"21_P2","enable":true,"type":"in","name":"Rtn_lv","alarm":{},"extra":{}},{"did":"22_P2","enable":true,"type":"in","name":"FRAG_R","alarm":{},"extra":{}},{"did":"base_I1","name":"DoorSw","type":"digital","extra":{},"enable":true},{"did":"base_I2","name":"Sw2","type":"digital","extra":{},"enable":true},{"did":"base_I3","name":"Sw3","type":"digital","extra":{},"enable":true},{"did":"base_I4","name":"Sw4","type":"digital","extra":{},"enable":true},{"did":"base_I5","name":"Sw5","type":"digital","extra":{},"enable":true},{"did":"base_I6","name":"SkimSW","type":"digital","extra":{},"enable":true},{"did":"10_I1","name":"ATOLOW","type":"digital","extra":{},"enable":true},{"did":"10_I2","name":"ATOMAX","type":"digital","extra":{},"enable":true},{"did":"10_I3","name":"XLow","type":"digital","extra":{},"enable":true},{"did":"10_I4","name":"Ext_Lo","type":"digital","extra":{},"enable":true},{"did":"12_I1","name":"Alk_Lo","type":"digital","extra":{},"enable":true},{"did":"12_I2","name":"CA_Low","type":"digital","extra":{},"enable":true},{"did":"14_I1","name":"NSW_Hi","type":"digital","extra":{},"enable":true},{"did":"14_I4","name":"NSW_Lo","type":"digital","extra":{},"enable":true},{"did":"19_I1","name":"Master","type":"digital","extra":{},"enable":true},{"did":"19_I2","name":"SWPump","type":"digital","extra":{},"enable":true},{"did":"19_I3","name":"SWRODI","type":"digital","extra":{},"enable":true},{"did":"19_I4","name":"Swx19_4","type":"digital","extra":{},"enable":true},{"did":"19_I5","name":"Swx19_5","type":"digital","extra":{},"enable":true},{"did":"19_I6","name":"Swx19_6","type":"digital","extra":{},"enable":true},{"did":"21_I1","name":"Ret_Lo","type":"digital","extra":{},"enable":true},{"did":"21_I2","name":"Ret_hi","type":"digital","extra":{},"enable":true},{"did":"21_I4","name":"Swx21_4","type":"digital","extra":{},"enable":true},{"did":"22_I1","name":"FRAG_L","type":"digital","extra":{},"enable":true},{"did":"22_I2","name":"FRAG_H","type":"digital","extra":{},"enable":true},{"did":"22_I4","name":"Swx22_4","type":"digital","extra":{},"enable":true}],"misc":{"reboot":false,"almSound":"Solveigs","wrnSound":"Positive Beep","logInterval":10,"feedInterval":[500,900,1200,300],"pwrMon":true},"season":{"temp":[76.0 ,75.0 ,76.0 ,76.0 ,76.5 ,77.5 ,78.5 ,80.5 ,78.5 ,77.5 ,76.5 ,76.0 ],"newmoon":[7,33,18,51,9,0,21,0,20,2,-8,7],"moonrise":["9:00","9:23","8:12","8:36","8:12","8:35","8:12","8:35","8:59","8:35","8:59","8:35"],"moonset":["21:00","21:23","20:12","20:36","20:12","20:35","20:12","20:35","20:59","20:35","20:59","20:35"],"sunrise":["7:33","7:37","7:26","7:06","6:47","6:39","6:43","6:52","6:57","6:58","7:03","7:17"],"sunset":["18:51","19:07","19:17","19:21","19:25","19:34","19:41","19:38","19:21","18:59","18:41","18:38"]},"nconf":{"dhcp":true,"hostname":"apex","ipaddr":"192.168.4.178","netmask":"255.255.252.0","gateway":"192.168.4.1","dns":["192.168.1.254","0.0.0.0"],"httpPort":80,"user":"admin","password":"1234","defaultAuth":true,"fusionEnable":true,"wifiAPLock":false,"wifiEnable":true,"wifiAPPassword":"","ssid":"","wifiAP":false,"emailEnable":false,"smtpPort":587,"smtpServer":"mail.example.com","emailFrom":"name@example.com","emailTo":"recipient@example.com","reEmail":60,"emailAuth":false,"emailUser":"name@example.com","emailPassword":"","updateFirmware":false,"latestFirmware":"5.12_CA25"},"cal":{"did":"14_P1","date":1775773756,"value":   7.9,"state": 2}}
+{
+  "oconf": [
+    {
+      "name": "WE-0to10",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "variable",
+      "did": "base_Var1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "0",
+      "prog": "Set 0\nIf FeedA 035 Then 0\nIf FeedA 025 Then 0\nIf FeedA 000 Then 30\nIf FeedC 000 Then 20\n",
+      "extra": {}
+    },
+    {
+      "name": "VarSpd2_I2",
+      "icon": "Left/Right Arrows",
+      "ctype": "Always",
+      "log": false,
+      "inuse": true,
+      "type": "variable",
+      "did": "base_Var2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "1",
+      "prog": "Fallback OFF \nSet OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "VarSpd3_I3",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "variable",
+      "did": "base_Var3",
+      "gid": "",
+      "gtype": "0",
+      "ID": "2",
+      "prog": "Set CorStandard\n",
+      "extra": {}
+    },
+    {
+      "name": "SkimmerPump",
+      "icon": "Spigot",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "variable",
+      "did": "base_Var4",
+      "gid": "",
+      "gtype": "0",
+      "ID": "3",
+      "prog": "Fallback OFF \ntdata 00:00:00,0,0,62,0,0,0,0,0,0,0,0,0,0\nIf FeedA 035 Then SkimmerVLow\n",
+      "extra": {}
+    },
+    {
+      "name": "SndAlm_I6",
+      "icon": "Sound B",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "alert",
+      "did": "base_Alarm",
+      "gid": "",
+      "gtype": "0",
+      "ID": "4",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "SndWrn_I7",
+      "icon": "Sound A",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "alert",
+      "did": "base_Warn",
+      "gid": "",
+      "gtype": "0",
+      "ID": "5",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Main_Alarm",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "alert",
+      "did": "base_email",
+      "gid": "",
+      "gtype": "0",
+      "ID": "6",
+      "prog": "Set OFF \nIf Output Skimmer_full = ON Then ON \nIf Error NSW_Pump Then ON \nIf Output ATK_Lo_Alarm = ON Then ON \nIf Output DDR_Low = ON Then ON \nIf pH > 8.60 Then ON \nIf pH < 7.70 Then ON \nIf Temp > 81.9 Then ON \nIf Temp < 75.5 Then ON \nIf Salt > 36.6 Then ON \nIf Salt < 21.0 Then ON \nIf Ext_Lo OPEN Then ON \nIf Output ATO_EMPTY = ON Then ON \nIf ATOLOW OPEN Then ON \nIf Output SumpAlarm = ON Then ON \nIf Error Return_UV Then ON \nIf Error Return_Etc Then ON \nIf Error FRAG_ATO_PMP Then ON \nIf ATO_LL > 13.4 Then ON \nIf Output RES_BAD = ON Then ON \nIf Error Apex Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Inkbird",
+      "icon": "Thermometer",
+      "ctype": "Heater",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "9_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "8",
+      "prog": "Fallback ON \nIf Temp < 77.5 Then ON \nIf Temp > 80.0 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Reactor",
+      "icon": "Spigot",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "9_2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "9",
+      "prog": "Fallback ON \nSet ON \nIf PO4 < 0.07 Then Pump_60_30\nIf PO4 < 0.04 Then Pump_60_60\nIf PO4 < 0.02 Then Pump_05_55\nIf PO4 = 0.00 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Fan",
+      "icon": "Fan",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "9_3",
+      "gid": "",
+      "gtype": "0",
+      "ID": "10",
+      "prog": "Fallback OFF \nSet OFF \nIf Temp > 78.5 Then ON \nIf pH > 8.50 Then OFF \nDefer 000:02 Then ON \nDefer 000:10 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Tunze_ATO",
+      "icon": "Spigot",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "9_4",
+      "gid": "",
+      "gtype": "0",
+      "ID": "11",
+      "prog": "Fallback ON \nSet ON \nIf Ret_hi CLOSED Then OFF \nIf Rtn_lv > 8.6 Then OFF \nMin Time 005:00 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "UV",
+      "icon": "Light B",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "9_5",
+      "gid": "",
+      "gtype": "0",
+      "ID": "12",
+      "prog": "Fallback OFF \nSet ON \nIf Output Return_UV = OFF Then OFF \nIf Output Return_UV Percent < 37 Then OFF \nIf Error Return_UV Then OFF \nDefer 010:00 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "ReefMat",
+      "icon": "Spigot",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "9_6",
+      "gid": "",
+      "gtype": "0",
+      "ID": "13",
+      "prog": "Fallback ON \nSet ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Sump_Flow",
+      "icon": "Fan",
+      "ctype": "Always",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "9_7",
+      "gid": "",
+      "gtype": "0",
+      "ID": "14",
+      "prog": "Fallback ON \nSet ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Stand_Light",
+      "icon": "Light B",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "9_8",
+      "gid": "",
+      "gtype": "0",
+      "ID": "15",
+      "prog": "Fallback OFF \nSet OFF \nIf DoorSw OPEN Then ON \nDefer 000:05 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "top_dc24",
+      "icon": "Up/Down Arrows",
+      "ctype": "Always",
+      "log": true,
+      "inuse": true,
+      "type": "24v",
+      "did": "9_9",
+      "gid": "",
+      "gtype": "0",
+      "ID": "16",
+      "prog": "Fallback ON \nSet ON \n",
+      "extra": {}
+    },
+    {
+      "name": "LinkB_9_10",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "24v",
+      "did": "9_10",
+      "gid": "",
+      "gtype": "0",
+      "ID": "17",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "AWC_ADD",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "dqd",
+      "did": "3_1",
+      "gid": "doserqd_3",
+      "gtype": "0",
+      "ID": "18",
+      "prog": "Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Return_Etc",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "cor|20",
+      "did": "11_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "19",
+      "prog": "Fallback OFF \ntdata 00:00:00,0,0,50,0,0,0,0,0,0,0,0,0,0\n",
+      "extra": {
+        "max": 100,
+        "min": 10,
+        "calState": 0
+      }
+    },
+    {
+      "name": "WaveEngine",
+      "icon": "Fan",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "4_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "20",
+      "prog": "Fallback ON \nSet ON \nIf Output Return_UV Percent < 40 Then OFF \nIf Time 21:00 to 10:29 Then OFF \nIf pH > 8.60 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Bottom2",
+      "icon": "Fan",
+      "ctype": "Always",
+      "log": false,
+      "inuse": true,
+      "type": "outlet",
+      "did": "4_2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "21",
+      "prog": "Fallback OFF \nSet OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "RetPump_4_3",
+      "icon": "Up/Down Arrows",
+      "ctype": "Return Pump",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "4_3",
+      "gid": "",
+      "gtype": "0",
+      "ID": "22",
+      "prog": "Fallback ON \nSet ON \nIf FeedA 000 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Heater_4_4",
+      "icon": "Thermometer",
+      "ctype": "Heater",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "4_4",
+      "gid": "",
+      "gtype": "0",
+      "ID": "23",
+      "prog": "Fallback OFF \nIf Temp < 78.0 Then ON \nIf Temp > 79.0 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Skimmer_4_5",
+      "icon": "Left/Right Arrows",
+      "ctype": "Skimmer",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "4_5",
+      "gid": "",
+      "gtype": "0",
+      "ID": "24",
+      "prog": "Fallback OFF \nSet ON \nIf FeedA 000 Then OFF \nDefer 005:00 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Pump_4_6",
+      "icon": "Spigot",
+      "ctype": "Always",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "4_6",
+      "gid": "",
+      "gtype": "0",
+      "ID": "25",
+      "prog": "Fallback ON \nSet ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Axis",
+      "icon": "Left/Right Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "4_7",
+      "gid": "",
+      "gtype": "0",
+      "ID": "26",
+      "prog": "Fallback ON \nSet ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Skimmer",
+      "icon": "Hourglass",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "4_8",
+      "gid": "",
+      "gtype": "0",
+      "ID": "27",
+      "prog": "Fallback ON \nSet ON \nIf Output RunSkimmer = OFF Then OFF \nIf SkimSW OPEN Then OFF \nDefer 000:01 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "LinkA_4_9",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "24v",
+      "did": "4_9",
+      "gid": "",
+      "gtype": "0",
+      "ID": "28",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "LinkB_4_10",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "24v",
+      "did": "4_10",
+      "gid": "",
+      "gtype": "0",
+      "ID": "29",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Return_UV",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "cor|20",
+      "did": "5_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "30",
+      "prog": "Fallback OFF \ntdata 23:59:00,0,0,55,0,0,0,0,0,0,0,0,0,0\n",
+      "extra": {
+        "max": 100,
+        "min": 10,
+        "calState": 0
+      }
+    },
+    {
+      "name": "Vortech3",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "MXMPump|Ecotech|Vortech",
+      "did": "20_1",
+      "gid": "0",
+      "gtype": "0",
+      "ID": "31",
+      "prog": "Fallback OFF \ntdata 00:00:00,0,0,100,11,2,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf FeedB 000 Then FeedSlow\nIf Output AllVortechs = OFF Then OFF \n",
+      "extra": {
+        "temperature": false,
+        "gph": {
+          "min": 0,
+          "max": 100
+        },
+        "modes": [
+          {
+            "id": 1,
+            "name": "Reef"
+          },
+          {
+            "id": 0,
+            "name": "Constant"
+          },
+          {
+            "id": 2,
+            "name": "Lagoon"
+          },
+          {
+            "id": 3,
+            "name": "Pulse"
+          },
+          {
+            "id": 7,
+            "name": "Tidal"
+          },
+          {
+            "id": 8,
+            "name": "Nutrient"
+          },
+          {
+            "id": 10,
+            "name": "Sync"
+          },
+          {
+            "id": 11,
+            "name": "AntiSync"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Vortech2",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "MXMPump|Ecotech|Vortech",
+      "did": "20_2",
+      "gid": "0",
+      "gtype": "0",
+      "ID": "32",
+      "prog": "Fallback OFF \ntdata 00:00:00,0,0,38,8,0,0,0,0,0,0,0,0,0\ntdata 08:00:00,0,0,53,1,0,0,0,0,0,0,0,0,0\ntdata 12:30:00,0,0,50,7,0,0,0,0,0,0,0,0,0\ntdata 16:45:00,0,0,60,1,0,0,0,0,0,0,0,0,0\ntdata 21:00:00,0,0,50,1,0,0,0,0,0,0,0,0,0\ntdata 22:00:00,0,0,40,8,0,0,0,0,0,0,0,0,0\ntdata 23:55:00,0,0,40,8,0,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedOff\nIf FeedB 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf Output AllVortechs = OFF Then OFF \n",
+      "extra": {
+        "temperature": false,
+        "gph": {
+          "min": 0,
+          "max": 100
+        },
+        "modes": [
+          {
+            "id": 1,
+            "name": "Reef"
+          },
+          {
+            "id": 0,
+            "name": "Constant"
+          },
+          {
+            "id": 2,
+            "name": "Lagoon"
+          },
+          {
+            "id": 3,
+            "name": "Pulse"
+          },
+          {
+            "id": 7,
+            "name": "Tidal"
+          },
+          {
+            "id": 8,
+            "name": "Nutrient"
+          },
+          {
+            "id": 10,
+            "name": "Sync"
+          },
+          {
+            "id": 11,
+            "name": "AntiSync"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Vortech1",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "MXMPump|Ecotech|Vortech",
+      "did": "20_3",
+      "gid": "0",
+      "gtype": "0",
+      "ID": "33",
+      "prog": "Fallback OFF \ntdata 00:00:00,0,0,38,8,0,0,0,0,0,0,0,0,0\ntdata 08:00:00,0,0,53,1,0,0,0,0,0,0,0,0,0\ntdata 12:30:00,0,0,50,7,0,0,0,0,0,0,0,0,0\ntdata 16:45:00,0,0,60,1,0,0,0,0,0,0,0,0,0\ntdata 21:00:00,0,0,50,1,0,0,0,0,0,0,0,0,0\ntdata 22:00:00,0,0,40,8,0,0,0,0,0,0,0,0,0\ntdata 23:55:00,0,0,40,8,0,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedOff\nIf FeedB 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf Output AllVortechs = OFF Then OFF \n",
+      "extra": {
+        "temperature": false,
+        "gph": {
+          "min": 0,
+          "max": 100
+        },
+        "modes": [
+          {
+            "id": 1,
+            "name": "Reef"
+          },
+          {
+            "id": 0,
+            "name": "Constant"
+          },
+          {
+            "id": 2,
+            "name": "Lagoon"
+          },
+          {
+            "id": 3,
+            "name": "Pulse"
+          },
+          {
+            "id": 7,
+            "name": "Tidal"
+          },
+          {
+            "id": 8,
+            "name": "Nutrient"
+          },
+          {
+            "id": 10,
+            "name": "Sync"
+          },
+          {
+            "id": 11,
+            "name": "AntiSync"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Vortech4",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "MXMPump|Ecotech|Vortech",
+      "did": "20_4",
+      "gid": "0",
+      "gtype": "0",
+      "ID": "34",
+      "prog": "Fallback OFF \ntdata 00:00:00,0,0,100,11,3,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf FeedB 000 Then FeedSlow\nIf Output AllVortechs = OFF Then OFF \n",
+      "extra": {
+        "temperature": false,
+        "gph": {
+          "min": 0,
+          "max": 100
+        },
+        "modes": [
+          {
+            "id": 1,
+            "name": "Reef"
+          },
+          {
+            "id": 0,
+            "name": "Constant"
+          },
+          {
+            "id": 2,
+            "name": "Lagoon"
+          },
+          {
+            "id": 3,
+            "name": "Pulse"
+          },
+          {
+            "id": 7,
+            "name": "Tidal"
+          },
+          {
+            "id": 8,
+            "name": "Nutrient"
+          },
+          {
+            "id": 10,
+            "name": "Sync"
+          },
+          {
+            "id": 11,
+            "name": "AntiSync"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PowerStrip",
+      "icon": "Light A",
+      "ctype": "Always",
+      "log": false,
+      "inuse": true,
+      "type": "outlet",
+      "did": "2_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "35",
+      "prog": "Fallback ON \nSet ON \n",
+      "extra": {}
+    },
+    {
+      "name": "NSW_Heater",
+      "icon": "Thermometer",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "outlet",
+      "did": "2_2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "36",
+      "prog": "Fallback OFF \nSet OFF \nIf NSW_Hi OPEN Then OFF \nIf Output Mix_NSW = ON Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "RunSkimmer",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "37",
+      "prog": "Set ON \nIf Output Return_Etc = OFF Then OFF \nIf Output Return_UV = OFF Then OFF \nIf Error Return_Etc Then OFF \nIf Error Return_UV Then OFF \nIf Output Return_Etc Percent < 40 Then OFF \nIf Output Return_UV Percent < 40 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "AllVortechs",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "38",
+      "prog": "Set ON \nFallback ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Feeder_Right",
+      "icon": "Bars",
+      "ctype": "Feeder",
+      "log": true,
+      "inuse": true,
+      "type": "afs",
+      "did": "8_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "39",
+      "prog": "OSC 000:00/000:30/000:30 Then ON \nIf Time 00:00 to 11:30 Then OFF \nIf Time 11:32 to 00:00 Then OFF \nIf FeedD 000 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Alkalinity",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "dos",
+      "did": "12_1",
+      "gid": "doser_12",
+      "gtype": "0",
+      "ID": "40",
+      "prog": "Fallback OFF \ntdata 00:00:00,2,21,1,114,18,0,5,159,3,72,0,100,50\nIf Alkx18 > 8.60 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Calcium",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "dos",
+      "did": "12_2",
+      "gid": "doser_12",
+      "gtype": "0",
+      "ID": "41",
+      "prog": "Fallback OFF \ntdata 00:00:00,2,21,1,74,18,1,5,159,1,194,0,80,10\nIf Cax18 > 480 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "LinkA_13_1",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": false,
+      "type": "24v",
+      "did": "13_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "42",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "LinkB_13_2",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": false,
+      "type": "24v",
+      "did": "13_2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "43",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Trident_18_3",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "selector",
+      "did": "18_3",
+      "gid": "",
+      "gtype": "0",
+      "ID": "44",
+      "prog": "OSC 000:00/001:00/719:00 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Alk_18_4",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "selector",
+      "did": "18_4",
+      "gid": "",
+      "gtype": "0",
+      "ID": "45",
+      "prog": "OSC 360:00/001:00/359:00 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "ATO_EMPTY",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A16",
+      "gid": "",
+      "gtype": "0",
+      "ID": "46",
+      "prog": "Set OFF \nFallback OFF \nIf ATOLOW OPEN Then ON \nIf ATO_LL < 1.0 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "TMP_DELETE",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_B1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "47",
+      "prog": "Set OFF \nIf ATO_LO OPEN Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "AWC_REM",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "dqd",
+      "did": "3_2",
+      "gid": "doserqd_3",
+      "gtype": "0",
+      "ID": "48",
+      "prog": "Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "LinkA_21_1",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": false,
+      "type": "24v",
+      "did": "21_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "49",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "ATK_Lo_Alarm",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A3",
+      "gid": "",
+      "gtype": "0",
+      "ID": "50",
+      "prog": "Set OFF \nIf Ret_Lo OPEN Then ON \nIf Ret_Lo CLOSED Then OFF \nIf Error LinkA_14_1 Then ON \nDefer 060:00 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "NSW_Pump",
+      "icon": "Spigot",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "2_3",
+      "gid": "",
+      "gtype": "0",
+      "ID": "51",
+      "prog": "Fallback OFF \nSet OFF \nIf SWPump CLOSED Then ON \nIf Master OPEN Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "RO_AUTOFILL",
+      "icon": "Bell",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A4",
+      "gid": "",
+      "gtype": "0",
+      "ID": "52",
+      "prog": "Fallback OFF \nIf Output ATO_EMPTY = ON Then ON \nWhen On > 095:00 Then OFF \nIf ATOMAX CLOSED Then OFF \nIf ATO_LL > 13.0 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "QT_ADD",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "dqd",
+      "did": "23_1",
+      "gid": "doserqd_23",
+      "gtype": "0",
+      "ID": "53",
+      "prog": "Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "QT_Remove",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "dqd",
+      "did": "23_2",
+      "gid": "doserqd_23",
+      "gtype": "0",
+      "ID": "54",
+      "prog": "Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Alarm_21_2",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": false,
+      "type": "alert",
+      "did": "21_2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "55",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "RES_BAD",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_B2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "56",
+      "prog": "Set OFF \nSet OFF \nIf RES_LV < 7.3 Then ON \nIf Rtn_lv > 7.9 Then ON \nIf Time 00:00 to 06:59 Then OFF \nIf Time 07:01 to 23:59 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "RO_Booster",
+      "icon": "Thermometer",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "2_4",
+      "gid": "",
+      "gtype": "0",
+      "ID": "57",
+      "prog": "Set OFF \nFallback OFF \nIf Output SOL_OUT_NSW = ON Then ON \nIf Output SOL_OUT_ATO = ON Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Ozone",
+      "icon": "Left/Right Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "2_5",
+      "gid": "",
+      "gtype": "0",
+      "ID": "58",
+      "prog": "Fallback OFF \nSet ON \nIf ORP > 380 Then OFF \nIf Output Skimmer = OFF Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Pump_2_6",
+      "icon": "Spigot",
+      "ctype": "Always",
+      "log": false,
+      "inuse": false,
+      "type": "outlet",
+      "did": "2_6",
+      "gid": "",
+      "gtype": "0",
+      "ID": "59",
+      "prog": "Fallback ON \nSet ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Feeding",
+      "icon": "Clock",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A5",
+      "gid": "",
+      "gtype": "0",
+      "ID": "60",
+      "prog": "Set OFF \nIf FeedA 000 Then ON \nIf FeedB 000 Then ON \nIf FeedC 000 Then ON \nIf FeedD 000 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "SumpAlarm",
+      "icon": "Bell",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A6",
+      "gid": "",
+      "gtype": "0",
+      "ID": "61",
+      "prog": "Set OFF \nFallback OFF \nIf Rtn_lv < 8.0 Then ON \nIf Rtn_lv > 9.0 Then ON \nIf FeedA 010 Then OFF \nIf FeedB 035 Then OFF \nIf Output Return_UV Percent > 56 Then ON \nIf Output Return_UV Percent < 40 Then ON \nIf Output Return_Etc Percent > 56 Then ON \nIf Output Return_Etc Percent < 40 Then ON \nDefer 010:00 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Pulser",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A7",
+      "gid": "",
+      "gtype": "0",
+      "ID": "62",
+      "prog": "Set OFF \nFallback OFF \nOSC 000:30/007:00/053:00 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "NSW_AutoFill",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A8",
+      "gid": "",
+      "gtype": "0",
+      "ID": "63",
+      "prog": "If Output NSW_Trigger = ON Then ON \nIf Output RO_AUTOFILL = ON Then OFF \nDefer 001:00 Then OFF \nWhen On > 500:00 Then OFF \nIf Output NSW_Trigger = OFF Then OFF \nIf NSW_Hi CLOSED Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "NSW_Trigger",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A9",
+      "gid": "",
+      "gtype": "0",
+      "ID": "64",
+      "prog": "Set OFF \nFallback OFF \nWhen On > 432:00 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "RefLght_2_7",
+      "icon": "Left/Right Arrows",
+      "ctype": "Light",
+      "log": false,
+      "inuse": false,
+      "type": "outlet",
+      "did": "2_7",
+      "gid": "",
+      "gtype": "0",
+      "ID": "65",
+      "prog": "Fallback ON \nSet OFF \nIf Time 21:00 to 09:00 Then ON \nIf Temp > 81.0 Then OFF \nMin Time 001:00 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "GPower8",
+      "icon": "Up/Down Arrows",
+      "ctype": "Always",
+      "log": true,
+      "inuse": true,
+      "type": "outlet",
+      "did": "2_8",
+      "gid": "",
+      "gtype": "0",
+      "ID": "66",
+      "prog": "Fallback OFF \nSet OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "DDR_Low",
+      "icon": "Sound A",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A10",
+      "gid": "",
+      "gtype": "0",
+      "ID": "67",
+      "prog": "Set OFF \nIf Alk_Lo OPEN Then ON \nIf CA_Low OPEN Then ON \nIf Time 00:00 to 06:59 Then OFF \nIf Time 07:01 to 23:59 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Mix_NSW",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A11",
+      "gid": "",
+      "gtype": "0",
+      "ID": "68",
+      "prog": "Set OFF \nFallback OFF \nIf NSW_Hi CLOSED Then ON \nIf NSW_Lo CLOSED Then ON \nIf Output AWC_Enabled = ON Then OFF \nIf NSW_Lo OPEN Then OFF \nIf NSW_Hi OPEN Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "AWC_Enabled",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A12",
+      "gid": "",
+      "gtype": "0",
+      "ID": "69",
+      "prog": "Set ON \nFallback OFF \nIf Output Mix_NSW = ON Then OFF \nIf Output NSW_AutoFill = ON Then OFF \nIf Output SOL_OUT_NSW = ON Then OFF \nIf FRAG_R > 8.5 Then OFF \nIf Salt < 25.5 Then OFF \nIf Salt > 35.5 Then OFF \nIf Temp < 77.0 Then OFF \nIf NSW_Lo OPEN Then OFF \nIf Rtn_lv < 7.1 Then OFF \nIf Rtn_lv > 8.5 Then OFF \nIf RES_LV < 7.3 Then OFF \nIf RES_LV > 7.8 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Alt_Fill",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A13",
+      "gid": "",
+      "gtype": "0",
+      "ID": "70",
+      "prog": "Set ON \nFallback OFF \nIf ATO_LK CLOSED Then OFF \nIf NSW_LK CLOSED Then OFF \nWhen On > 100:00 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "DT_ATO_PUMP",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "24v",
+      "did": "2_9",
+      "gid": "",
+      "gtype": "0",
+      "ID": "71",
+      "prog": "Fallback OFF \nSet OFF \nIf Ret_Lo OPEN Then ON \nIf Ret_hi CLOSED Then OFF \nIf Rtn_lv > 8.8 Then OFF \nWhen On > 012:00 Then OFF \nDefer 000:20 Then ON \nDefer 000:20 Then OFF \nMin Time 010:00 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "FRAG_ATO_PMP",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "24v",
+      "did": "2_10",
+      "gid": "",
+      "gtype": "0",
+      "ID": "72",
+      "prog": "Fallback OFF \nSet OFF \nIf FRAG_L OPEN Then ON \nIf FRAG_H CLOSED Then OFF \nIf FRAG_R > 8.0 Then OFF \nWhen On > 001:00 Then OFF \nDefer 000:10 Then ON \nDefer 000:04 Then OFF \nMin Time 015:00 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "TSM",
+      "icon": "Fan",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A14",
+      "gid": "",
+      "gtype": "0",
+      "ID": "76",
+      "prog": "Fallback OFF \nSet OFF \nOSC 000:00/007:00/053:00 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "LinkA_22_1",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": false,
+      "type": "24v",
+      "did": "22_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "77",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Alarm_22_2",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": false,
+      "type": "alert",
+      "did": "22_2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "78",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Trident_6_3",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "selector",
+      "did": "6_3",
+      "gid": "",
+      "gtype": "0",
+      "ID": "79",
+      "prog": "Fallback OFF \nSet OFF \nIf Time 05:00 to 05:01 Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Skimmer_full",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "virtual",
+      "did": "Cntl_A15",
+      "gid": "",
+      "gtype": "0",
+      "ID": "80",
+      "prog": "Set OFF \nIf SkimSW OPEN Then ON \nIf Time 00:00 to 06:59 Then OFF \nIf Time 07:01 to 23:59 Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "SOL_INPUT",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "24v",
+      "did": "15_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "81",
+      "prog": "Set OFF \nFallback OFF \nIf Output RO_AUTOFILL = ON Then ON \nIf Output NSW_AutoFill = ON Then ON \nIf Output Alt_Fill = ON Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "SOL_OUT_NSW",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "24v",
+      "did": "15_2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "82",
+      "prog": "Set OFF \nIf Output NSW_AutoFill = ON Then ON \nIf Output Alt_Fill = ON Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "LinkA_14_1",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": false,
+      "type": "24v",
+      "did": "14_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "83",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Alarm_14_2",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": false,
+      "type": "alert",
+      "did": "14_2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "84",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "SOL_OUT_ATO",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "24v",
+      "did": "10_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "85",
+      "prog": "Set OFF \nFallback OFF \nIf Output RO_AUTOFILL = ON Then ON \n",
+      "extra": {}
+    },
+    {
+      "name": "Alarm_10_2",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": false,
+      "type": "alert",
+      "did": "10_2",
+      "gid": "",
+      "gtype": "0",
+      "ID": "86",
+      "prog": "Set OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "Wav_Bottom",
+      "icon": "Fan",
+      "ctype": "Advanced",
+      "log": false,
+      "inuse": true,
+      "type": "wav",
+      "did": "17_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "87",
+      "prog": "Fallback OFF \ntdata 00:00:00,0,0,50,4,150,0,0,0,0,0,0,0,0\nIf Output Mix_NSW = OFF Then OFF \nIf NSW_Lo OPEN Then OFF \n",
+      "extra": {}
+    },
+    {
+      "name": "WAV_Top",
+      "icon": "Up/Down Arrows",
+      "ctype": "Advanced",
+      "log": true,
+      "inuse": true,
+      "type": "wav",
+      "did": "16_1",
+      "gid": "",
+      "gtype": "0",
+      "ID": "88",
+      "prog": "Fallback OFF \ntdata 00:00:00,0,0,50,1,0,0,0,0,0,0,0,0,0\nIf Output Mix_NSW = OFF Then OFF \nIf NSW_Lo OPEN Then OFF \n",
+      "extra": {}
+    }
+  ],
+  "pconf": [
+    {
+      "name": "VortechPuls",
+      "ID": 1,
+      "type": "vortech",
+      "data": {
+        "subType": "Pulse",
+        "onTime": 12,
+        "max": 55
+      }
+    },
+    {
+      "name": "AfterFeed",
+      "ID": 2,
+      "type": "vortech",
+      "data": {
+        "subType": "Nutrient",
+        "max": 62
+      }
+    },
+    {
+      "name": "CorStandard",
+      "ID": 3,
+      "type": "ramp",
+      "data": {
+        "rampTime": 1,
+        "min": 20,
+        "max": 60
+      }
+    },
+    {
+      "name": "FeedSlow",
+      "ID": 4,
+      "type": "vortech",
+      "data": {
+        "subType": "Nutrient",
+        "max": 35
+      }
+    },
+    {
+      "name": "Feed_Mix",
+      "ID": 5,
+      "type": "vortech",
+      "data": {
+        "subType": "Nutrient",
+        "max": 40
+      }
+    },
+    {
+      "name": "SlowFlow",
+      "ID": 6,
+      "type": "vortech",
+      "data": {
+        "subType": "Lagoon",
+        "max": 5
+      }
+    },
+    {
+      "name": "BottomMix",
+      "ID": 7,
+      "type": "wav",
+      "data": {
+        "subType": "Pulse",
+        "onTime": 25,
+        "max": 75
+      }
+    },
+    {
+      "name": "Pump_60_60",
+      "ID": 8,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 0,
+        "onTime": 60,
+        "offTime1": 60
+      }
+    },
+    {
+      "name": "Pump_60_30",
+      "ID": 9,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 0,
+        "onTime": 60,
+        "offTime1": 30
+      }
+    },
+    {
+      "name": "Pump_05_55",
+      "ID": 10,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 0,
+        "onTime": 59,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "FeedOff",
+      "ID": 11,
+      "type": "vortech",
+      "data": {
+        "subType": "Nutrient",
+        "max": 40
+      }
+    },
+    {
+      "name": "SkimmerLow",
+      "ID": 12,
+      "type": "pump",
+      "data": {
+        "min": 30,
+        "max": 30,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 0,
+        "onTime": 0,
+        "offTime1": 0
+      }
+    },
+    {
+      "name": "SkimmerVLow",
+      "ID": 13,
+      "type": "pump",
+      "data": {
+        "min": 10,
+        "max": 10,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 0,
+        "onTime": 0,
+        "offTime1": 0
+      }
+    },
+    {
+      "name": "Ramp20",
+      "ID": 14,
+      "type": "ramp",
+      "data": {
+        "rampTime": 0,
+        "min": 20,
+        "max": 20
+      }
+    },
+    {
+      "name": "PF15",
+      "ID": 15,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF16",
+      "ID": 16,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF17",
+      "ID": 17,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF18",
+      "ID": 18,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF19",
+      "ID": 19,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF20",
+      "ID": 20,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF21",
+      "ID": 21,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF22",
+      "ID": 22,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF23",
+      "ID": 23,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF24",
+      "ID": 24,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF25",
+      "ID": 25,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF26",
+      "ID": 26,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF27",
+      "ID": 27,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF28",
+      "ID": 28,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF29",
+      "ID": 29,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF30",
+      "ID": 30,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "PF31",
+      "ID": 31,
+      "type": "pump",
+      "data": {
+        "min": 0,
+        "max": 100,
+        "sync": "Disable",
+        "div10": "Disable",
+        "offTime0": 1,
+        "onTime": 1,
+        "offTime1": 1
+      }
+    },
+    {
+      "name": "SandBlast",
+      "ID": 32,
+      "type": "vortech",
+      "data": {
+        "subType": "Tidal",
+        "max": 60
+      }
+    }
+  ],
+  "clock": {
+    "timezone": [
+      "-8.00",
+      "-7.00"
+    ],
+    "date": 1775773756,
+    "dst": true,
+    "auto": true
+  },
+  "mconf": [
+    {
+      "abaddr": 2,
+      "name": "GPower",
+      "hwtype": "EB832",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0
+      }
+    },
+    {
+      "abaddr": 3,
+      "name": "DQD_DT",
+      "hwtype": "DQD",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "volume": [
+          2000,
+          2000
+        ],
+        "volumeLeft": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "abaddr": 4,
+      "name": "PWR_Bottom",
+      "hwtype": "EB832",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0
+      }
+    },
+    {
+      "abaddr": 5,
+      "name": "COR_5",
+      "hwtype": "COR",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "errorMask": 103,
+        "max": 100,
+        "min": 10,
+        "calState": 0
+      }
+    },
+    {
+      "abaddr": 6,
+      "name": "TNP",
+      "hwtype": "TNP",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "errorMask": 65535,
+        "wasteSize": 3218,
+        "cal": false,
+        "targetPO4": 0,
+        "targetNO3": 50,
+        "sampleChange": false,
+        "resetDefaults": false,
+        "primeBlank": false,
+        "prime": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "clean": 0,
+        "reset": [
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "newReagent": [
+          false,
+          false,
+          false
+        ],
+        "calConst": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "abaddr": 8,
+      "name": "AFS_8",
+      "hwtype": "AFS",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0
+      }
+    },
+    {
+      "abaddr": 9,
+      "name": "PWR_Top",
+      "hwtype": "EB832",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0
+      }
+    },
+    {
+      "abaddr": 10,
+      "name": "FMM_G2",
+      "hwtype": "FMM",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "auto": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "mode": [
+          "optical",
+          "optical",
+          "optical",
+          "optical"
+        ],
+        "flowMode": "gph",
+        "levelMode": "in"
+      }
+    },
+    {
+      "abaddr": 11,
+      "name": "COR_11",
+      "hwtype": "COR",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "errorMask": 103,
+        "max": 100,
+        "min": 10,
+        "calState": 0
+      }
+    },
+    {
+      "abaddr": 12,
+      "name": "DOS_2Part",
+      "hwtype": "DOS",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "volume": [
+          2000,
+          2000
+        ],
+        "volumeLeft": [
+          716,
+          561
+        ]
+      }
+    },
+    {
+      "abaddr": 13,
+      "name": "1LNK_13",
+      "hwtype": "1LNK",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0
+      }
+    },
+    {
+      "abaddr": 14,
+      "name": "FMM_G1",
+      "hwtype": "FMM",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "auto": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "mode": [
+          "optical",
+          "LLS-15",
+          "LLS-15",
+          "optical"
+        ],
+        "flowMode": "gph",
+        "levelMode": "in"
+      }
+    },
+    {
+      "abaddr": 15,
+      "name": "1LNK_15",
+      "hwtype": "1LNK",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0
+      }
+    },
+    {
+      "abaddr": 16,
+      "name": "WAV_16",
+      "hwtype": "WAV",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "homeSet": false,
+        "errorMask": 10
+      }
+    },
+    {
+      "abaddr": 17,
+      "name": "WAV_17",
+      "hwtype": "WAV",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "homeSet": false,
+        "errorMask": 0
+      }
+    },
+    {
+      "abaddr": 18,
+      "name": "Trident",
+      "hwtype": "TRI",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "errorMask": 65535,
+        "wasteSize": 3585,
+        "cal": false,
+        "targetAlk": 8.5,
+        "targetCa": 400,
+        "targetMg": 1300,
+        "sampleChange": false,
+        "resetDefaults": false,
+        "primeBlank": false,
+        "prime": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "clean": 0,
+        "reset": [
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "newReagent": [
+          false,
+          false,
+          false
+        ],
+        "calConst": [
+          62.61,
+          72.89,
+          8.37
+        ]
+      }
+    },
+    {
+      "abaddr": 19,
+      "name": "PM2",
+      "hwtype": "PM2",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0
+      }
+    },
+    {
+      "abaddr": 20,
+      "name": "MXM",
+      "hwtype": "MXM",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "status": "\n    (0,15,15)\n   Vortech3(42) - Rev 1.4 Ser #: 4G160033FBRBC4 - OK-1\n   Vortech2(42) - Rev 1.4 Ser #: 76701964875114 - OK-2\n   Vortech1(42) - Rev 1.4 Ser #: 4G160033F9RBBB - OK-3\n   Vortech4(42) - Rev 1.4 Ser #: 76701964881080 - OK-4\n"
+      }
+    },
+    {
+      "abaddr": 21,
+      "name": "FMM_Cab",
+      "hwtype": "FMM",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "auto": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "mode": [
+          "optical",
+          "optical",
+          "LLS-15",
+          "optical"
+        ],
+        "flowMode": "gph",
+        "levelMode": "in"
+      }
+    },
+    {
+      "abaddr": 22,
+      "name": "FMM_FRAG",
+      "hwtype": "FMM",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "auto": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "mode": [
+          "optical",
+          "optical",
+          "LLS-15",
+          "wof"
+        ],
+        "flowMode": "gph",
+        "levelMode": "in"
+      }
+    },
+    {
+      "abaddr": 23,
+      "name": "DQD_QT",
+      "hwtype": "DQD",
+      "update": false,
+      "updateStat": 0,
+      "extra": {
+        "swapAddr": 0,
+        "volume": [
+          2000,
+          2000
+        ],
+        "volumeLeft": [
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "dconf": [
+    {
+      "page": 0,
+      "lineEnables": [
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "probes": [
+        "base_Temp",
+        "base_pH",
+        "base_Cond",
+        "base_ORP"
+      ],
+      "outputs": [
+        "base_Var1",
+        "base_Var2",
+        "base_Var3",
+        "base_Var4",
+        "base_Alarm",
+        "base_Warn",
+        "base_email",
+        "0_0",
+        "3_1",
+        "3_2",
+        "3_3",
+        "3_4",
+        "3_5",
+        "3_6",
+        "3_7",
+        "3_8"
+      ]
+    },
+    {
+      "page": 1,
+      "lineEnables": [
+        true,
+        true,
+        false,
+        true,
+        false
+      ],
+      "probes": [
+        "base_Temp",
+        "base_pH",
+        "base_pH2",
+        "base_Temp"
+      ],
+      "outputs": [
+        "base_Var1",
+        "base_Var2",
+        "base_Var3",
+        "base_Var4",
+        "base_Alarm",
+        "base_Warn",
+        "base_email",
+        "0_0",
+        "3_1",
+        "3_2",
+        "3_3",
+        "3_4",
+        "3_5",
+        "3_6",
+        "3_7",
+        "3_8"
+      ]
+    },
+    {
+      "page": 2,
+      "lineEnables": [
+        false,
+        true,
+        true,
+        false,
+        false
+      ],
+      "probes": [
+        "base_Temp",
+        "base_pH",
+        "base_Cond",
+        "base_pH2"
+      ],
+      "outputs": [
+        "base_Var1",
+        "base_Var2",
+        "base_Var3",
+        "base_Var4",
+        "base_Alarm",
+        "base_Warn",
+        "base_email",
+        "base_Var1",
+        "3_1",
+        "3_2",
+        "3_3",
+        "3_4",
+        "3_5",
+        "3_6",
+        "3_7",
+        "3_8"
+      ]
+    },
+    {
+      "page": 3,
+      "lineEnables": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "probes": [
+        "base_Temp",
+        "base_pH",
+        "base_pH2",
+        "3_0"
+      ],
+      "outputs": [
+        "base_Var1",
+        "base_Var2",
+        "base_Var3",
+        "base_Var4",
+        "base_Alarm",
+        "base_Warn",
+        "base_email",
+        "base_Var1",
+        "3_1",
+        "3_2",
+        "3_3",
+        "3_4",
+        "3_5",
+        "3_6",
+        "3_7",
+        "3_8"
+      ]
+    }
+  ],
+  "iconf": [
+    {
+      "did": "base_Temp",
+      "enable": true,
+      "type": "Temp",
+      "name": "Temp",
+      "alarm": {},
+      "extra": {
+        "scale": "5e9",
+        "offset": "-10",
+        "range": "Faren"
+      }
+    },
+    {
+      "did": "base_pH",
+      "enable": true,
+      "type": "pH",
+      "name": "pH",
+      "alarm": {},
+      "extra": {
+        "scale": "10d7",
+        "offset": "-38",
+        "comp": false
+      }
+    },
+    {
+      "did": "base_pH2",
+      "enable": false,
+      "type": "pH",
+      "name": "pH2",
+      "alarm": {},
+      "extra": {
+        "scale": "13ea",
+        "offset": "-175",
+        "comp": false
+      }
+    },
+    {
+      "did": "base_ORP",
+      "enable": true,
+      "type": "ORP",
+      "name": "ORP",
+      "alarm": {},
+      "extra": {
+        "scale": "1071",
+        "offset": "97"
+      }
+    },
+    {
+      "did": "base_Cond",
+      "enable": true,
+      "type": "Cond",
+      "name": "Salt",
+      "alarm": {},
+      "extra": {
+        "scale": "d40",
+        "offset": "-224",
+        "comp": 0,
+        "range": "Salinity"
+      }
+    },
+    {
+      "did": "2_P0",
+      "enable": true,
+      "type": "Amps",
+      "name": "Alk",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P1",
+      "enable": true,
+      "type": "Amps",
+      "name": "Ca",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P2",
+      "enable": true,
+      "type": "Amps",
+      "name": "Mg",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P3",
+      "enable": true,
+      "type": "Amps",
+      "name": "RO_BoosterA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P4",
+      "enable": true,
+      "type": "Amps",
+      "name": "OzoneA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P5",
+      "enable": true,
+      "type": "Amps",
+      "name": "Pump_2_6A",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P6",
+      "enable": true,
+      "type": "Amps",
+      "name": "RefLght_2_7A",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P7",
+      "enable": true,
+      "type": "Amps",
+      "name": "GPower8A",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P8",
+      "enable": true,
+      "type": "pwr",
+      "name": "PowerStripW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P9",
+      "enable": true,
+      "type": "pwr",
+      "name": "NSW_HeaterW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P10",
+      "enable": true,
+      "type": "pwr",
+      "name": "NSW_PumpW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P11",
+      "enable": true,
+      "type": "pwr",
+      "name": "RO_BoosterW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P12",
+      "enable": true,
+      "type": "pwr",
+      "name": "OzoneW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P13",
+      "enable": true,
+      "type": "pwr",
+      "name": "Pump_2_6W",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P14",
+      "enable": true,
+      "type": "pwr",
+      "name": "RefLght_2_7W",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P15",
+      "enable": true,
+      "type": "pwr",
+      "name": "GPower8W",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "2_P16",
+      "enable": true,
+      "type": "volts",
+      "name": "Volt_2",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P0",
+      "enable": true,
+      "type": "Amps",
+      "name": "WaveEngineA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P1",
+      "enable": true,
+      "type": "Amps",
+      "name": "Bottom2A",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P2",
+      "enable": true,
+      "type": "Amps",
+      "name": "RetPump_4_3A",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P3",
+      "enable": true,
+      "type": "Amps",
+      "name": "Heater_4_4A",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P4",
+      "enable": true,
+      "type": "Amps",
+      "name": "Skimmer_4_5A",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P5",
+      "enable": true,
+      "type": "Amps",
+      "name": "Pump_4_6A",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P6",
+      "enable": true,
+      "type": "Amps",
+      "name": "AxisA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P7",
+      "enable": true,
+      "type": "Amps",
+      "name": "SkimmerA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P8",
+      "enable": true,
+      "type": "pwr",
+      "name": "WaveEngineW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P9",
+      "enable": true,
+      "type": "pwr",
+      "name": "Bottom2W",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P10",
+      "enable": true,
+      "type": "pwr",
+      "name": "RetPump_4_3W",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P11",
+      "enable": true,
+      "type": "pwr",
+      "name": "Heater_4_4W",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P12",
+      "enable": true,
+      "type": "pwr",
+      "name": "Skimmer_4_5W",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P13",
+      "enable": true,
+      "type": "pwr",
+      "name": "Pump_4_6W",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P14",
+      "enable": true,
+      "type": "pwr",
+      "name": "AxisW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P15",
+      "enable": true,
+      "type": "pwr",
+      "name": "SkimmerW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "4_P16",
+      "enable": true,
+      "type": "volts",
+      "name": "Volt_4",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "6_0",
+      "enable": true,
+      "type": "po4",
+      "name": "PO4",
+      "alarm": {},
+      "extra": {
+        "scale": "0",
+        "offset": "0"
+      }
+    },
+    {
+      "did": "6_1",
+      "enable": true,
+      "type": "no3",
+      "name": "NO3",
+      "alarm": {},
+      "extra": {
+        "scale": "0",
+        "offset": "0"
+      }
+    },
+    {
+      "did": "9_P0",
+      "enable": true,
+      "type": "Amps",
+      "name": "InkbirdA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P1",
+      "enable": true,
+      "type": "Amps",
+      "name": "ReactorA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P2",
+      "enable": true,
+      "type": "Amps",
+      "name": "FanA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P3",
+      "enable": true,
+      "type": "Amps",
+      "name": "Tunze_ATOA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P4",
+      "enable": true,
+      "type": "Amps",
+      "name": "UVA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P5",
+      "enable": true,
+      "type": "Amps",
+      "name": "ReefMatA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P6",
+      "enable": true,
+      "type": "Amps",
+      "name": "Sump_FlowA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P7",
+      "enable": true,
+      "type": "Amps",
+      "name": "Stand_LightA",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P8",
+      "enable": true,
+      "type": "pwr",
+      "name": "InkbirdW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P9",
+      "enable": true,
+      "type": "pwr",
+      "name": "ReactorW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P10",
+      "enable": true,
+      "type": "pwr",
+      "name": "FanW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P11",
+      "enable": true,
+      "type": "pwr",
+      "name": "Tunze_ATOW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P12",
+      "enable": true,
+      "type": "pwr",
+      "name": "UVW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P13",
+      "enable": true,
+      "type": "pwr",
+      "name": "ReefMatW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P14",
+      "enable": true,
+      "type": "pwr",
+      "name": "Sump_FlowW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P15",
+      "enable": true,
+      "type": "pwr",
+      "name": "Stand_LightW",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "9_P16",
+      "enable": true,
+      "type": "volts",
+      "name": "Volt_9",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "14_P1",
+      "enable": true,
+      "type": "in",
+      "name": "RES_LV",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "14_P2",
+      "enable": true,
+      "type": "in",
+      "name": "ATO_LL",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "18_0",
+      "enable": true,
+      "type": "alk",
+      "name": "Alkx18",
+      "alarm": {},
+      "extra": {
+        "scale": "0",
+        "offset": "0"
+      }
+    },
+    {
+      "did": "18_1",
+      "enable": true,
+      "type": "ca",
+      "name": "Cax18",
+      "alarm": {},
+      "extra": {
+        "scale": "0",
+        "offset": "0"
+      }
+    },
+    {
+      "did": "18_2",
+      "enable": true,
+      "type": "mg",
+      "name": "Mgx18",
+      "alarm": {},
+      "extra": {
+        "scale": "0",
+        "offset": "0"
+      }
+    },
+    {
+      "did": "19_0",
+      "enable": false,
+      "type": "Temp",
+      "name": "TmpJnk",
+      "alarm": {},
+      "extra": {
+        "scale": "1000",
+        "offset": "-20",
+        "range": "Faren"
+      }
+    },
+    {
+      "did": "19_1",
+      "enable": true,
+      "type": "Cond",
+      "name": "Condx19",
+      "alarm": {},
+      "extra": {
+        "scale": "1133",
+        "offset": "91",
+        "comp": 0,
+        "range": "Salinity"
+      }
+    },
+    {
+      "did": "21_P2",
+      "enable": true,
+      "type": "in",
+      "name": "Rtn_lv",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "22_P2",
+      "enable": true,
+      "type": "in",
+      "name": "FRAG_R",
+      "alarm": {},
+      "extra": {}
+    },
+    {
+      "did": "base_I1",
+      "name": "DoorSw",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "base_I2",
+      "name": "Sw2",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "base_I3",
+      "name": "Sw3",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "base_I4",
+      "name": "Sw4",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "base_I5",
+      "name": "Sw5",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "base_I6",
+      "name": "SkimSW",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "10_I1",
+      "name": "ATOLOW",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "10_I2",
+      "name": "ATOMAX",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "10_I3",
+      "name": "XLow",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "10_I4",
+      "name": "Ext_Lo",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "12_I1",
+      "name": "Alk_Lo",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "12_I2",
+      "name": "CA_Low",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "14_I1",
+      "name": "NSW_Hi",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "14_I4",
+      "name": "NSW_Lo",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "19_I1",
+      "name": "Master",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "19_I2",
+      "name": "SWPump",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "19_I3",
+      "name": "SWRODI",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "19_I4",
+      "name": "Swx19_4",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "19_I5",
+      "name": "Swx19_5",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "19_I6",
+      "name": "Swx19_6",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "21_I1",
+      "name": "Ret_Lo",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "21_I2",
+      "name": "Ret_hi",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "21_I4",
+      "name": "Swx21_4",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "22_I1",
+      "name": "FRAG_L",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "22_I2",
+      "name": "FRAG_H",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    },
+    {
+      "did": "22_I4",
+      "name": "Swx22_4",
+      "type": "digital",
+      "extra": {},
+      "enable": true
+    }
+  ],
+  "misc": {
+    "reboot": false,
+    "almSound": "Solveigs",
+    "wrnSound": "Positive Beep",
+    "logInterval": 10,
+    "feedInterval": [
+      500,
+      900,
+      1200,
+      300
+    ],
+    "pwrMon": true
+  },
+  "season": {
+    "temp": [
+      76,
+      75,
+      76,
+      76,
+      76.5,
+      77.5,
+      78.5,
+      80.5,
+      78.5,
+      77.5,
+      76.5,
+      76
+    ],
+    "newmoon": [
+      7,
+      33,
+      18,
+      51,
+      9,
+      0,
+      21,
+      0,
+      20,
+      2,
+      -8,
+      7
+    ],
+    "moonrise": [
+      "9:00",
+      "9:23",
+      "8:12",
+      "8:36",
+      "8:12",
+      "8:35",
+      "8:12",
+      "8:35",
+      "8:59",
+      "8:35",
+      "8:59",
+      "8:35"
+    ],
+    "moonset": [
+      "21:00",
+      "21:23",
+      "20:12",
+      "20:36",
+      "20:12",
+      "20:35",
+      "20:12",
+      "20:35",
+      "20:59",
+      "20:35",
+      "20:59",
+      "20:35"
+    ],
+    "sunrise": [
+      "7:33",
+      "7:37",
+      "7:26",
+      "7:06",
+      "6:47",
+      "6:39",
+      "6:43",
+      "6:52",
+      "6:57",
+      "6:58",
+      "7:03",
+      "7:17"
+    ],
+    "sunset": [
+      "18:51",
+      "19:07",
+      "19:17",
+      "19:21",
+      "19:25",
+      "19:34",
+      "19:41",
+      "19:38",
+      "19:21",
+      "18:59",
+      "18:41",
+      "18:38"
+    ]
+  },
+  "nconf": {
+    "dhcp": true,
+    "hostname": "apex",
+    "ipaddr": "192.168.4.178",
+    "netmask": "255.255.252.0",
+    "gateway": "192.168.4.1",
+    "dns": [
+      "192.168.1.254",
+      "0.0.0.0"
+    ],
+    "httpPort": 80,
+    "user": "admin",
+    "password": "1234",
+    "defaultAuth": true,
+    "fusionEnable": true,
+    "wifiAPLock": false,
+    "wifiEnable": true,
+    "wifiAPPassword": "",
+    "ssid": "",
+    "wifiAP": false,
+    "emailEnable": false,
+    "smtpPort": 587,
+    "smtpServer": "mail.example.com",
+    "emailFrom": "name@example.com",
+    "emailTo": "recipient@example.com",
+    "reEmail": 60,
+    "emailAuth": false,
+    "emailUser": "name@example.com",
+    "emailPassword": "",
+    "updateFirmware": false,
+    "latestFirmware": "5.12_CA25"
+  },
+  "cal": {
+    "did": "14_P1",
+    "date": 1775773756,
+    "value": 7.9,
+    "state": 2
+  }
+}
