@@ -50,6 +50,16 @@ Statements that require historical state (`Defer`, `Min Time`, `When`) and astro
 
 ---
 
+## Dashboard Usage Lookup
+
+On the main dashboard (`/apex/dash`), every probe, outlet, and switch widget shows a small bug icon next to its settings cog. Clicking it opens a panel showing every outlet whose program references that item — so you can instantly see what depends on it without hunting through your config manually.
+
+![Dashboard panel showing outlets that reference a selected probe](img/dashboard-usages.png)
+
+Each row links directly to that outlet's configuration page. Click a row to see the full outlet program in the right pane, with the matching line highlighted.
+
+---
+
 ## Installation
 
 You'll download the extension files from GitHub and load them manually into Chrome. This takes about two minutes.

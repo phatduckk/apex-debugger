@@ -482,6 +482,7 @@
       #apex-probe-left th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: #999; font-weight: 700; padding: 0 10px 6px 0; border-bottom: 1px solid #ddd; }
       .apex-prog-line { display: block; padding: 1px 4px; border-radius: 2px; white-space: pre; }
       .apex-prog-line.match { background: rgba(224,120,32,0.15); }
+      .af-debug:before { content: "\\f188"; }
       #apex-help-body h3, #apex-probe-body h3 {
         color: #e07820; margin: 14px 0 5px; font-size: 11px;
         text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
@@ -889,10 +890,9 @@
   function injectDashIcons() {
     if (!location.pathname.startsWith('/apex/dash')) return;
     function makeIcon() {
-      const icon = document.createElement('span');
-      icon.className = 'apex-dash-icon';
-      icon.style.cssText = 'display:inline-flex;align-items:center;vertical-align:middle;color:rgb(153,153,153);margin-right:4px;cursor:default;';
-      icon.innerHTML = DASH_ICON_SVG;
+      const icon = document.createElement('i');
+      icon.className = 'af af-debug apex-dash-icon';
+      icon.style.cssText = 'color:#999;margin-right:4px;cursor:default;vertical-align:text-bottom;line-height:21px;';
       return icon;
     }
     document.querySelectorAll('.dash-selector-config').forEach(el => {
@@ -910,6 +910,7 @@
       if (el.firstElementChild?.classList.contains('apex-dash-icon')) return;
       const icon = makeIcon();
       icon.style.cursor = 'pointer';
+      icon.style.lineHeight = '17px';
       icon.addEventListener('click', e => {
         e.stopPropagation();
         const name = el.closest('.dash-switch')?.querySelector('.dash-switch-name')?.innerHTML ?? '';
@@ -920,7 +921,7 @@
     document.querySelectorAll('.dash-probe-info-config').forEach(el => {
       if (el.querySelector('.apex-dash-icon')) return;
       const icon = makeIcon();
-      icon.style.cssText += ';position:absolute;left:0;top:50%;transform:translateY(-50%);margin:0;cursor:pointer;';
+      icon.style.cssText = 'color:#999;position:absolute;right:24px;top:50%;transform:translateY(-50%);margin:0;cursor:pointer;';
       icon.addEventListener('click', e => {
         e.stopPropagation();
         const name = el.closest('.dash-probe')?.querySelector('.dash-probe-info-name')?.innerHTML ?? '';
