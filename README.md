@@ -60,6 +60,23 @@ Each row links directly to that outlet's configuration page. Click a row to see 
 
 ---
 
+## Explore: Find Where Probes Are Used
+
+The **Explore** panel lets you browse every probe in your config and see at a glance which other outlets reference it — or don't.
+
+Open it from the **`?` help menu** in the top toolbar of the dashboard and select **Explore**.
+
+![Explore panel showing probe list and references](img/explore.png)
+
+The panel has two columns:
+
+- **Left — probe list**: every probe from your config, listed alphabetically. `Fallback` and `Set` are pinned at the top as special keywords. Type in the search box to filter the list.
+- **Right — references**: click any probe to see which other outlets reference it in their programming, with the matching line of code shown and syntax-highlighted. Each entry links directly to that outlet's config page.
+
+Use the **Referenced in / Not referenced in** toggle to flip the view and see which outlets *don't* reference the selected probe — useful for finding orphaned probes or outlets that are missing a dependency.
+
+---
+
 ## Installation
 
 You'll download the extension files from GitHub and load them manually into Chrome. This takes about two minutes.
