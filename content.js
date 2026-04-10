@@ -10,8 +10,9 @@
   let lastCtx    = null;
   let lastSeason = null;
   let editorObserver = null;
-  let helpOpen  = false;
-  let probeOpen = false;
+  let helpOpen    = false;
+  let probeOpen   = false;
+  let exploreOpen = false;
   let lastUrl    = location.href;
 
   const HELP_MIN_H   = 160;
@@ -483,6 +484,7 @@
       .apex-prog-line { display: block; padding: 1px 4px; border-radius: 2px; white-space: pre; }
       .apex-prog-line.match { background: rgba(224,120,32,0.15); }
       .af-debug:before { content: "\\f188"; }
+      .af-explore:before { content: "\\f06e"; }
       #apex-help-body h3, #apex-probe-body h3 {
         color: #e07820; margin: 14px 0 5px; font-size: 11px;
         text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
@@ -540,6 +542,61 @@
       }
       #apex-probe-close:hover { color: #fff; }
       #apex-probe-body { overflow-y: auto; flex: 1; padding: 10px 16px 16px; background: #f5f5f5; }
+      #apex-explore-panel {
+        position: fixed; bottom: 0; left: 0; right: 0;
+        height: ${HELP_DEF_H}px;
+        background: #fff; color: #333;
+        font-family: system-ui, sans-serif; font-size: 13px;
+        z-index: 999999;
+        display: flex; flex-direction: column;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.18);
+        transform: translateY(100%);
+        transition: transform 0.2s ease;
+        border-top: 2px solid #d0d0d0;
+      }
+      #apex-explore-panel.open { transform: translateY(0); }
+      #apex-explore-handle {
+        height: 8px; background: #e8e8e8; cursor: ns-resize;
+        flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      }
+      #apex-explore-handle:hover { background: #ddd; }
+      #apex-explore-handle::after {
+        content: ''; width: 36px; height: 3px;
+        background: #bbb; border-radius: 2px;
+      }
+      #apex-explore-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 6px 14px; background: #222; flex-shrink: 0;
+      }
+      #apex-explore-header span { display: flex; align-items: center; gap: 7px; font-weight: 400; font-size: 14px; color: #9a9a9a; letter-spacing: normal; text-transform: none; }
+      #apex-explore-close {
+        background: none; border: none; color: #888;
+        font-size: 18px; cursor: pointer; padding: 0 2px; line-height: 1;
+      }
+      #apex-explore-close:hover { color: #fff; }
+      #apex-explore-body { display: flex; flex: 1; overflow: hidden; background: #f5f5f5; }
+      #apex-explore-left { display: flex; flex-direction: column; width: 280px; flex-shrink: 0; border-right: 1px solid #ddd; background: #fff; }
+      #apex-explore-search { padding: 8px; border-bottom: 1px solid #eee; flex-shrink: 0; }
+      #apex-explore-search input { width: 100%; box-sizing: border-box; padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; outline: none; }
+      #apex-explore-search input:focus { border-color: #e07820; }
+      #apex-explore-specials { border-bottom: 2px solid #eee; flex-shrink: 0; }
+      .apex-explore-keyword { display: block; width: 100%; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; color: #e07820; border: none; background: none; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .apex-explore-keyword:hover { background: #fff8f3; }
+      .apex-explore-keyword.active { background: #e07820; color: #fff; }
+      #apex-explore-list { overflow-y: auto; flex: 1; }
+      .apex-explore-probe { padding: 6px 12px; cursor: pointer; font-size: 12px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .apex-explore-probe:hover { background: #f5f5f5; }
+      .apex-explore-probe.active { background: #e07820; color: #fff; }
+      #apex-explore-divider { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
+      #apex-explore-divider:hover, #apex-explore-divider.dragging { background: #bbb; }
+      #apex-explore-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #f5f5f5; }
+      #apex-explore-right h3 { color: #e07820; margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; }
+      .apex-explore-right-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 8px; }
+      .apex-explore-ref { padding: 5px 8px; font-size: 12px; border-bottom: 1px solid #eee; background: #fff; border-radius: 2px; margin-bottom: 3px; }
+      .apex-explore-toggle { display: inline-flex; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; }
+      .apex-explore-toggle button { background: #fff; border: none; padding: 2px 8px; font-size: 11px; cursor: pointer; color: #555; line-height: 1.6; }
+      .apex-explore-toggle button.active { background: #e07820; color: #fff; }
+      .apex-explore-toggle button:hover:not(.active) { background: #f0f0f0; }
       #apex-debug-toggle, #apex-debug-help {
         background-color: rgba(71,73,73,0.65) !important;
         border-color: rgba(71,73,73,0.65) !important;
@@ -791,6 +848,186 @@
     probeOpen = false;
   }
 
+  // ── Explore panel ───────────────────────────────────────────────────────────
+
+  function injectExplorePanel() {
+    if (document.getElementById('apex-explore-panel')) return;
+    const panel = document.createElement('div');
+    panel.id = 'apex-explore-panel';
+    panel.innerHTML =
+      '<div id="apex-explore-handle"></div>' +
+      '<div id="apex-explore-header"><span>Explore</span><button id="apex-explore-close" title="Close">\u00d7</button></div>' +
+      '<div id="apex-explore-body">' +
+        '<div id="apex-explore-left">' +
+          '<div id="apex-explore-search"><input type="text" id="apex-explore-search-input" placeholder="Search probes\u2026"></div>' +
+          '<div id="apex-explore-specials"></div>' +
+          '<div id="apex-explore-list"><p style="color:#888;padding:10px;margin:0">Loading\u2026</p></div>' +
+        '</div>' +
+        '<div id="apex-explore-divider"></div>' +
+        '<div id="apex-explore-right"><p style="color:#888;margin:0">Select a probe to see references.</p></div>' +
+      '</div>';
+    document.body.appendChild(panel);
+    document.getElementById('apex-explore-close').addEventListener('click', closeExplorePanel);
+    document.getElementById('apex-explore-handle').addEventListener('mousedown', makePanelResizer(panel));
+  }
+
+  async function openExplorePanel() {
+    injectExplorePanel();
+    requestAnimationFrame(() => document.getElementById('apex-explore-panel').classList.add('open'));
+    exploreOpen = true;
+
+    // Wire left/right divider resizer
+    const divider = document.getElementById('apex-explore-divider');
+    if (divider && !divider._wired) {
+      divider._wired = true;
+      divider.addEventListener('mousedown', e => {
+        e.preventDefault();
+        divider.classList.add('dragging');
+        const left = document.getElementById('apex-explore-left');
+        const body = document.getElementById('apex-explore-body');
+        function onMove(ev) {
+          const rect = body.getBoundingClientRect();
+          left.style.width = Math.min(Math.max(ev.clientX - rect.left, 150), rect.width - 150) + 'px';
+        }
+        function onUp() {
+          divider.classList.remove('dragging');
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+    }
+
+    let allOconf = [];
+    try {
+      const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
+      const json = await r.json();
+      allOconf = (json.oconf || []).filter(item => item.name);
+    } catch (_) {}
+
+    const list = document.getElementById('apex-explore-list');
+    if (!list) return;
+
+    let exploreMode = 'referenced';
+    let selectedProbe = null;
+
+    function renderRefs(name) {
+      const right = document.getElementById('apex-explore-right');
+      if (!right) return;
+      const needle = name.toLowerCase();
+      const loc = { sensitivity: 'base' };
+
+      let content;
+      if (exploreMode === 'referenced') {
+        const refs = allOconf
+          .filter(item => item.name !== name)
+          .flatMap(item => {
+            const lines = (item.prog || '').split('\n')
+              .filter(line => !/^tdata\b/i.test(line.trim()) && line.toLowerCase().includes(needle));
+            return lines.map(line => ({ name: item.name, did: item.did, line: line.trim() }));
+          })
+          .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
+        content = refs.length
+          ? `<h3>Referenced in (${refs.length})</h3>` + refs.map(r =>
+              `<div class="apex-explore-ref">` +
+                `<div style="font-weight:700;margin-bottom:2px"><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank" style="color:inherit;text-decoration:none">${esc(r.name)}</a></div>` +
+                `<code style="font-size:11px">${highlightLine(r.line, name)}</code>` +
+              `</div>`).join('')
+          : `<h3>Referenced in</h3><p style="color:#888;margin:8px 0 0">No other probes reference <strong>${esc(name)}</strong>.</p>`;
+      } else {
+        const notRefs = allOconf
+          .filter(item =>
+            item.name !== name &&
+            !(item.prog || '').split('\n').some(line =>
+              !/^tdata\b/i.test(line.trim()) && line.toLowerCase().includes(needle)
+            )
+          )
+          .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
+        content = notRefs.length
+          ? `<h3>Not referenced in (${notRefs.length})</h3>` + notRefs.map(item =>
+              `<div class="apex-explore-ref" style="font-weight:700"><a href="/apex/config/outputs/${esc(String(item.did))}" target="_blank" style="color:inherit;text-decoration:none">${esc(item.name)}</a></div>`).join('')
+          : `<h3>Not referenced in</h3><p style="color:#888;margin:8px 0 0">All other probes reference <strong>${esc(name)}</strong>.</p>`;
+      }
+
+      // Extract h3 text and build header with toggle
+      const h3Match = content.match(/^<h3>(.*?)<\/h3>/);
+      const h3Text = h3Match ? h3Match[1] : '';
+      const rest = h3Match ? content.slice(h3Match[0].length) : content;
+
+      right.innerHTML =
+        `<div class="apex-explore-right-header">` +
+          `<h3>${h3Text}</h3>` +
+          `<div class="apex-explore-toggle">` +
+            `<button data-mode="referenced" class="${exploreMode === 'referenced' ? 'active' : ''}">Referenced in</button>` +
+            `<button data-mode="not-referenced" class="${exploreMode === 'not-referenced' ? 'active' : ''}">Not referenced in</button>` +
+          `</div>` +
+        `</div>` + rest;
+
+      right.querySelectorAll('.apex-explore-toggle button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          exploreMode = btn.dataset.mode;
+          renderRefs(name);
+        });
+      });
+    }
+
+    function selectProbe(name) {
+      selectedProbe = name;
+      list.querySelectorAll('.apex-explore-probe').forEach(el =>
+        el.classList.toggle('active', el.dataset.name === name)
+      );
+      document.querySelectorAll('.apex-explore-keyword').forEach(el =>
+        el.classList.toggle('active', el.dataset.name === name)
+      );
+      renderRefs(name);
+    }
+
+    function renderList(filter) {
+      const q = filter.toLowerCase();
+      const filtered = (q ? allOconf.filter(item => item.name.toLowerCase().includes(q)) : allOconf)
+        .slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+      if (!filtered.length) {
+        list.innerHTML = '<p style="color:#888;padding:10px;margin:0">No probes found.</p>';
+        return;
+      }
+      list.innerHTML = filtered.map(item =>
+        `<div class="apex-explore-probe" data-name="${esc(item.name)}">${esc(item.name)}</div>`
+      ).join('');
+      list.querySelectorAll('.apex-explore-probe').forEach(el => {
+        el.addEventListener('click', () => selectProbe(el.dataset.name));
+      });
+    }
+
+    renderList('');
+
+    // Populate keyword specials
+    const specials = document.getElementById('apex-explore-specials');
+    if (specials && !specials._wired) {
+      specials._wired = true;
+      ['Fallback', 'Set'].forEach(kw => {
+        const btn = document.createElement('button');
+        btn.className = 'apex-explore-keyword';
+        btn.textContent = kw;
+        btn.dataset.name = kw;
+        btn.addEventListener('click', () => selectProbe(kw));
+        specials.appendChild(btn);
+      });
+    }
+
+    const input = document.getElementById('apex-explore-search-input');
+    if (input) {
+      input.addEventListener('input', () => renderList(input.value));
+      input.focus();
+    }
+  }
+
+  function closeExplorePanel() {
+    const panel = document.getElementById('apex-explore-panel');
+    if (panel) panel.classList.remove('open');
+    exploreOpen = false;
+  }
+
   function makePanelResizer(panel) {
     return function(e) {
       e.preventDefault();
@@ -929,13 +1166,24 @@
       });
       el.appendChild(icon);
     });
+
+    const helpDropdown = document.querySelector('[title="Help"] ~ .dropdown-menu, [title="Help"] + .dropdown-menu');
+    if (helpDropdown && !helpDropdown.querySelector('.apex-explore-item')) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'dropdown-item apex-explore-item';
+      btn.innerHTML = '<div class="menu-item-basic"><i class="af af-fw af-explore"></i> Explore</div>';
+      btn.addEventListener('click', openExplorePanel);
+      helpDropdown.appendChild(btn);
+    }
   }
 
   // ── Navigation reset ───────────────────────────────────────────────────────
 
   function onNavigate() {
-    if (enabled)  setEnabled(false);
-    if (helpOpen) closeHelpPanel();
+    if (enabled)      setEnabled(false);
+    if (helpOpen)     closeHelpPanel();
+    if (exploreOpen)  closeExplorePanel();
   }
 
   // ── Init ───────────────────────────────────────────────────────────────────
