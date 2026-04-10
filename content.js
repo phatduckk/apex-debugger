@@ -906,9 +906,27 @@
       });
       el.insertAdjacentElement('beforebegin', icon);
     });
+    document.querySelectorAll('.dash-switch-config').forEach(el => {
+      if (el.previousElementSibling?.classList.contains('apex-dash-icon')) return;
+      const icon = makeIcon();
+      icon.style.cursor = 'pointer';
+      icon.addEventListener('click', e => {
+        e.stopPropagation();
+        const name = el.closest('.dash-switch')?.querySelector('.dash-switch-name')?.innerHTML ?? '';
+        openProbePanel(name);
+      });
+      el.insertAdjacentElement('beforebegin', icon);
+    });
     document.querySelectorAll('.dash-probe-info-config').forEach(el => {
       if (el.firstElementChild?.classList.contains('apex-dash-icon')) return;
-      el.insertAdjacentElement('afterbegin', makeIcon());
+      const icon = makeIcon();
+      icon.style.cursor = 'pointer';
+      icon.addEventListener('click', e => {
+        e.stopPropagation();
+        const name = el.closest('.dash-probe')?.querySelector('.dash-probe-info-name')?.innerHTML ?? '';
+        openProbePanel(name);
+      });
+      el.insertAdjacentElement('afterbegin', icon);
     });
   }
 
