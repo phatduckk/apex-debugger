@@ -9,6 +9,7 @@
   let pollTimer  = null;
   let lastCtx    = null;
   let lastSeason = null;
+  let beefMode   = false;
   let editorObserver = null;
   let helpOpen    = false;
   let probeOpen   = false;
@@ -289,7 +290,14 @@
     lines.forEach((line, i) => {
       const gEl = gutterEls[i + 1];
       if (!gEl) return;
-      gEl.style.backgroundColor = BG[results[i]] ?? '';
+      gEl.style.backgroundColor = beefMode ? '' : (BG[results[i]] ?? '');
+      if (beefMode) {
+        if (results[i] === 'green')      gEl.dataset.apexBeef = 'T';
+        else if (results[i] === 'red')   gEl.dataset.apexBeef = 'F';
+        else                             delete gEl.dataset.apexBeef;
+      } else {
+        delete gEl.dataset.apexBeef;
+      }
       const tip = buildTipText(line.textContent, results[i], i === winnerIdx, winnerFinalState);
       if (tip) {
         gEl.dataset.apexTip   = tip;
@@ -305,7 +313,10 @@
     const winnerStyle = document.getElementById('apex-winner-style');
     if (winnerStyle) winnerStyle.textContent = '';
     document.querySelectorAll('.cm-lineNumbers .cm-gutterElement')
-      .forEach(el => (el.style.backgroundColor = ''));
+      .forEach(el => {
+        el.style.backgroundColor = '';
+        delete el.dataset.apexBeef;
+      });
   }
 
   // ── Refresh cycle ──────────────────────────────────────────────────────────
@@ -503,6 +514,29 @@
         padding: 6px 10px; border-radius: 4px; border-left: 3px solid #888;
         max-width: 320px; box-shadow: 0 2px 10px rgba(0,0,0,0.35);
         white-space: pre-wrap;
+      }
+      .cm-lineNumbers .cm-gutterElement[data-apex-beef] {
+        position: relative;
+        padding-right: 18px;
+      }
+      .cm-lineNumbers .cm-gutterElement[data-apex-beef]::after {
+        position: absolute;
+        right: 2px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        font-family: ApexFusion;
+        font-weight: 900;
+        line-height: 1;
+        pointer-events: none;
+      }
+      .cm-lineNumbers .cm-gutterElement[data-apex-beef="T"]::after {
+        content: '\\f058';
+        color: #4caf50;
+      }
+      .cm-lineNumbers .cm-gutterElement[data-apex-beef="F"]::after {
+        content: '\\f057';
+        color: #e05555;
       }
       .adh-swatch {
         display: inline-block; width: 11px; height: 11px;
@@ -1188,7 +1222,8 @@
 
   // ── Init ───────────────────────────────────────────────────────────────────
 
-  chrome.storage.sync.get({ hostname: 'apex.local' }, ({ hostname }) => {
+  chrome.storage.sync.get({ hostname: 'apex.local', beefMode: false }, ({ hostname, beefMode: beef }) => {
+    beefMode = beef;
     if (window.location.hostname !== hostname) return;
 
     STATUS_URL = `http://${hostname}/cgi-bin/status.json`;
