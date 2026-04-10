@@ -105,6 +105,18 @@ You'll download the extension files from GitHub and load them manually into Chro
 
 > **Note:** The extension only runs while it's loaded here. Don't delete the folder after installing or Chrome will lose track of it.
 
+### Updating the extension
+
+When a new version is available:
+
+1. Download the latest ZIP from GitHub (same link as above) and unzip it
+2. Replace the files in your existing `apex-debugger-main` folder with the new ones
+3. Go to `chrome://extensions` and click the **refresh icon** on the Apex Debugger card to reload it
+
+   ![Apex Debugger extension card showing the refresh button](img/refresh.png)
+
+That's all — no need to re-add or reconfigure anything.
+
 ---
 
 ## Setting Your Apex Hostname
