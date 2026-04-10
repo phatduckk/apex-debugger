@@ -186,3 +186,9 @@ apex-debugger/
 ## License
 
 MIT
+
+---
+
+## ETC
+
+Yup - Claude did all this. Took no time. Neptune should really try harder =)
