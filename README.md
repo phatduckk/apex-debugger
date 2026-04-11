@@ -174,9 +174,11 @@ Safari should automatically pick up the new version. If the extension shows as d
 
 The extension needs to know the address of your Apex controller on your local network. By default it tries `apex.local`, which works for most setups — but if your controller is on a different hostname or IP address, you'll need to update this.
 
-### How to change the hostname
+You can find your Apex's IP address in your router's admin panel, or in the Fusion app under **System → Network**.
 
-1. In Chrome, click the **puzzle piece icon** (🧩) in the top-right toolbar to open your extensions list
+### Chrome
+
+1. Click the **puzzle piece icon** (🧩) in the top-right toolbar to open your extensions list
 2. Find **Apex Debugger** and click the **three-dot menu** (⋮) next to it
 3. Click **Options**
 
@@ -191,7 +193,21 @@ The extension needs to know the address of your Apex controller on your local ne
 
 5. Click **Save** (or press Enter)
 
-You can find your Apex's IP address in your router's admin panel, or in the Fusion app under **System → Network**.
+### Safari
+
+1. Open **Safari → Settings** (`Cmd+,`) → **Extensions** tab
+2. Click **Apex Debugger** in the sidebar, then click the **Settings** button (highlighted with the orange arrow)
+
+   ![Safari Extensions panel showing the Settings button](img/safari-ext.png)
+
+3. The settings page will open — enter your controller's hostname or IP in the **Apex Hostname** field:
+
+   ![Apex Debugger settings page in Safari](img/safari-settings.png)
+
+   - Most users: `apex.local`
+   - If you know your controller's IP: e.g. `192.168.1.50`
+
+4. Click **Save**
 
 ---
 
