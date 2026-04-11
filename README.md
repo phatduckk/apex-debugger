@@ -4,169 +4,90 @@
 
 # Apex Debugger
 
-A browser extension for **Chrome and Safari** that adds live debugging tools to the [Neptune Apex Fusion](https://apex.local) interface. It color-codes your outlet programming in real time so you can see exactly which conditions are firing, shows you where any probe or input is used across your entire config, and lets you explore dependency relationships across outlets — all without leaving Fusion.
+A browser extension for **Chrome and Safari** that adds useful features to [Apex Fusion](https://apex.local). It works by connecting directly to your Apex controller on your local network — so it needs access to `apex.local` (or whatever hostname your controller uses) to read live status and configuration data.
 
 ---
 
 ## Features
 
-### Outlet Program Debugger
+### Unused Widgets Filter
 
-When you're editing an outlet program in Apex Fusion, the extension reads your Apex's live status and highlights every line:
+The dashboard has a section at the bottom for widgets that aren't assigned to any tile. The extension adds a filter bar to that section so you can quickly find widgets by name or type without scrolling through the whole list.
 
-![Apex Debugger overlay showing color-coded outlet program lines](img/debugger-screenshot.png)
+<p align="center"><img src="img/widgets.gif" alt="Unused widgets filter in action"></p>
 
-In the editor toolbar, click the **`?`** button to open a reference panel with the color legend and a quick guide to how the debugger works. Click the **bug icon** for inline code help and statement syntax reference.
+---
+
+### Dashboard References
+
+Every probe, input, and output widget on the dashboard gets a magnifier icon next to its settings cog. Click it and a panel slides up showing every outlet whose program references that item — with the exact matching line of code for each one.
+
+<p align="center"><img src="img/dash-references.gif" alt="Dashboard references panel"></p>
+
+Click any line of code in the panel to expand it into the full outlet program on the right, with the matching line highlighted. Click the outlet name to jump directly to its edit page.
+
+---
+
+### Explore
+
+Explore is like the dashboard references panel but for your entire config at once. Open it from the **`?` menu** in the dashboard toolbar and select **Explore**.
+
+<p align="center"><img src="img/explore.gif" alt="Explore panel"></p>
+
+The left column lists every input, output, and probe in your config. Click any item to see which outlets reference it in the right column — with the matching line of code shown for each. Use the **Referenced in / Not referenced in** toggle to flip the view and find everything that *doesn't* reference the selected item, useful for finding orphaned probes or missing dependencies.
+
+You can search the left column to filter the list. `Fallback` and `Set` are included at the top as a convenience since they appear frequently in outlet programs.
+
+---
+
+### Code Debugger
+
+When you open an outlet's programming editor, the extension automatically color-codes every line based on your Apex's current live state — no button to click, no refresh needed. It updates as you edit.
+
+<p align="center"><img src="img/debugger.gif" alt="Code debugger in action"></p>
 
 **Gutter** (line number column) — colored for every line:
 
-| Gutter color | Meaning |
+| Color | Meaning |
 |---|---|
 | 🟢 Green | Condition is currently **true** |
 | 🔴 Red | Condition is currently **false** |
 | ⬜ Grey | Can't be evaluated (e.g. `Min Time`, `When`, `OSC`) |
-| _(no color)_ | Neutral statement (`Fallback`, `Set [profile]`, blank lines) |
+| _(no color)_ | Neutral (`Fallback`, `Set [profile]`, blank lines) |
 
-**Line background** — highlighted only for the single winning statement (last true condition):
+**Line background** — highlighted only for the winning statement (last true condition):
 
-| Line color | Meaning |
+| Color | Meaning |
 |---|---|
-| 🟢 Green background | Winning statement → outlet will be **ON** |
-| 🔴 Red background | Winning statement → outlet will be **OFF** |
+| 🟢 Green background | Outlet will be **ON** |
+| 🔴 Red background | Outlet will be **OFF** |
 
-This makes it easy to understand your programs at a glance — especially complex multi-condition chains where the "last true statement wins" rule can be tricky to reason about.
+Hover over any gutter marker for more detail. The overlay updates immediately as you change code.
 
-The extension can evaluate:
+---
 
-- `If Time` — time ranges (including midnight-spanning)
-- `If DOW` — day of week
-- `If [PROBE] > / <` — temperature, pH, ORP, and any custom probe
-- `If [INPUT] OPEN / CLOSED` — float switches and contact switches
-- `If Output / If Outlet` — outlet state (ON/OFF)
-- `If Output Percent` — variable output intensity
-- `If FeedA / B / C / D` — active feed cycles
-- `If Error` — outlet error state
-- `Set ON / OFF` — always colored (green/red respectively)
+### References from Output & Input Pages
 
-Statements that require historical state (`Defer`, `Min Time`, `When`) and astronomical lookups (`If Sun`, `If Moon`, `If Temp < RT+`) are shown in grey — they can't be computed from a single status snapshot.
+The same references panel available on the dashboard is also accessible directly from any output or input configuration page. Click the magnifier icon in the toolbar and a panel shows every outlet that references the current item — with the same line-of-code view and full-program preview.
 
-### Dashboard Usage Lookup
+<p align="center"><img src="img/page-ref.gif" alt="References panel on output/input page"></p>
 
-On the main dashboard (`/apex/dash`), every probe, outlet, and switch widget shows a small bug icon next to its settings cog. Clicking it opens a panel showing every outlet whose program references that item — so you can instantly see what depends on it without hunting through your config manually.
+---
 
-![Dashboard panel showing outlets that reference a selected probe](img/dashboard-usages.png)
+### Legend
 
-Each row links directly to that outlet's configuration page. Click a row to see the full outlet program in the right pane, with the matching line highlighted.
+Click the **lightbulb icon** in the toolbar on any output or input page to open the legend panel.
 
-### Explore: Probe & Input Dependencies
+<p align="center"><img src="img/legend.gif" alt="Legend panel"></p>
 
-The **Explore** panel lets you browse every probe in your config and see at a glance which outlets reference it — or don't.
-
-Open it from the **`?` help menu** in the top toolbar of the dashboard and select **Explore**.
-
-![Explore panel showing probe list and references](img/explore.png)
-
-The panel has two columns:
-
-- **Left — probe list**: every probe from your config, listed alphabetically. `Fallback` and `Set` are pinned at the top as special keywords. Type in the search box to filter the list.
-- **Right — references**: click any probe to see which other outlets reference it in their programming, with the matching line of code shown and syntax-highlighted. Each entry links directly to that outlet's config page.
-
-Use the **Referenced in / Not referenced in** toggle to flip the view and see which outlets *don't* reference the selected probe — useful for finding orphaned probes or outlets that are missing a dependency.
+The legend explains how the code debugger works, shows which statement types the extension can and can't evaluate, and includes a coding reference to help you write new outlet programs.
 
 ---
 
 ## Installation
 
-### Chrome
-
-You'll download the extension files from GitHub and load them manually into Chrome. This takes about two minutes.
-
-> **Safari users:** you can delete the `Apex Debugger.zip` file from the download — it's only needed for Safari.
-
-#### Step 1 — Download the extension
-
-1. Go to **[https://github.com/phatduckk/apex-debugger](https://github.com/phatduckk/apex-debugger)**
-2. Click the green **`< > Code`** button near the top right
-3. Click **Download ZIP**
-4. Once downloaded, **unzip** the file — on Mac, double-click it; on Windows, right-click → _Extract All_
-5. You should now have a folder called **`apex-debugger-main`** (or similar). Move it somewhere you won't accidentally delete it (e.g. your Documents folder)
-
-#### Step 2 — Load it into Chrome
-
-1. Open **Google Chrome**
-2. In the address bar, type `chrome://extensions` and press Enter
-3. In the top-right corner of that page, turn on **Developer mode** (toggle switch)
-4. Click the **Load unpacked** button that appears
-
-   ![Chrome extensions page showing Developer mode toggle and Load unpacked button](img/chrome-extensions-header.png)
-
-5. Navigate to the `apex-debugger-main` folder you unzipped and select it
-6. The **Apex Debugger** extension will appear in your list — click **Enable** if it isn't already active
-
-   ![Apex Debugger extension card with Enable button](img/enable-extension.png)
-
-> **Note:** The extension only runs while it's loaded here. Don't delete the folder after installing or Chrome will lose track of it.
-
----
-
-### Safari (Mac)
-
-> **Chrome users:** you can delete the `Apex Debugger.zip` file from the download — it's only needed for Safari.
-
-#### Step 1 — Install the app
-
-1. Go to **[https://github.com/phatduckk/apex-debugger](https://github.com/phatduckk/apex-debugger)** and download the ZIP as described above
-2. In the unzipped folder, find **`Apex Debugger.zip`** and double-click it to unzip it
-3. Drag the resulting **`Apex Debugger.app`** to your **Applications** folder
-4. Double-click **`Apex Debugger.app`** to run it once — this registers the extension with Safari
-
-#### Step 2 — Enable the extension in Safari
-
-1. Open **Safari** → **Settings** (`Cmd+,`) → click the **Extensions** tab
-2. Find **Apex Debugger** in the left sidebar and check the checkbox to enable it
-
-   ![Safari Extensions settings showing Apex Debugger enabled with Settings button highlighted](img/safari-ext.png)
-
-#### Step 3 — Configure your Apex hostname
-
-To change the hostname (e.g. if your Apex isn't at `apex.local`):
-
-1. In the Extensions tab, click **Apex Debugger** in the sidebar
-2. Click the **Settings** button (shown with the orange arrow in the screenshot above)
-3. Enter your Apex controller's hostname or IP address and click Save
-
-#### Step 4 — Grant permissions
-
-The first time you visit your Apex Fusion interface, Safari will show a prompt asking if the extension can access the site:
-
-![Safari permission prompt asking if Apex Debugger can access apex.local](img/safari-perms.png)
-
-Choose **Always Allow on This Website** — this lets the extension read your Apex's live data on every visit without asking again.
-
-If you need to adjust permissions later (for example, if your Apex is on a custom hostname or IP), open **Safari → Settings → Extensions → Apex Debugger** and click **Edit Websites...**. Find your Apex host (e.g. `apex.local`, or whatever IP/hostname you use) and set it to **Allow**.
-
-![Safari Websites settings showing per-site permission for Apex Debugger](img/safari-allow-url.png)
-
-### Updating the extension
-
-#### Chrome
-
-1. Download the latest ZIP from GitHub (same link as above) and unzip it
-2. Replace the files in your existing `apex-debugger-main` folder with the new ones
-3. Go to `chrome://extensions` and click the **refresh icon** on the Apex Debugger card to reload it
-
-   ![Apex Debugger extension card showing the refresh button](img/refresh.png)
-
-That's all — no need to re-add or reconfigure anything.
-
-#### Safari
-
-1. Download the latest ZIP from GitHub and unzip it
-2. Inside the unzipped folder, find **`Apex Debugger.zip`** and double-click it to unzip it
-3. Drag the new **`Apex Debugger.app`** to your **Applications** folder — click **Replace** when prompted
-4. Double-click the app once to re-register the updated extension with Safari
-
-Safari should automatically pick up the new version. If the extension shows as disabled after updating, go to **Safari → Settings → Extensions**, find Apex Debugger, and re-enable it. Your settings (hostname, etc.) are stored in Safari's extension storage and will be preserved across updates.
+- [Chrome Installation](INSTALL_CHROME.md)
+- [Safari Installation](INSTALL_SAFARI.md)
 
 ---
 
@@ -211,23 +132,12 @@ You can find your Apex's IP address in your router's admin panel, or in the Fusi
 
 ---
 
-## Usage
-
-1. Log in to your Apex Fusion interface in Chrome
-2. Navigate to any outlet and open its **programming editor**
-3. The debug overlay activates automatically — each program line is highlighted based on the current live state of your system
-4. The overlay refreshes every **5 seconds**
-
-That's it. No buttons to click, no extra steps.
-
----
-
 ## Troubleshooting
 
 **Lines aren't getting colored / overlay isn't showing**
 - Make sure you're viewing an outlet program in the Fusion editor (not the main dashboard)
-- Check that your hostname is set correctly (see the [Setting Your Apex Hostname](#setting-your-apex-hostname) section above)
-- Open Chrome DevTools (`Cmd+Option+I` on Mac, `F12` on Windows) → Console tab, and look for any errors mentioning `apex-debugger`
+- Check that your hostname is set correctly (see [Setting Your Apex Hostname](#setting-your-apex-hostname) above)
+- Open browser DevTools (`Cmd+Option+I` on Mac) → Console tab, and look for any errors mentioning `apex-debugger`
 
 **All lines are grey**
 - The extension couldn't reach your Apex controller. Double-check the hostname in Options and make sure your computer is on the same network as your Apex.
