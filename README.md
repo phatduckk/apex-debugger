@@ -79,9 +79,13 @@ Use the **Referenced in / Not referenced in** toggle to flip the view and see wh
 
 ## Installation
 
+### Chrome
+
 You'll download the extension files from GitHub and load them manually into Chrome. This takes about two minutes.
 
-### Step 1 — Download the extension
+> **Safari users:** you can delete the `Safari Ext.zip` file from the download — it's only needed for Safari.
+
+#### Step 1 — Download the extension
 
 1. Go to **[https://github.com/phatduckk/apex-debugger](https://github.com/phatduckk/apex-debugger)**
 2. Click the green **`< > Code`** button near the top right
@@ -89,7 +93,7 @@ You'll download the extension files from GitHub and load them manually into Chro
 4. Once downloaded, **unzip** the file — on Mac, double-click it; on Windows, right-click → _Extract All_
 5. You should now have a folder called **`apex-debugger-main`** (or similar). Move it somewhere you won't accidentally delete it (e.g. your Documents folder)
 
-### Step 2 — Load it into Chrome
+#### Step 2 — Load it into Chrome
 
 1. Open **Google Chrome**
 2. In the address bar, type `chrome://extensions` and press Enter
@@ -104,6 +108,46 @@ You'll download the extension files from GitHub and load them manually into Chro
    ![Apex Debugger extension card with Enable button](img/enable-extension.png)
 
 > **Note:** The extension only runs while it's loaded here. Don't delete the folder after installing or Chrome will lose track of it.
+
+---
+
+### Safari (Mac)
+
+> **Chrome users:** you can delete the `Safari Ext.zip` file from the download — it's only needed for Safari.
+
+#### Step 1 — Install the app
+
+1. Go to **[https://github.com/phatduckk/apex-debugger](https://github.com/phatduckk/apex-debugger)** and download the ZIP as described above
+2. In the unzipped folder, find **`Safari Ext.zip`** and double-click it to unzip it
+3. Drag the resulting **`Apex Debugger.app`** to your **Applications** folder
+4. Double-click **`Apex Debugger.app`** to run it once — this registers the extension with Safari
+
+#### Step 2 — Enable the extension in Safari
+
+1. Open **Safari** → **Settings** (`Cmd+,`) → click the **Extensions** tab
+2. Find **Apex Debugger** in the left sidebar and check the checkbox to enable it
+
+   ![Safari Extensions settings showing Apex Debugger enabled with Settings button highlighted](img/safari-ext.png)
+
+#### Step 3 — Configure your Apex hostname
+
+To change the hostname (e.g. if your Apex isn't at `apex.local`):
+
+1. In the Extensions tab, click **Apex Debugger** in the sidebar
+2. Click the **Settings** button (shown with the orange arrow in the screenshot above)
+3. Enter your Apex controller's hostname or IP address and click Save
+
+#### Step 4 — Grant permissions
+
+The first time you visit your Apex Fusion interface, Safari will show a prompt asking if the extension can access the site:
+
+![Safari permission prompt asking if Apex Debugger can access apex.local](img/safari-perms.png)
+
+Choose **Always Allow on This Website** — this lets the extension read your Apex's live data on every visit without asking again.
+
+If you need to adjust permissions later (for example, if your Apex is on a custom hostname or IP), open **Safari → Settings → Extensions → Apex Debugger** and click **Edit Websites...**. Find your Apex host (e.g. `apex.local`, or whatever IP/hostname you use) and set it to **Allow**.
+
+![Safari Websites settings showing per-site permission for Apex Debugger](img/safari-allow-url.png)
 
 ### Updating the extension
 
