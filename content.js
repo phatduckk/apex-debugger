@@ -1286,37 +1286,84 @@
     });
 
     const unusedSection = document.getElementById('dash-section-0');
-    if (unusedSection && !document.getElementById('apex-unused-search')) {
-      unusedSection.style.position = 'relative';
-      const searchWrap = document.createElement('div');
-      searchWrap.style.cssText = 'position:absolute;bottom:8px;left:8px;z-index:100;display:flex;align-items:center;background:#fff;border:1px solid #ccc;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.15);';
-      const searchInput = document.createElement('input');
-      searchInput.id = 'apex-unused-search';
-      searchInput.type = 'text';
-      searchInput.placeholder = 'Filter...';
-      searchInput.style.cssText = 'width:140px;padding:4px 8px;border:none;border-radius:4px;font-size:12px;outline:none;background:transparent;';
-      const clearBtn = document.createElement('button');
-      clearBtn.textContent = '×';
-      clearBtn.style.cssText = 'border:none;background:none;cursor:pointer;padding:0 6px;font-size:14px;color:#aaa;line-height:1;';
-      clearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        unusedSection.querySelectorAll('.dash-widget').forEach(w => { w.style.display = ''; });
-        searchInput.focus();
-      });
+    const unusedContainer = document.getElementById('dash-widget-unused');
+    if (unusedContainer && !document.getElementById('apex-unused-header')) {
+      const card = document.createElement('div');
+      card.className = 'card mt-2';
+      card.style.cssText = 'border-bottom-left-radius:0;border-bottom-right-radius:0;';
+      const h5 = document.createElement('h5');
+      h5.id = 'apex-unused-header';
+      h5.className = 'card-header d-flex justify-content-between align-items-center';
+      h5.innerHTML = '<span>Unused Widgets</span>';
+      const filterRow = document.createElement('div');
+      filterRow.className = 'row g-1 p-2 border-bottom';
+      filterRow.innerHTML =
+        '<div class="col-md-6">' +
+          '<div class="input-group">' +
+            '<input class="form-control" id="apex-unused-search" type="text" placeholder="Filter...">' +
+            '<button class="btn btn-secondary" id="apex-unused-search-clear" type="button" title="Clear">' +
+              '<i class="af af-times"></i>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="col-md-6">' +
+          '<select class="form-select" id="apex-unused-type" disabled>' +
+            '<option value="">Loading...</option>' +
+          '</select>' +
+        '</div>';
+      card.appendChild(h5);
+      card.appendChild(filterRow);
+      unusedContainer.insertBefore(card, unusedSection);
+
+      const searchInput = card.querySelector('#apex-unused-search');
+      const clearBtn = card.querySelector('#apex-unused-search-clear');
+      const typeSelect = card.querySelector('#apex-unused-type');
+
       const filterWidgets = () => {
         const q = searchInput.value.toLowerCase();
-        unusedSection.querySelectorAll('.dash-widget').forEach(widget => {
+        const t = typeSelect.value;
+        unusedSection?.querySelectorAll('.dash-widget').forEach(widget => {
           const nameEl = widget.querySelector('[class*="-name"]');
-          const name = (nameEl?.textContent || '').toLowerCase();
-          widget.style.display = (!q || name.includes(q)) ? '' : 'none';
+          const nameMatch = !q || (nameEl?.textContent || '').toLowerCase().includes(q);
+          const typeMatch = !t || widget.dataset.apexType === t;
+          widget.style.display = (nameMatch && typeMatch) ? '' : 'none';
         });
       };
+
       searchInput.addEventListener('input', filterWidgets);
-      searchInput.addEventListener('focus', () => { searchWrap.style.borderColor = '#e07820'; });
-      searchInput.addEventListener('blur', () => { searchWrap.style.borderColor = '#ccc'; });
-      searchWrap.appendChild(searchInput);
-      searchWrap.appendChild(clearBtn);
-      unusedSection.appendChild(searchWrap);
+      typeSelect.addEventListener('change', filterWidgets);
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        filterWidgets();
+        searchInput.focus();
+      });
+
+      // Async: fetch config, stamp data-apex-type on each widget, populate dropdown
+      (async () => {
+        try {
+          const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
+          const json = await r.json();
+          const nameTypeMap = new Map();
+          for (const item of [...(json.oconf || []), ...(json.iconf || [])]) {
+            if (item.name && item.type) nameTypeMap.set(item.name, item.type);
+          }
+          const types = new Set();
+          unusedSection?.querySelectorAll('.dash-widget').forEach(widget => {
+            const name = widget.querySelector('[class*="-name"]')?.textContent?.trim();
+            const type = name ? nameTypeMap.get(name) : undefined;
+            if (type) { widget.dataset.apexType = type; types.add(type); }
+          });
+          const fmtType = t => t.length === 3 ? t.toUpperCase() : t.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+          typeSelect.innerHTML = '<option value="">All Types</option>';
+          [...types].sort().forEach(type => {
+            const opt = document.createElement('option');
+            opt.value = type;
+            opt.textContent = fmtType(type);
+            typeSelect.appendChild(opt);
+          });
+          typeSelect.disabled = false;
+        } catch (_) {}
+      })();
     }
 
     const helpDropdown = document.querySelector('[title="Help"] ~ .dropdown-menu, [title="Help"] + .dropdown-menu');
