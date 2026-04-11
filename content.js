@@ -774,15 +774,12 @@
       const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
       const json = await r.json();
       const rows = [];
-      const needle = name.toLowerCase();
-      console.log('[apex-debug] fetchProbeUsages: looking for', JSON.stringify(name), 'in', (json.oconf || []).length, 'oconf items');
+      const needleRe = new RegExp('(?<![\\w-])' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w-])', 'i');
       for (const item of (json.oconf || [])) {
         const lines = (item.prog || '').split('\n');
-        console.log(`[apex-debug] output "${item.name}" — ${lines.length} lines`);
         lines.forEach((line, i) => {
           if (/^tdata\b/i.test(line.trim())) return;
-          const match = line.toLowerCase().includes(needle);
-          console.log(`  [${match ? 'MATCH' : '    -'}] ${i + 1}: ${line}`);
+          const match = needleRe.test(line);
           if (match) {
             rows.push({ output: item.name, did: item.did, lineNum: i + 1, line: line.trim(), prog: item.prog || '' });
           }
@@ -1003,7 +1000,7 @@
     function renderRefs(name) {
       const right = document.getElementById('apex-explore-right');
       if (!right) return;
-      const needle = name.toLowerCase();
+      const needleRe = new RegExp('(?<![\\w-])' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w-])', 'i');
       const loc = { sensitivity: 'base' };
 
       let content;
@@ -1012,7 +1009,7 @@
           .filter(item => item.name !== name)
           .flatMap(item => {
             const lines = (item.prog || '').split('\n')
-              .filter(line => !/^tdata\b/i.test(line.trim()) && line.toLowerCase().includes(needle));
+              .filter(line => !/^tdata\b/i.test(line.trim()) && needleRe.test(line));
             return lines.map(line => ({ name: item.name, did: item.did, line: line.trim() }));
           })
           .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
@@ -1028,7 +1025,7 @@
           .filter(item =>
             item.name !== name &&
             !(item.prog || '').split('\n').some(line =>
-              !/^tdata\b/i.test(line.trim()) && line.toLowerCase().includes(needle)
+              !/^tdata\b/i.test(line.trim()) && needleRe.test(line)
             )
           )
           .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
@@ -1195,6 +1192,7 @@
     const btn  = document.getElementById('apex-debug-toggle');
     const help = document.getElementById('apex-debug-help');
     if (!btn) return;
+    if (/\/apex\/config\/(inputs|outputs)\//.test(location.pathname)) return;
     const visible = isEditorVisible();
     const display = visible ? 'inline-flex' : 'none';
     btn.style.display  = display;
@@ -1213,7 +1211,10 @@
     }
     if (!document.getElementById('apex-debug-toggle')) {
       const copyBtn = document.querySelector('button[title="Copy"]');
-      if (copyBtn) {
+      const navGroup = /\/apex\/config\/(inputs|outputs)\//.test(location.pathname) && !copyBtn
+        ? document.querySelector('.nav-items .nav-group') : null;
+      const anchor = copyBtn || navGroup;
+      if (anchor) {
         const btn = document.createElement('button');
         btn.id        = 'apex-debug-toggle';
         btn.type      = 'button';
@@ -1222,21 +1223,33 @@
         btn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF689;</i>';
         btn.style.cssText = 'align-items:center; justify-content:center;';
         btn.addEventListener('click', () => {
-          const name = document.getElementById('output-name')?.value?.trim();
+          const name = (document.getElementById('output-name') || document.getElementById('input-name-value'))?.value?.trim();
           if (name) openProbePanel(name);
         });
-        copyBtn.insertAdjacentElement('afterend', btn);
+        if (copyBtn) {
+          copyBtn.insertAdjacentElement('afterend', btn);
+          const help = document.createElement('button');
+          help.id        = 'apex-debug-help';
+          help.type      = 'button';
+          help.title     = 'Debug Help';
+          help.className = 'btn btn-secondary';
+          help.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF0EB;</i>';
+          help.style.cssText = 'align-items:center; justify-content:center;';
+          help.addEventListener('click', toggleHelpPanel);
+          btn.insertAdjacentElement('beforebegin', help);
+        } else {
+          const updateBtn = document.querySelector('.nav-items button[title="Update Apex"]');
+          if (updateBtn) {
+            const rightGroup = document.createElement('div');
+            rightGroup.className = 'nav-group';
+            updateBtn.parentNode.insertBefore(rightGroup, updateBtn);
+            rightGroup.appendChild(btn);
+            rightGroup.appendChild(updateBtn);
+          } else {
+            navGroup.appendChild(btn);
+          }
+        }
         setEnabled(true);
-
-        const help = document.createElement('button');
-        help.id        = 'apex-debug-help';
-        help.type      = 'button';
-        help.title     = 'Debug Help';
-        help.className = 'btn btn-secondary';
-        help.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF0EB;</i>';
-        help.style.cssText = 'align-items:center; justify-content:center;';
-        help.addEventListener('click', toggleHelpPanel);
-        btn.insertAdjacentElement('beforebegin', help);
       }
     }
     updateButtonVisibility();
