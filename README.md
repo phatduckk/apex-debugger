@@ -108,19 +108,6 @@ The legend explains how the code debugger works, shows which statement types the
 
 ---
 
-## Project Structure
-
-```
-apex-debugger/
-├── manifest.json      # Extension metadata and permissions
-├── content.js         # Core logic: polling, evaluation, overlay rendering
-├── options.html       # Settings UI
-├── options.js         # Settings save/load
-└── APEX_GRAMMAR.md    # Reference doc for Apex programming language grammar
-```
-
----
-
 ## Peeps We Dig
 
 **Reef Beef** — [Official Site](https://reefbeefpodcast.com) — [YouTube](https://www.youtube.com/c/ReefBeefPodcast)
@@ -146,3 +133,16 @@ Yup - Claude did all this. Took no time. Neptune should really try harder =)
 ## License
 
 MIT
+
+---
+
+## Project Structure
+
+```
+apex-debugger/
+├── manifest.json      # Extension metadata and permissions
+├── content.js         # Core logic: polling, evaluation, overlay rendering
+├── options.html       # Settings UI
+├── options.js         # Settings save/load
+└── APEX_GRAMMAR.md    # Reference doc for Apex programming language grammar
+```
