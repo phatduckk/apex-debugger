@@ -847,7 +847,7 @@
 
   function openProbePanel(name) {
     injectProbePanel();
-    document.getElementById('apex-probe-title').textContent = name;
+    document.getElementById('apex-probe-title').textContent = `References to: ${name}`;
     const body = document.getElementById('apex-probe-body');
     body.innerHTML = '<div id="apex-probe-left"><p style="color:#888;margin:0">Loading\u2026</p></div><div id="apex-probe-divider"></div><div id="apex-probe-right"><p>Click a row to preview</p></div>';
     document.getElementById('apex-probe-divider').addEventListener('mousedown', e => {
@@ -1219,7 +1219,7 @@
         btn.type      = 'button';
         btn.title     = 'Debug';
         btn.className = 'btn btn-secondary';
-        btn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF00E;</i>';
+        btn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF05B;</i>';
         btn.style.cssText = 'align-items:center; justify-content:center;';
         btn.addEventListener('click', () => {
           const name = document.getElementById('output-name')?.value?.trim();
@@ -1250,7 +1250,8 @@
     if (!location.pathname.startsWith('/apex/dash')) return;
     function makeIcon() {
       const icon = document.createElement('i');
-      icon.className = 'af af-debug apex-dash-icon';
+      icon.className = 'af af-fw apex-dash-icon';
+      icon.textContent = '\uF05B';
       icon.style.cssText = 'color:#999;margin-right:4px;cursor:default;vertical-align:text-bottom;line-height:21px;';
       return icon;
     }
@@ -1387,6 +1388,7 @@
     if (enabled)      setEnabled(false);
     if (helpOpen)     closeHelpPanel();
     if (exploreOpen)  closeExplorePanel();
+    if (probeOpen)    closeProbePanel();
   }
 
   // ── Init ───────────────────────────────────────────────────────────────────
