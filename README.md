@@ -81,7 +81,7 @@ Use the **Referenced in / Not referenced in** toggle to flip the view and see wh
 
 You'll download the extension files from GitHub and load them manually into Chrome. This takes about two minutes.
 
-> **Safari users:** you can delete the `Safari Ext.zip` file from the download — it's only needed for Safari.
+> **Safari users:** you can delete the `Apex Debugger.zip` file from the download — it's only needed for Safari.
 
 #### Step 1 — Download the extension
 
@@ -111,12 +111,12 @@ You'll download the extension files from GitHub and load them manually into Chro
 
 ### Safari (Mac)
 
-> **Chrome users:** you can delete the `Safari Ext.zip` file from the download — it's only needed for Safari.
+> **Chrome users:** you can delete the `Apex Debugger.zip` file from the download — it's only needed for Safari.
 
 #### Step 1 — Install the app
 
 1. Go to **[https://github.com/phatduckk/apex-debugger](https://github.com/phatduckk/apex-debugger)** and download the ZIP as described above
-2. In the unzipped folder, find **`Safari Ext.zip`** and double-click it to unzip it
+2. In the unzipped folder, find **`Apex Debugger.zip`** and double-click it to unzip it
 3. Drag the resulting **`Apex Debugger.app`** to your **Applications** folder
 4. Double-click **`Apex Debugger.app`** to run it once — this registers the extension with Safari
 
@@ -162,7 +162,7 @@ That's all — no need to re-add or reconfigure anything.
 #### Safari
 
 1. Download the latest ZIP from GitHub and unzip it
-2. Inside the unzipped folder, find **`Safari Ext.zip`** and double-click it to unzip it
+2. Inside the unzipped folder, find **`Apex Debugger.zip`** and double-click it to unzip it
 3. Drag the new **`Apex Debugger.app`** to your **Applications** folder — click **Replace** when prompted
 4. Double-click the app once to re-register the updated extension with Safari
 

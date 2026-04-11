@@ -953,10 +953,14 @@
     }
 
     let allOconf = [];
+    let allProbes = [];
     try {
       const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
       const json = await r.json();
       allOconf = (json.oconf || []).filter(item => item.name);
+      const iconf = (json.iconf || []).filter(item => item.name);
+      const seen = new Set(allOconf.map(i => i.name));
+      allProbes = [...allOconf, ...iconf.filter(i => !seen.has(i.name))];
     } catch (_) {}
 
     const list = document.getElementById('apex-explore-list');
@@ -1038,7 +1042,7 @@
 
     function renderList(filter) {
       const q = filter.toLowerCase();
-      const filtered = (q ? allOconf.filter(item => item.name.toLowerCase().includes(q)) : allOconf)
+      const filtered = (q ? allProbes.filter(item => item.name.toLowerCase().includes(q)) : allProbes)
         .slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
       if (!filtered.length) {
         list.innerHTML = '<p style="color:#888;padding:10px;margin:0">No probes found.</p>';
