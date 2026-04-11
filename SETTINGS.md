@@ -1,5 +1,13 @@
 # Settings
 
+## Beef Mode
+
+Beef Mode is an alternative color scheme for the code debugger designed for users who have difficulty distinguishing between red and green. Instead of the default red/green coloring, Beef Mode uses colors that are easier to tell apart for those with red-green color blindness.
+
+You can enable it in the extension settings alongside your hostname configuration.
+
+---
+
 ## Setting Your Apex Hostname
 
 The extension needs to know the address of your Apex controller on your local network. By default it tries `apex.local`, which works for most setups — but if your controller is on a different hostname or IP address, you'll need to update this.

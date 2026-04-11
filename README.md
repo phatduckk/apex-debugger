@@ -89,6 +89,7 @@ The legend explains how the code debugger works, shows which statement types the
 - [Chrome Installation](INSTALL_CHROME.md)
 - [Safari Installation](INSTALL_SAFARI.md)
 - [Settings](SETTINGS.md)
+  - *Change your Apex hostname and enable Beef Mode*
 
 ---
 
@@ -129,3 +130,9 @@ MIT
 ## ETC
 
 Yup - Claude did all this. Took no time. Neptune should really try harder =)
+
+---
+
+## We support Reef Beef
+
+[Reef Beef](https://www.youtube.com/c/ReefBeefPodcast)
