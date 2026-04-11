@@ -133,6 +133,8 @@ Yup - Claude did all this. Took no time. Neptune should really try harder =)
 
 ---
 
-## We support Reef Beef
+## Peeps We Dig
 
-[Reef Beef](https://www.youtube.com/c/ReefBeefPodcast)
+**Reef Beef** — [Official Site](https://reefbeefpodcast.com) — [YouTube](https://www.youtube.com/c/ReefBeefPodcast)
+
+**High Tide Aquatics** — [hightideaquatics.net](https://www.hightideaquatics.net)
