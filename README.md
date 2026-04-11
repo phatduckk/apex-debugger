@@ -138,3 +138,7 @@ Yup - Claude did all this. Took no time. Neptune should really try harder =)
 **Reef Beef** — [Official Site](https://reefbeefpodcast.com) — [YouTube](https://www.youtube.com/c/ReefBeefPodcast)
 
 **High Tide Aquatics** — [hightideaquatics.net](https://www.hightideaquatics.net)
+
+**Bay Area Reefers** — [bareefers.org](https://www.bareefers.org/forum/)
+
+[Thanks for the feedback Tangdora](https://www.reef2reef.com/members/tangdora.142148/)
