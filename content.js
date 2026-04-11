@@ -619,8 +619,10 @@
       #apex-explore-body { display: flex; flex: 1; overflow: hidden; background: #f5f5f5; }
       #apex-explore-left { display: flex; flex-direction: column; width: 280px; flex-shrink: 0; border-right: 1px solid #ddd; background: #fff; }
       #apex-explore-search { padding: 8px; border-bottom: 1px solid #eee; flex-shrink: 0; }
-      #apex-explore-search input { width: 100%; box-sizing: border-box; padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; outline: none; }
-      #apex-explore-search input:focus { border-color: #e07820; }
+      #apex-explore-search-wrap { display: flex; align-items: center; border: 1px solid #ccc; border-radius: 4px; background: #fff; }
+      #apex-explore-search-wrap:focus-within { border-color: #e07820; }
+      #apex-explore-search input { flex: 1; min-width: 0; padding: 5px 8px; border: none; border-radius: 4px; font-size: 12px; outline: none; background: transparent; }
+      #apex-explore-search-clear { border: none; background: none; cursor: pointer; padding: 0 6px; font-size: 14px; color: #aaa; line-height: 1; flex-shrink: 0; }
       #apex-explore-specials { border-bottom: 2px solid #eee; flex-shrink: 0; }
       .apex-explore-keyword { display: block; width: 100%; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; color: #e07820; border: none; background: none; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .apex-explore-keyword:hover { background: #fff8f3; }
@@ -912,7 +914,7 @@
       '<div id="apex-explore-header"><span>Explore</span><button id="apex-explore-close" title="Close">\u00d7</button></div>' +
       '<div id="apex-explore-body">' +
         '<div id="apex-explore-left">' +
-          '<div id="apex-explore-search"><input type="text" id="apex-explore-search-input" placeholder="Search probes\u2026"></div>' +
+          '<div id="apex-explore-search"><div id="apex-explore-search-wrap"><input type="text" id="apex-explore-search-input" placeholder="Search probes\u2026"><button id="apex-explore-search-clear">\u00d7</button></div></div>' +
           '<div id="apex-explore-specials"></div>' +
           '<div id="apex-explore-list"><p style="color:#888;padding:10px;margin:0">Loading\u2026</p></div>' +
         '</div>' +
@@ -1075,6 +1077,14 @@
     const input = document.getElementById('apex-explore-search-input');
     if (input) {
       input.addEventListener('input', () => renderList(input.value));
+      const clearExplore = document.getElementById('apex-explore-search-clear');
+      if (clearExplore) {
+        clearExplore.addEventListener('click', () => {
+          input.value = '';
+          renderList('');
+          input.focus();
+        });
+      }
       input.focus();
     }
   }
@@ -1223,6 +1233,40 @@
       });
       el.appendChild(icon);
     });
+
+    const unusedSection = document.getElementById('dash-section-0');
+    if (unusedSection && !document.getElementById('apex-unused-search')) {
+      unusedSection.style.position = 'relative';
+      const searchWrap = document.createElement('div');
+      searchWrap.style.cssText = 'position:absolute;bottom:8px;left:8px;z-index:100;display:flex;align-items:center;background:#fff;border:1px solid #ccc;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.15);';
+      const searchInput = document.createElement('input');
+      searchInput.id = 'apex-unused-search';
+      searchInput.type = 'text';
+      searchInput.placeholder = 'Filter...';
+      searchInput.style.cssText = 'width:140px;padding:4px 8px;border:none;border-radius:4px;font-size:12px;outline:none;background:transparent;';
+      const clearBtn = document.createElement('button');
+      clearBtn.textContent = '×';
+      clearBtn.style.cssText = 'border:none;background:none;cursor:pointer;padding:0 6px;font-size:14px;color:#aaa;line-height:1;';
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        unusedSection.querySelectorAll('.dash-widget').forEach(w => { w.style.display = ''; });
+        searchInput.focus();
+      });
+      const filterWidgets = () => {
+        const q = searchInput.value.toLowerCase();
+        unusedSection.querySelectorAll('.dash-widget').forEach(widget => {
+          const nameEl = widget.querySelector('[class*="-name"]');
+          const name = (nameEl?.textContent || '').toLowerCase();
+          widget.style.display = (!q || name.includes(q)) ? '' : 'none';
+        });
+      };
+      searchInput.addEventListener('input', filterWidgets);
+      searchInput.addEventListener('focus', () => { searchWrap.style.borderColor = '#e07820'; });
+      searchInput.addEventListener('blur', () => { searchWrap.style.borderColor = '#ccc'; });
+      searchWrap.appendChild(searchInput);
+      searchWrap.appendChild(clearBtn);
+      unusedSection.appendChild(searchWrap);
+    }
 
     const helpDropdown = document.querySelector('[title="Help"] ~ .dropdown-menu, [title="Help"] + .dropdown-menu');
     if (helpDropdown && !helpDropdown.querySelector('.apex-explore-item')) {
