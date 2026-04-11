@@ -631,9 +631,13 @@
       .apex-explore-probe { padding: 6px 12px; cursor: pointer; font-size: 12px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .apex-explore-probe:hover { background: #f5f5f5; }
       .apex-explore-probe.active { background: #e07820; color: #fff; }
-      #apex-explore-divider { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
-      #apex-explore-divider:hover, #apex-explore-divider.dragging { background: #bbb; }
+      #apex-explore-divider, #apex-explore-divider2 { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
+      #apex-explore-divider:hover, #apex-explore-divider.dragging,
+      #apex-explore-divider2:hover, #apex-explore-divider2.dragging { background: #bbb; }
       #apex-explore-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #f5f5f5; }
+      #apex-explore-preview { width: 340px; flex-shrink: 0; overflow-y: auto; padding: 10px 16px 16px; background: #fff; font-size: 12px; white-space: pre; font-family: monospace; border-left: 1px solid #e0e0e0; }
+      #apex-explore-preview p { white-space: normal; font-family: inherit; color: #888; margin: 0; }
+      .apex-explore-ref.active { background: #fff3e8; }
       #apex-explore-right h3 { color: #e07820; margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; }
       .apex-explore-right-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 8px; }
       .apex-explore-ref { padding: 5px 8px; font-size: 12px; border-bottom: 1px solid #eee; background: #fff; border-radius: 2px; margin-bottom: 3px; }
@@ -920,6 +924,8 @@
         '</div>' +
         '<div id="apex-explore-divider"></div>' +
         '<div id="apex-explore-right"><p style="color:#888;margin:0">Select a probe to see references.</p></div>' +
+        '<div id="apex-explore-divider2"></div>' +
+        '<div id="apex-explore-preview"><p>Click a reference to preview its program.</p></div>' +
       '</div>';
     document.body.appendChild(panel);
     document.getElementById('apex-explore-close').addEventListener('click', closeExplorePanel);
@@ -946,6 +952,29 @@
         }
         function onUp() {
           divider.classList.remove('dragging');
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+    }
+
+    // Wire middle/preview divider resizer
+    const divider2 = document.getElementById('apex-explore-divider2');
+    if (divider2 && !divider2._wired) {
+      divider2._wired = true;
+      divider2.addEventListener('mousedown', e => {
+        e.preventDefault();
+        divider2.classList.add('dragging');
+        const preview = document.getElementById('apex-explore-preview');
+        const body = document.getElementById('apex-explore-body');
+        function onMove(ev) {
+          const rect = body.getBoundingClientRect();
+          preview.style.width = Math.min(Math.max(rect.right - ev.clientX, 150), rect.width - 150) + 'px';
+        }
+        function onUp() {
+          divider2.classList.remove('dragging');
           document.removeEventListener('mousemove', onMove);
           document.removeEventListener('mouseup', onUp);
         }
@@ -989,7 +1018,7 @@
           .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
         content = refs.length
           ? `<h3>Referenced in (${refs.length})</h3>` + refs.map(r =>
-              `<div class="apex-explore-ref">` +
+              `<div class="apex-explore-ref" data-did="${esc(String(r.did))}" style="cursor:pointer">` +
                 `<div style="font-weight:700;margin-bottom:2px"><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank" style="color:inherit;text-decoration:none">${esc(r.name)}</a></div>` +
                 `<code style="font-size:11px">${highlightLine(r.line, name)}</code>` +
               `</div>`).join('')
@@ -1029,6 +1058,28 @@
           renderRefs(name);
         });
       });
+
+      if (exploreMode === 'referenced') {
+        right.querySelectorAll('.apex-explore-ref[data-did]').forEach(el => {
+          el.addEventListener('click', e => {
+            if (e.target.tagName === 'A') return;
+            right.querySelectorAll('.apex-explore-ref').forEach(r => r.classList.remove('active'));
+            el.classList.add('active');
+            const item = allOconf.find(o => String(o.did) === el.dataset.did);
+            const preview = document.getElementById('apex-explore-preview');
+            if (!preview || !item) return;
+            const matchLine = el.querySelector('code')?.textContent.trim();
+            const lines = (item.prog || '').split('\n').filter(l => !/^tdata\b/i.test(l.trim()));
+            const matchNum = lines.findIndex(l => l.trim() === matchLine) + 1;
+            preview.innerHTML = lines.map((line, i) => {
+              const n = i + 1;
+              const cls = 'apex-prog-line' + (n === matchNum ? ' match' : '');
+              return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name)}</span>`;
+            }).join('');
+            preview.querySelector('.match')?.scrollIntoView({ block: 'center' });
+          });
+        });
+      }
     }
 
     function selectProbe(name) {
