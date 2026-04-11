@@ -121,18 +121,6 @@ apex-debugger/
 
 ---
 
-## License
-
-MIT
-
----
-
-## ETC
-
-Yup - Claude did all this. Took no time. Neptune should really try harder =)
-
----
-
 ## Peeps We Dig
 
 **Reef Beef** — [Official Site](https://reefbeefpodcast.com) — [YouTube](https://www.youtube.com/c/ReefBeefPodcast)
@@ -146,3 +134,15 @@ Yup - Claude did all this. Took no time. Neptune should really try harder =)
 **Neptune Aquatics** — [neptuneaquatics.com](https://www.neptuneaquatics.com)
 
 [Thanks for the feedback Tangdora](https://www.reef2reef.com/members/tangdora.142148/)
+
+---
+
+## ETC
+
+Yup - Claude did all this. Took no time. Neptune should really try harder =)
+
+---
+
+## License
+
+MIT
