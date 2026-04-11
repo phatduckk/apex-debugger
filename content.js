@@ -1219,17 +1219,18 @@
         btn.type      = 'button';
         btn.title     = 'Debug';
         btn.className = 'btn btn-secondary';
-        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="currentColor"><path d="M29.83,20l.34-2L25,17.15V13c0-.08,0-.15,0-.23l5.06-1.36-.51-1.93-4.83,1.29A9,9,0,0,0,20,5V2H18V4.23a8.81,8.81,0,0,0-4,0V2H12V5a9,9,0,0,0-4.71,5.82L2.46,9.48,2,11.41,7,12.77c0,.08,0,.15,0,.23v4.15L1.84,18l.32,2L7,19.18a8.9,8.9,0,0,0,.82,3.57L3.29,27.29l1.42,1.42,4.19-4.2a9,9,0,0,0,14.2,0l4.19,4.2,1.42-1.42-4.54-4.54A8.9,8.9,0,0,0,25,19.18ZM15,25.92A7,7,0,0,1,9,19V13h6ZM9.29,11a7,7,0,0,1,13.42,0ZM23,19a7,7,0,0,1-6,6.92V13h6Z"/></svg>';
+        btn.innerHTML = '<i class="af af-fw af-debug"></i>';
         btn.style.cssText = 'align-items:center; justify-content:center;';
         btn.addEventListener('click', () => setEnabled(!enabled));
         copyBtn.insertAdjacentElement('afterend', btn);
+        if (/\/apex\/config\/outputs\//.test(location.pathname)) setEnabled(true);
 
         const help = document.createElement('button');
         help.id        = 'apex-debug-help';
         help.type      = 'button';
         help.title     = 'Debug Help';
         help.className = 'btn btn-secondary';
-        help.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M10.7751 15.75c0.01665 -1.2 0.15415 -2.075 0.4125 -2.625 0.25835 -0.55 0.74585 -1.15 1.4625 -1.8 0.7 -0.63335 1.2375 -1.22085 1.6125 -1.7625s0.5625 -1.12085 0.5625 -1.7375c0 -0.75 -0.25 -1.375 -0.75 -1.875s-1.2 -0.75 -2.1 -0.75c-0.86665 0 -1.53335 0.24585 -2 0.7375 -0.46665 0.49165 -0.80835 1.00415 -1.025 1.5375l-2.1 -0.925c0.36665 -0.98335 0.9875 -1.820835 1.8625 -2.5125C9.5876 3.345835 10.6751 3 11.9751 3c1.66665 0 2.95 0.4625 3.85 1.3875 0.9 0.925 1.35 2.0375 1.35 3.3375 0 0.8 -0.17085 1.525 -0.5125 2.175 -0.34165 0.65 -0.8875 1.33335 -1.6375 2.05 -0.81665 0.78335 -1.30835 1.38335 -1.475 1.8 -0.16665 0.41665 -0.25835 1.08335 -0.275 2h-2.5Zm1.2 6.25c-0.48335 0 -0.89585 -0.17085 -1.2375 -0.5125 -0.34165 -0.34165 -0.5125 -0.75415 -0.5125 -1.2375 0 -0.48335 0.17085 -0.89585 0.5125 -1.2375 0.34165 -0.34165 0.75415 -0.5125 1.2375 -0.5125 0.48335 0 0.89585 0.17085 1.2375 0.5125 0.34165 0.34165 0.5125 0.75415 0.5125 1.2375 0 0.48335 -0.17085 0.89585 -0.5125 1.2375 -0.34165 0.34165 -0.75415 0.5125 -1.2375 0.5125Z" stroke-width="0.5"></path></svg>';
+        help.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF0EB;</i>';
         help.style.cssText = 'align-items:center; justify-content:center;';
         help.addEventListener('click', toggleHelpPanel);
         btn.insertAdjacentElement('beforebegin', help);
