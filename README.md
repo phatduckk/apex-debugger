@@ -14,6 +14,10 @@ A browser extension for **Chrome and Safari** that adds live debugging tools to 
 
 When you're editing an outlet program in Apex Fusion, the extension reads your Apex's live status and highlights every line:
 
+![Apex Debugger overlay showing color-coded outlet program lines](img/debugger-screenshot.png)
+
+In the editor toolbar, click the **`?`** button to open a reference panel with the color legend and a quick guide to how the debugger works. Click the **bug icon** for inline code help and statement syntax reference.
+
 **Gutter** (line number column) — colored for every line:
 
 | Gutter color | Meaning |
@@ -31,8 +35,6 @@ When you're editing an outlet program in Apex Fusion, the extension reads your A
 | 🔴 Red background | Winning statement → outlet will be **OFF** |
 
 This makes it easy to understand your programs at a glance — especially complex multi-condition chains where the "last true statement wins" rule can be tricky to reason about.
-
-![Apex Debugger overlay showing color-coded outlet program lines](img/debugger-screenshot.png)
 
 The extension can evaluate:
 
