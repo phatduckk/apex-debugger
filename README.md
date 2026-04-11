@@ -141,4 +141,8 @@ Yup - Claude did all this. Took no time. Neptune should really try harder =)
 
 **Bay Area Reefers** — [bareefers.org](https://www.bareefers.org/forum/)
 
+**Aquatic Collection** — [aquaticcollection.com](https://aquaticcollection.com)
+
+**Neptune Aquatics** — [neptuneaquatics.com](https://www.neptuneaquatics.com)
+
 [Thanks for the feedback Tangdora](https://www.reef2reef.com/members/tangdora.142148/)
