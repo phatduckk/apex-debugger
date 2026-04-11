@@ -1219,11 +1219,14 @@
         btn.type      = 'button';
         btn.title     = 'Debug';
         btn.className = 'btn btn-secondary';
-        btn.innerHTML = '<i class="af af-fw af-debug"></i>';
+        btn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF00E;</i>';
         btn.style.cssText = 'align-items:center; justify-content:center;';
-        btn.addEventListener('click', () => setEnabled(!enabled));
+        btn.addEventListener('click', () => {
+          const name = document.getElementById('output-name')?.value?.trim();
+          if (name) openProbePanel(name);
+        });
         copyBtn.insertAdjacentElement('afterend', btn);
-        if (/\/apex\/config\/outputs\//.test(location.pathname)) setEnabled(true);
+        setEnabled(true);
 
         const help = document.createElement('button');
         help.id        = 'apex-debug-help';
