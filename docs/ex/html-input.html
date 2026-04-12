@@ -1,0 +1,429 @@
+<html lang="en" class="js cookies geolocation history no-touchscreen video dash-covers-touch"><head><style>.ͼ1.cm-focused {outline: 1px dotted #212121;}
+.ͼ1 {position: relative !important; box-sizing: border-box; display: flex !important; flex-direction: column;}
+.ͼ1 .cm-scroller {display: flex !important; align-items: flex-start !important; font-family: monospace; line-height: 1.4; height: 100%; overflow-x: auto; position: relative; z-index: 0; overflow-anchor: none;}
+.ͼ1 .cm-content[contenteditable=true] {-webkit-user-modify: read-write-plaintext-only;}
+.ͼ1 .cm-content {margin: 0; flex-grow: 2; flex-shrink: 0; display: block; white-space: pre; word-wrap: normal; box-sizing: border-box; min-height: 100%; padding: 4px 0; outline: none;}
+.ͼ1 .cm-lineWrapping {white-space: pre-wrap; white-space: break-spaces; word-break: break-word; overflow-wrap: anywhere; flex-shrink: 1;}
+.ͼ2 .cm-content {caret-color: black;}
+.ͼ3 .cm-content {caret-color: white;}
+.ͼ1 .cm-line {display: block; padding: 0 2px 0 6px;}
+.ͼ1 .cm-layer > * {position: absolute;}
+.ͼ1 .cm-layer {position: absolute; left: 0; top: 0; contain: size style;}
+.ͼ2 .cm-selectionBackground {background: #d9d9d9;}
+.ͼ3 .cm-selectionBackground {background: #222;}
+.ͼ2.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {background: #d7d4f0;}
+.ͼ3.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {background: #233;}
+.ͼ1 .cm-cursorLayer {pointer-events: none;}
+.ͼ1.cm-focused > .cm-scroller > .cm-cursorLayer {animation: steps(1) cm-blink 1.2s infinite;}
+@keyframes cm-blink {50% {opacity: 0;}}
+@keyframes cm-blink2 {50% {opacity: 0;}}
+.ͼ1 .cm-cursor, .ͼ1 .cm-dropCursor {border-left: 1.2px solid black; margin-left: -0.6px; pointer-events: none;}
+.ͼ1 .cm-cursor {display: none;}
+.ͼ3 .cm-cursor {border-left-color: #444;}
+.ͼ1 .cm-dropCursor {position: absolute;}
+.ͼ1.cm-focused > .cm-scroller > .cm-cursorLayer .cm-cursor {display: block;}
+.ͼ1 .cm-iso {unicode-bidi: isolate;}
+.ͼ1 .cm-announced {position: fixed; top: -10000px;}
+@media print {.ͼ1 .cm-announced {display: none;}}
+.ͼ2 .cm-activeLine {background-color: #cceeff44;}
+.ͼ3 .cm-activeLine {background-color: #99eeff33;}
+.ͼ2 .cm-specialChar {color: red;}
+.ͼ3 .cm-specialChar {color: #f78;}
+.ͼ1 .cm-gutters {flex-shrink: 0; display: flex; height: 100%; box-sizing: border-box; inset-inline-start: 0; z-index: 200;}
+.ͼ2 .cm-gutters {background-color: #f5f5f5; color: #6c6c6c; border-right: 1px solid #ddd;}
+.ͼ3 .cm-gutters {background-color: #333338; color: #ccc;}
+.ͼ1 .cm-gutter {display: flex !important; flex-direction: column; flex-shrink: 0; box-sizing: border-box; min-height: 100%; overflow: hidden;}
+.ͼ1 .cm-gutterElement {box-sizing: border-box;}
+.ͼ1 .cm-lineNumbers .cm-gutterElement {padding: 0 3px 0 5px; min-width: 20px; text-align: right; white-space: nowrap;}
+.ͼ2 .cm-activeLineGutter {background-color: #e2f2ff;}
+.ͼ3 .cm-activeLineGutter {background-color: #222227;}
+.ͼ1 .cm-panels {box-sizing: border-box; position: sticky; left: 0; right: 0; z-index: 300;}
+.ͼ2 .cm-panels {background-color: #f5f5f5; color: black;}
+.ͼ2 .cm-panels-top {border-bottom: 1px solid #ddd;}
+.ͼ2 .cm-panels-bottom {border-top: 1px solid #ddd;}
+.ͼ3 .cm-panels {background-color: #333338; color: white;}
+.ͼ1 .cm-tab {display: inline-block; overflow: hidden; vertical-align: bottom;}
+.ͼ1 .cm-widgetBuffer {vertical-align: text-top; height: 1em; width: 0; display: inline;}
+.ͼ1 .cm-placeholder {color: #888; display: inline-block; vertical-align: top;}
+.ͼ1 .cm-highlightSpace:before {content: attr(data-display); position: absolute; pointer-events: none; color: #888;}
+.ͼ1 .cm-highlightTab {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="20"><path stroke="%23888" stroke-width="1" fill="none" d="M1 10H196L190 5M190 15L196 10M197 4L197 16"/></svg>'); background-size: auto 100%; background-position: right 90%; background-repeat: no-repeat;}
+.ͼ1 .cm-trailingSpace {background-color: #ff332255;}
+.ͼ1 .cm-button {vertical-align: middle; color: inherit; font-size: 70%; padding: .2em 1em; border-radius: 1px;}
+.ͼ2 .cm-button:active {background-image: linear-gradient(#b4b4b4, #d0d3d6);}
+.ͼ2 .cm-button {background-image: linear-gradient(#eff1f5, #d9d9df); border: 1px solid #888;}
+.ͼ3 .cm-button:active {background-image: linear-gradient(#111, #333);}
+.ͼ3 .cm-button {background-image: linear-gradient(#393939, #111); border: 1px solid #888;}
+.ͼ1 .cm-textfield {vertical-align: middle; color: inherit; font-size: 70%; border: 1px solid silver; padding: .2em .5em;}
+.ͼ2 .cm-textfield {background-color: white;}
+.ͼ3 .cm-textfield {border: 1px solid #555; background-color: inherit;}
+.ͼ1 .cm-diagnostic {padding: 3px 6px 3px 8px; margin-left: -1px; display: block; white-space: pre-wrap;}
+.ͼ1 .cm-diagnostic-error {border-left: 5px solid #d11;}
+.ͼ1 .cm-diagnostic-warning {border-left: 5px solid orange;}
+.ͼ1 .cm-diagnostic-info {border-left: 5px solid #999;}
+.ͼ1 .cm-diagnostic-hint {border-left: 5px solid #66d;}
+.ͼ1 .cm-diagnosticAction {font: inherit; border: none; padding: 2px 4px; background-color: #444; color: white; border-radius: 3px; margin-left: 8px; cursor: pointer;}
+.ͼ1 .cm-diagnosticSource {font-size: 70%; opacity: 0.7;}
+.ͼ1 .cm-lintRange {background-position: left bottom; background-repeat: repeat-x; padding-bottom: 0.7px;}
+.ͼ1 .cm-lintRange-error {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="3">%3Cpath%20d%3D%22m0%202.5%20l2%20-1.5%20l1%200%20l2%201.5%20l1%200%22%20stroke%3D%22%23d11%22%20fill%3D%22none%22%20stroke-width%3D%22.7%22%2F%3E</svg>');}
+.ͼ1 .cm-lintRange-warning {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="3">%3Cpath%20d%3D%22m0%202.5%20l2%20-1.5%20l1%200%20l2%201.5%20l1%200%22%20stroke%3D%22orange%22%20fill%3D%22none%22%20stroke-width%3D%22.7%22%2F%3E</svg>');}
+.ͼ1 .cm-lintRange-info {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="3">%3Cpath%20d%3D%22m0%202.5%20l2%20-1.5%20l1%200%20l2%201.5%20l1%200%22%20stroke%3D%22%23999%22%20fill%3D%22none%22%20stroke-width%3D%22.7%22%2F%3E</svg>');}
+.ͼ1 .cm-lintRange-hint {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="3">%3Cpath%20d%3D%22m0%202.5%20l2%20-1.5%20l1%200%20l2%201.5%20l1%200%22%20stroke%3D%22%2366d%22%20fill%3D%22none%22%20stroke-width%3D%22.7%22%2F%3E</svg>');}
+.ͼ1 .cm-lintRange-active {background-color: #ffdd9980;}
+.ͼ1 .cm-tooltip-lint {padding: 0; margin: 0;}
+.ͼ1 .cm-lintPoint:after {content: ""; position: absolute; bottom: 0; left: -2px; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 4px solid #d11;}
+.ͼ1 .cm-lintPoint {position: relative;}
+.ͼ1 .cm-lintPoint-warning:after {border-bottom-color: orange;}
+.ͼ1 .cm-lintPoint-info:after {border-bottom-color: #999;}
+.ͼ1 .cm-lintPoint-hint:after {border-bottom-color: #66d;}
+.ͼ1 .cm-panel.cm-panel-lint ul [aria-selected] u {text-decoration: underline;}
+.ͼ1 .cm-panel.cm-panel-lint ul [aria-selected] {background-color: #ddd;}
+.ͼ1 .cm-panel.cm-panel-lint ul:focus [aria-selected] {background: #bdf; background-color: Highlight; color: white; color: HighlightText;}
+.ͼ1 .cm-panel.cm-panel-lint ul u {text-decoration: none;}
+.ͼ1 .cm-panel.cm-panel-lint ul {max-height: 100px; overflow-y: auto; padding: 0; margin: 0;}
+.ͼ1 .cm-panel.cm-panel-lint [name=close] {position: absolute; top: 0; right: 2px; background: inherit; border: none; font: inherit; padding: 0; margin: 0;}
+.ͼ1 .cm-panel.cm-panel-lint {position: relative;}
+.ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul > li, .ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul > completion-section {padding: 1px 3px; line-height: 1.2;}
+.ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul > li {overflow-x: hidden; text-overflow: ellipsis; cursor: pointer;}
+.ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul > completion-section {display: list-item; border-bottom: 1px solid silver; padding-left: 0.5em; opacity: 0.7;}
+.ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul {font-family: monospace; white-space: nowrap; overflow: hidden auto; max-width: 700px; max-width: min(700px, 95vw); min-width: 250px; max-height: 10em; height: 100%; list-style: none; margin: 0; padding: 0;}
+.ͼ2 .cm-tooltip-autocomplete ul li[aria-selected] {background: #17c; color: white;}
+.ͼ2 .cm-tooltip-autocomplete-disabled ul li[aria-selected] {background: #777;}
+.ͼ3 .cm-tooltip-autocomplete ul li[aria-selected] {background: #347; color: white;}
+.ͼ3 .cm-tooltip-autocomplete-disabled ul li[aria-selected] {background: #444;}
+.ͼ1 .cm-completionListIncompleteTop:before, .ͼ1 .cm-completionListIncompleteBottom:after {content: "···"; opacity: 0.5; display: block; text-align: center;}
+.ͼ1 .cm-tooltip.cm-completionInfo {position: absolute; padding: 3px 9px; width: max-content; max-width: 400px; box-sizing: border-box; white-space: pre-line;}
+.ͼ1 .cm-completionInfo.cm-completionInfo-left {right: 100%;}
+.ͼ1 .cm-completionInfo.cm-completionInfo-right {left: 100%;}
+.ͼ1 .cm-completionInfo.cm-completionInfo-left-narrow {right: 30px;}
+.ͼ1 .cm-completionInfo.cm-completionInfo-right-narrow {left: 30px;}
+.ͼ2 .cm-snippetField {background-color: #00000022;}
+.ͼ3 .cm-snippetField {background-color: #ffffff22;}
+.ͼ1 .cm-snippetFieldPosition {vertical-align: text-top; width: 0; height: 1.15em; display: inline-block; margin: 0 -0.7px -.7em; border-left: 1.4px dotted #888;}
+.ͼ1 .cm-completionMatchedText {text-decoration: underline;}
+.ͼ1 .cm-completionDetail {margin-left: 0.5em; font-style: italic;}
+.ͼ1 .cm-completionIcon {font-size: 90%; width: .8em; display: inline-block; text-align: center; padding-right: .6em; opacity: 0.6; box-sizing: content-box;}
+.ͼ1 .cm-completionIcon-function:after, .ͼ1 .cm-completionIcon-method:after {content: 'ƒ';}
+.ͼ1 .cm-completionIcon-class:after {content: '○';}
+.ͼ1 .cm-completionIcon-interface:after {content: '◌';}
+.ͼ1 .cm-completionIcon-variable:after {content: '𝑥';}
+.ͼ1 .cm-completionIcon-constant:after {content: '𝐶';}
+.ͼ1 .cm-completionIcon-type:after {content: '𝑡';}
+.ͼ1 .cm-completionIcon-enum:after {content: '∪';}
+.ͼ1 .cm-completionIcon-property:after {content: '□';}
+.ͼ1 .cm-completionIcon-keyword:after {content: '🔑︎';}
+.ͼ1 .cm-completionIcon-namespace:after {content: '▢';}
+.ͼ1 .cm-completionIcon-text:after {content: 'abc'; font-size: 50%; vertical-align: middle;}
+.ͼ1 .cm-tooltip {z-index: 100; box-sizing: border-box;}
+.ͼ2 .cm-tooltip {border: 1px solid #bbb; background-color: #f5f5f5;}
+.ͼ2 .cm-tooltip-section:not(:first-child) {border-top: 1px solid #bbb;}
+.ͼ3 .cm-tooltip {background-color: #333338; color: white;}
+.ͼ1 .cm-tooltip-arrow:before, .ͼ1 .cm-tooltip-arrow:after {content: ''; position: absolute; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent;}
+.ͼ1 .cm-tooltip-above .cm-tooltip-arrow:before {border-top: 7px solid #bbb;}
+.ͼ1 .cm-tooltip-above .cm-tooltip-arrow:after {border-top: 7px solid #f5f5f5; bottom: 1px;}
+.ͼ1 .cm-tooltip-above .cm-tooltip-arrow {bottom: -7px;}
+.ͼ1 .cm-tooltip-below .cm-tooltip-arrow:before {border-bottom: 7px solid #bbb;}
+.ͼ1 .cm-tooltip-below .cm-tooltip-arrow:after {border-bottom: 7px solid #f5f5f5; top: 1px;}
+.ͼ1 .cm-tooltip-below .cm-tooltip-arrow {top: -7px;}
+.ͼ1 .cm-tooltip-arrow {height: 7px; width: 14px; position: absolute; z-index: -1; overflow: hidden;}
+.ͼ3 .cm-tooltip .cm-tooltip-arrow:before {border-top-color: #333338; border-bottom-color: #333338;}
+.ͼ3 .cm-tooltip .cm-tooltip-arrow:after {border-top-color: transparent; border-bottom-color: transparent;}
+.ͼ4 .cm-line ::selection, .ͼ4 .cm-line::selection {background-color: transparent !important;}
+.ͼ4 .cm-line {caret-color: transparent !important;}
+.ͼ4 .cm-content :focus::selection, .ͼ4 .cm-content :focus ::selection {background-color: Highlight !important;}
+.ͼ4 .cm-content :focus {caret-color: initial !important;}
+.ͼ4 .cm-content {caret-color: transparent !important;}
+</style>
+    <meta charset="utf-8">
+    <meta name="google" content="notranslate">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="/144.png">
+    <link rel="shortcut icon" sizes="196x196" href="/196.png">
+    <link rel="shortcut icon" sizes="128x128" href="/128.png">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/152.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/120.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/72.png">
+    <link rel="apple-touch-icon-precomposed" href="/57.png">
+    <title>APEX Local</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <script src="/main.js"></script>
+<style id="apex-debug-styles">
+      #apex-help-panel {
+        position: fixed; bottom: 0; left: 0; right: 0;
+        height: 340px;
+        background: #fff; color: #333;
+        font-family: system-ui, sans-serif; font-size: 13px;
+        z-index: 999999;
+        display: flex; flex-direction: column;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.18);
+        transform: translateY(100%);
+        transition: transform 0.2s ease;
+        border-top: 2px solid #d0d0d0;
+      }
+      #apex-help-panel.open { transform: translateY(0); }
+      #apex-help-handle {
+        height: 8px; background: #e8e8e8; cursor: ns-resize;
+        flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      }
+      #apex-help-handle:hover { background: #ddd; }
+      #apex-help-handle::after {
+        content: ''; width: 36px; height: 3px;
+        background: #bbb; border-radius: 2px;
+      }
+      #apex-help-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 6px 14px; background: #222; flex-shrink: 0;
+      }
+      #apex-help-header span { display: flex; align-items: center; gap: 7px; font-weight: 400; font-size: 14px; color: #9a9a9a; letter-spacing: normal; text-transform: none; }
+      #apex-help-close {
+        background: none; border: none; color: #888;
+        font-size: 18px; cursor: pointer; padding: 0 2px; line-height: 1;
+      }
+      #apex-help-close:hover { color: #fff; }
+      #apex-help-body { overflow-y: auto; flex: 1; padding: 10px 16px 16px; background: #f5f5f5; }
+      #apex-probe-body { display: flex; flex: 1; overflow: hidden; background: #f5f5f5; }
+      #apex-probe-left { overflow-y: auto; padding: 10px 16px 16px; width: 40%; flex-shrink: 0; }
+      #apex-probe-divider { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
+      #apex-probe-divider:hover, #apex-probe-divider.dragging { background: #aaa; }
+      #apex-probe-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #fff; font-family: monospace; font-size: 12px; line-height: 1.7; }
+      #apex-probe-right p { color: #bbb; margin: 0; font-family: system-ui, sans-serif; }
+      .apex-probe-row { cursor: pointer; }
+      .apex-probe-row:hover td { background: rgba(0,119,204,0.06) !important; }
+      .apex-probe-row.active td { background: rgba(0,119,204,0.13) !important; }
+      #apex-probe-left th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: #999; font-weight: 700; padding: 0 10px 6px 0; border-bottom: 1px solid #ddd; }
+      .apex-prog-line { display: block; padding: 1px 4px; border-radius: 2px; white-space: pre; }
+      .apex-prog-line.match { background: rgba(224,120,32,0.15); }
+      .af-debug:before { content: "\f188"; }
+      .af-explore:before { content: "\f06e"; }
+      #apex-help-body h3, #apex-probe-body h3 {
+        color: #e07820; margin: 14px 0 5px; font-size: 11px;
+        text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
+        border-bottom: 1px solid #ddd; padding-bottom: 3px;
+      }
+      #apex-help-body h3:first-child, #apex-probe-body h3:first-child { margin-top: 0; }
+      #apex-help-body table, #apex-probe-body table { border-collapse: collapse; width: 100%; margin-bottom: 4px; }
+      #apex-help-body td, #apex-probe-body td { padding: 3px 10px 3px 0; vertical-align: top; line-height: 1.45; color: #333; }
+      #apex-help-body td:first-child, #apex-probe-body td:first-child { white-space: nowrap; font-family: monospace; font-size: 12px; color: #2a6496; padding-right: 16px; }
+      #apex-help-body tr:nth-child(even) td, #apex-probe-body tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+      #apex-help-body td code, #apex-probe-body td code { font-family: monospace; color: #c0392b; }
+      #apex-gutter-tip {
+        position: fixed; z-index: 999998; pointer-events: none; display: none;
+        background: #222; color: #eee;
+        font-family: system-ui, sans-serif; font-size: 12px; line-height: 1.6;
+        padding: 6px 10px; border-radius: 4px; border-left: 3px solid #888;
+        max-width: 320px; box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+        white-space: pre-wrap;
+      }
+      .cm-lineNumbers .cm-gutterElement[data-apex-beef] {
+        position: relative;
+        padding-right: 18px;
+      }
+      .cm-lineNumbers .cm-gutterElement[data-apex-beef]::after {
+        position: absolute;
+        right: 2px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        font-family: ApexFusion;
+        font-weight: 900;
+        line-height: 1;
+        pointer-events: none;
+      }
+      .cm-lineNumbers .cm-gutterElement[data-apex-beef="T"]::after {
+        content: '\f058';
+        color: #4caf50;
+      }
+      .cm-lineNumbers .cm-gutterElement[data-apex-beef="F"]::after {
+        content: '\f057';
+        color: #e05555;
+      }
+      .adh-swatch {
+        display: inline-block; width: 11px; height: 11px;
+        border-radius: 2px; vertical-align: middle; margin-right: 5px;
+        border: 1px solid rgba(0,0,0,0.15);
+      }
+      #apex-probe-panel {
+        position: fixed; bottom: 0; left: 0; right: 0;
+        height: 340px;
+        background: #fff; color: #333;
+        font-family: system-ui, sans-serif; font-size: 13px;
+        z-index: 999999;
+        display: flex; flex-direction: column;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.18);
+        transform: translateY(100%);
+        transition: transform 0.2s ease;
+        border-top: 2px solid #d0d0d0;
+      }
+      #apex-probe-panel.open { transform: translateY(0); }
+      #apex-probe-handle {
+        height: 8px; background: #e8e8e8; cursor: ns-resize;
+        flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      }
+      #apex-probe-handle:hover { background: #ddd; }
+      #apex-probe-handle::after {
+        content: ''; width: 36px; height: 3px;
+        background: #bbb; border-radius: 2px;
+      }
+      #apex-probe-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 6px 14px; background: #222; flex-shrink: 0;
+      }
+      #apex-probe-header span { display: flex; align-items: center; gap: 7px; font-weight: 400; font-size: 14px; color: #9a9a9a; letter-spacing: normal; text-transform: none; }
+      #apex-probe-close {
+        background: none; border: none; color: #888;
+        font-size: 18px; cursor: pointer; padding: 0 2px; line-height: 1;
+      }
+      #apex-probe-close:hover { color: #fff; }
+      #apex-probe-body { overflow-y: auto; flex: 1; padding: 10px 16px 16px; background: #f5f5f5; }
+      #apex-explore-panel {
+        position: fixed; bottom: 0; left: 0; right: 0;
+        height: 340px;
+        background: #fff; color: #333;
+        font-family: system-ui, sans-serif; font-size: 13px;
+        z-index: 999999;
+        display: flex; flex-direction: column;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.18);
+        transform: translateY(100%);
+        transition: transform 0.2s ease;
+        border-top: 2px solid #d0d0d0;
+      }
+      #apex-explore-panel.open { transform: translateY(0); }
+      #apex-explore-handle {
+        height: 8px; background: #e8e8e8; cursor: ns-resize;
+        flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      }
+      #apex-explore-handle:hover { background: #ddd; }
+      #apex-explore-handle::after {
+        content: ''; width: 36px; height: 3px;
+        background: #bbb; border-radius: 2px;
+      }
+      #apex-explore-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 6px 14px; background: #222; flex-shrink: 0;
+      }
+      #apex-explore-header span { display: flex; align-items: center; gap: 7px; font-weight: 400; font-size: 14px; color: #9a9a9a; letter-spacing: normal; text-transform: none; }
+      #apex-explore-close {
+        background: none; border: none; color: #888;
+        font-size: 18px; cursor: pointer; padding: 0 2px; line-height: 1;
+      }
+      #apex-explore-close:hover { color: #fff; }
+      #apex-explore-body { display: flex; flex: 1; overflow: hidden; background: #f5f5f5; }
+      #apex-explore-left { display: flex; flex-direction: column; width: 280px; flex-shrink: 0; border-right: 1px solid #ddd; background: #fff; }
+      #apex-explore-search { padding: 8px; border-bottom: 1px solid #eee; flex-shrink: 0; }
+      #apex-explore-search-wrap { display: flex; align-items: center; border: 1px solid #ccc; border-radius: 4px; background: #fff; }
+      #apex-explore-search-wrap:focus-within { border-color: #e07820; }
+      #apex-explore-search input { flex: 1; min-width: 0; padding: 5px 8px; border: none; border-radius: 4px; font-size: 12px; outline: none; background: transparent; }
+      #apex-explore-search-clear { border: none; background: none; cursor: pointer; padding: 0 6px; font-size: 14px; color: #aaa; line-height: 1; flex-shrink: 0; }
+      #apex-explore-specials { border-bottom: 2px solid #eee; flex-shrink: 0; }
+      .apex-explore-keyword { display: block; width: 100%; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; color: #e07820; border: none; background: none; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .apex-explore-keyword:hover { background: #fff8f3; }
+      .apex-explore-keyword.active { background: #e07820; color: #fff; }
+      #apex-explore-list { overflow-y: auto; flex: 1; }
+      .apex-explore-probe { padding: 6px 12px; cursor: pointer; font-size: 12px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .apex-explore-probe:hover { background: #f5f5f5; }
+      .apex-explore-probe.active { background: #e07820; color: #fff; }
+      #apex-explore-divider, #apex-explore-divider2 { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
+      #apex-explore-divider:hover, #apex-explore-divider.dragging,
+      #apex-explore-divider2:hover, #apex-explore-divider2.dragging { background: #bbb; }
+      #apex-explore-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #f5f5f5; }
+      #apex-explore-preview { width: 340px; flex-shrink: 0; overflow-y: auto; padding: 10px 16px 16px; background: #fff; font-size: 12px; white-space: pre; font-family: monospace; border-left: 1px solid #e0e0e0; }
+      #apex-explore-preview p { white-space: normal; font-family: inherit; color: #888; margin: 0; }
+      .apex-explore-ref.active { background: #fff3e8; }
+      #apex-explore-right h3 { color: #e07820; margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; }
+      .apex-explore-right-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 8px; }
+      .apex-explore-ref { padding: 5px 8px; font-size: 12px; border-bottom: 1px solid #eee; background: #fff; border-radius: 2px; margin-bottom: 3px; }
+      .apex-explore-toggle { display: inline-flex; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; }
+      .apex-explore-toggle button { background: #fff; border: none; padding: 2px 8px; font-size: 11px; cursor: pointer; color: #555; line-height: 1.6; }
+      .apex-explore-toggle button.active { background: #e07820; color: #fff; }
+      .apex-explore-toggle button:hover:not(.active) { background: #f0f0f0; }
+      #apex-debug-toggle, #apex-debug-help {
+        background-color: rgba(71,73,73,0.65) !important;
+        border-color: rgba(71,73,73,0.65) !important;
+        color: #fff !important;
+      }
+      #apex-debug-toggle.active, #apex-debug-help.active {
+        background-color: rgb(71,73,73) !important;
+        border-color: rgb(71,73,73) !important;
+        color: #fff !important;
+      }
+    </style><style id="apex-winner-style">.cm-content > .cm-line:nth-child(2) { background-color: #c8f7c5 !important; }</style></head>
+<body>
+    <nav class="navbar navbar-dark navbar-expand-md fixed-top bg-dark"><div class="container"><div id="nav-alert"><button type="button" title="Alerts" style="display: none;"><i class="af af-lg af-fw af-bell"></i><div class="badge">0</div></button></div><button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nav-collapse" aria-controls="nav-collapse" aria-expanded="false" aria-label="Toggle navigation"><span></span><span></span><span></span></button><div class="collapse navbar-collapse" id="nav-collapse"><div class="nav navbar-nav me-auto"><div class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="af af-fw af-home"></i><span id="nav-main-menu-name">apex</span></a><div class="dropdown-menu mt-0"><h6 class="dropdown-header">Apex</h6><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-tachometer"></i> Dashboard</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-question"></i> About</div></button><div class="dropdown-divider"></div><h6 class="dropdown-header">Logs</h6><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-tint"></i> DŌS Log</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-analytics"></i> Input Log</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-tasks"></i> Output Log</div></button><div class="dropdown-divider"></div><h6 class="dropdown-header">Configuration</h6><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-sitemap af-rotate-270"></i> System</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-thermometer-half"></i> Inputs</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-module"></i> Modules</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-outlet"></i> Outputs</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-folder"></i> Profiles</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-print"></i> Summary</div></button><div class="dropdown-divider"></div><h6 class="dropdown-header">Setup</h6><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-clock"></i> Clock</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-wrench"></i> Misc</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-wifi"></i> Network</div></button></div></div></div><div class="nav navbar-nav ms-auto"><div class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="af af-fw af-user"></i>admin</a><div class="dropdown-menu dropdown-menu-end mt-0"><h6 class="dropdown-header">User</h6><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-wrench"></i> Settings</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-link"></i> Link Apex</div></button><div class="dropdown-divider"></div><h6 class="dropdown-header">Help</h6><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-life-ring"></i> Contact Support</div></button><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-book"></i> Apex Help</div></button><div class="dropdown-divider"></div><button class="dropdown-item" type="button"><div class="menu-item-basic"><i class="af af-fw af-sign-out"></i> Sign Out</div></button></div></div></div></div></div></nav>
+    <div class="container">
+        <div id="message"></div>
+        <div id="content"><div><div class="nav-items"><div class="nav-group"><button type="button" title="Dashboard" class="btn btn-secondary"><i class="af af-fw af-tachometer"></i></button><button type="button" title="System" class="btn btn-secondary"><i class="af af-fw af-sitemap af-rotate-270"></i></button><button type="button" title="Inputs" class="btn btn-secondary"><i class="af af-fw af-thermometer-half"></i></button></div><button type="button" title="Update Apex" class="btn btn-secondary" disabled=""><i class="af af-fw af-cloud-upload"></i></button></div><div class="card card-body bg-body-tertiary mt-2 px-2 px-sm-3"><p class="lead" id="input-lead">Digital Switch Configuration</p><div class="row g-3"><div class="col-lg-6"><div class="card"><h5 class="card-header">Summary</h5><div class="card-body"><div><div class="row mb-3"><div class="col-form-label col-md-3">Name</div><div class="col-md-9"><p class="form-control-plaintext">DoorSw</p></div></div><div class="row mb-3"><div class="col-form-label col-md-3">Device</div><div class="col-md-9"><p class="form-control-plaintext">base_I1</p></div></div><div class="row mb-3"><div class="col-form-label col-md-3">Location</div><div class="col-md-9"><p class="form-control-plaintext">Digital Switch 1 on the Apex Base Unit.</p></div></div></div></div></div></div><div class="col-lg-6"><div class="card"><h5 class="card-header">Configuration</h5><div class="card-body"><div><div id="input-name"><div><div class="row mb-3"><label class="col-form-label col-md-3" for="input-name-value">Name</label><div class="col-md-9"><div class="row g-1"><div class="col"><input class="form-control" id="input-name-value" type="text" name="name" maxlength="6" placeholder="Name" spellcheck="false" autocomplete="off" required=""></div><div class="col-auto"><button type="button" class="btn btn-info"><i class="af af-question"></i></button></div></div></div></div></div></div></div></div></div></div></div></div></div></div>
+        <div id="toasts" ,="" aria-live="polite" aria-atomic="true"></div>
+        <br>
+        <noscript>
+            <div class="lead text-center">
+                <p>To use this site, your web browser must have JavaScript enabled.</p>
+                <p>Please read these
+                    <a href="https://www.enable-javascript.com/" target="_blank" rel="noopener">these instructions</a> to enable JavaScript in your web browser.</p>
+                <br>
+            </div>
+        </noscript>
+        <p class="small text-muted text-end">© 2013 - 2025
+            <a href="https://www.neptunesystems.com" target="_blank" rel="noopener">Neptune Systems</a>. All rights reserved.
+        </p>
+    </div>
+
+
+<div id="apex-gutter-tip" style="display: none; border-color: rgb(224, 85, 85); top: 264.797px; left: 612px;">Condition: Output Return_UV = OFF
+State: FALSE</div><div id="apex-help-panel" class=""><div id="apex-help-handle"></div><div id="apex-help-header"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="#9a9a9a"><path d="M29.83,20l.34-2L25,17.15V13c0-.08,0-.15,0-.23l5.06-1.36-.51-1.93-4.83,1.29A9,9,0,0,0,20,5V2H18V4.23a8.81,8.81,0,0,0-4,0V2H12V5a9,9,0,0,0-4.71,5.82L2.46,9.48,2,11.41,7,12.77c0,.08,0,.15,0,.23v4.15L1.84,18l.32,2L7,19.18a8.9,8.9,0,0,0,.82,3.57L3.29,27.29l1.42,1.42,4.19-4.2a9,9,0,0,0,14.2,0l4.19,4.2,1.42-1.42-4.54-4.54A8.9,8.9,0,0,0,25,19.18ZM15,25.92A7,7,0,0,1,9,19V13h6ZM9.29,11a7,7,0,0,1,13.42,0ZM23,19a7,7,0,0,1-6,6.92V13h6Z"></path></svg>apex debug</span><button id="apex-help-close" title="Close">×</button></div><div id="apex-help-body">
+    <h3>Color legend</h3>
+    <table>
+      <tbody><tr><td><span class="adh-swatch" style="background:#c8f7c5"></span>Green gutter</td><td>Condition is currently <strong>true</strong></td></tr>
+      <tr><td><span class="adh-swatch" style="background:#f7c5c5"></span>Red gutter</td><td>Condition is currently <strong>false</strong></td></tr>
+      <tr><td><span class="adh-swatch" style="background:#e0e0e0"></span>Grey gutter</td><td>Cannot evaluate (Sun, Moon, OSC, timers…)</td></tr>
+      <tr><td>No color</td><td>Neutral — Fallback, Set [profile], blank lines</td></tr>
+      <tr><td><span class="adh-swatch" style="background:#c8f7c5"></span>Green line bg</td><td>Winning statement → outlet will be <strong>ON</strong></td></tr>
+      <tr><td><span class="adh-swatch" style="background:#f7c5c5"></span>Red line bg</td><td>Winning statement → outlet will be <strong>OFF</strong></td></tr>
+    </tbody></table>
+
+    <h3>How it works</h3>
+    <table>
+      <tbody><tr><td></td><td>Statements evaluate top-to-bottom. The <strong>last true statement wins</strong> and determines the physical output state.</td></tr>
+      <tr><td></td><td>Status refreshes every 5 s from the Apex. Colors update instantly as you type.</td></tr>
+    </tbody></table>
+
+    <h3>Evaluable — If / Then</h3>
+    <table>
+      <tbody><tr><td>If Time HH:MM to HH:MM Then ON|OFF</td><td>True if current time is in range. Midnight-spanning ok (e.g. <code>21:00 to 03:00</code>). Inclusive both ends.</td></tr>
+      <tr><td>If DOW SMTWTFS Then ON|OFF</td><td>7 chars S M T W T F S. Hyphen = skip day. e.g. <code>-MTWTF-</code> = weekdays only.</td></tr>
+      <tr><td>If [Probe] &gt; [val] Then ON|OFF</td><td>Temp, pH, ORP, Salt, or any named probe — greater-than comparison.</td></tr>
+      <tr><td>If [Probe] &lt; [val] Then ON|OFF</td><td>Same probe, less-than comparison.</td></tr>
+      <tr><td>If [Input] OPEN Then ON|OFF</td><td>Digital switch — OPEN = value 0.</td></tr>
+      <tr><td>If [Input] CLOSED Then ON|OFF</td><td>Digital switch — CLOSED = value 200.</td></tr>
+      <tr><td>If Output [name] = ON|OFF Then ON|OFF</td><td>Tests another outlet's current on/off state.</td></tr>
+      <tr><td>If Outlet [name] = ON|OFF Then ON|OFF</td><td>Identical to Output (older firmware keyword).</td></tr>
+      <tr><td>If Output [name] Percent &gt; [val] Then ON|OFF</td><td>Tests variable output intensity 0–100.</td></tr>
+      <tr><td>If Output [name] Percent &lt; [val] Then ON|OFF</td><td>Same, less-than.</td></tr>
+      <tr><td>If FeedA|B|C|D MMM Then ON|OFF</td><td>True if that feed cycle is active. MMM = delay minutes after cycle ends.</td></tr>
+      <tr><td>If Error [name] Then ON|OFF</td><td>True if the named outlet is in ERR state (overload / short circuit).</td></tr>
+      <tr><td>If Sun [+/-MMM]/[+/-MMM] Then ON|OFF</td><td>True if current time is between (sunrise + offset1) and (sunset + offset2). Data from /rest/config.</td></tr>
+      <tr><td>If Moon [+/-MMM]/[+/-MMM] Then ON|OFF</td><td>True if current time is between (moonrise + offset1) and (moonset + offset2). Data from /rest/config.</td></tr>
+      <tr><td>If [Probe] &lt; RT+[val] Then ON|OFF</td><td>Compares probe to seasonal regional temp ± differential. e.g. <code>RT+0.4</code>, <code>RT+-0.4</code>, <code>RT+</code>. Data from /rest/config.</td></tr>
+    </tbody></table>
+
+    <h3>Always executes</h3>
+    <table>
+      <tbody><tr><td>Set ON|OFF</td><td>Unconditionally sets the outlet register. Always green — participates in winner selection.</td></tr>
+      <tr><td>Set [Profile]</td><td>Sets a named profile. Treated as neutral — profile state can't be evaluated.</td></tr>
+      <tr><td>Fallback ON|OFF</td><td>What the physical outlet does if communication with the base unit is lost. Neutral.</td></tr>
+    </tbody></table>
+
+    <h3>Cannot evaluate — always grey</h3>
+    <table>
+      <tbody><tr><td>OSC MMM:SS/MMM:SS/MMM:SS</td><td>Oscillate. Three segments: delay / on-time / off-time. Requires cycle-phase history.</td></tr>
+      <tr><td>Defer MMM:SS Then ON|OFF</td><td>Delays a state change until the register holds that state for the full duration. Requires outlet history.</td></tr>
+      <tr><td>Min Time MMM:SS Then ON|OFF</td><td>Forces outlet to hold its current state for minimum duration before switching. Requires outlet history.</td></tr>
+      <tr><td>When ON|OFF &gt; MMM:SS Then ON|OFF</td><td>Forces outlet to manual OFF if it has been in the specified state longer than the duration. Requires runtime tracking.</td></tr>
+      <tr><td>If Power Apex|EB ON|OFF MMM</td><td>Tests power state of base unit or Energy Bar. Partial data only — grey for now.</td></tr>
+    </tbody></table>
+  </div></div><div id="apex-probe-panel" class=""><div id="apex-probe-handle"></div><div id="apex-probe-header"><span id="apex-probe-title"><i class="af af-fw" style="font-style:normal;margin-right:6px"></i>References to: DoorSw</span><button id="apex-probe-close" title="Close">×</button></div><div id="apex-probe-body"><div id="apex-probe-left"><table><thead><tr><th>Output</th><th>#</th><th>Code</th></tr></thead><tbody><tr class="apex-probe-row active" data-i="0"><td><a href="/apex/config/outputs/9_8" target="_blank">Stand_Light</a></td><td style="color:#bbb;text-align:right;padding-right:12px">3</td><td><code><span style="color:#0077cc;font-weight:500">If</span> <span style="color:#e07820;font-weight:700">DoorSw</span> <span style="color:#999">OPEN</span> <span style="color:#0077cc;font-weight:500">Then</span> <span style="color:#27ae60;font-weight:600">ON</span></code></td></tr></tbody></table></div><div id="apex-probe-divider"></div><div id="apex-probe-right"><span class="apex-prog-line"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">1</span><span style="color:#0077cc;font-weight:500">Fallback</span> <span style="color:#e74c3c;font-weight:600">OFF</span> </span><span class="apex-prog-line"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">2</span><span style="color:#0077cc;font-weight:500">Set</span> <span style="color:#e74c3c;font-weight:600">OFF</span> </span><span class="apex-prog-line match"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">3</span><span style="color:#0077cc;font-weight:500">If</span> <span style="color:#e07820;font-weight:700">DoorSw</span> <span style="color:#999">OPEN</span> <span style="color:#0077cc;font-weight:500">Then</span> <span style="color:#27ae60;font-weight:600">ON</span> </span><span class="apex-prog-line"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">4</span><span style="color:#0077cc;font-weight:500">Defer</span> <span style="color:#16a085">000</span>:<span style="color:#16a085">05</span> <span style="color:#0077cc;font-weight:500">Then</span> <span style="color:#e74c3c;font-weight:600">OFF</span> </span><span class="apex-prog-line"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">5</span></span></div></div></div><div id="apex-explore-panel" class=""><div id="apex-explore-handle"></div><div id="apex-explore-header"><span>Explore</span><button id="apex-explore-close" title="Close">×</button></div><div id="apex-explore-body"><div id="apex-explore-left"><div id="apex-explore-search"><div id="apex-explore-search-wrap"><input type="text" id="apex-explore-search-input" placeholder="Search probes…"><button id="apex-explore-search-clear">×</button></div></div><div id="apex-explore-specials"><button class="apex-explore-keyword" data-name="Fallback">Fallback</button><button class="apex-explore-keyword" data-name="Set">Set</button></div><div id="apex-explore-list"><div class="apex-explore-probe active" data-name="RunSkimmer">RunSkimmer</div><div class="apex-explore-probe" data-name="Skimmer">Skimmer</div><div class="apex-explore-probe" data-name="Skimmer_4_5">Skimmer_4_5</div><div class="apex-explore-probe" data-name="Skimmer_4_5A">Skimmer_4_5A</div><div class="apex-explore-probe" data-name="Skimmer_4_5W">Skimmer_4_5W</div><div class="apex-explore-probe" data-name="Skimmer_full">Skimmer_full</div><div class="apex-explore-probe" data-name="SkimmerA">SkimmerA</div><div class="apex-explore-probe" data-name="SkimmerPump">SkimmerPump</div><div class="apex-explore-probe" data-name="SkimmerW">SkimmerW</div></div></div><div id="apex-explore-divider"></div><div id="apex-explore-right"><div class="apex-explore-right-header"><h3>Referenced in (1)</h3><div class="apex-explore-toggle"><button data-mode="referenced" class="active">Referenced in</button><button data-mode="not-referenced" class="">Not referenced in</button></div></div><div class="apex-explore-ref active" data-did="4_8" style="cursor:pointer"><div style="font-weight:700;margin-bottom:2px"><a href="/apex/config/outputs/4_8" target="_blank" style="color:inherit;text-decoration:none">Skimmer</a></div><code style="font-size:11px"><span style="color:#0077cc;font-weight:500">If</span> <span style="color:#7e57c2">Output</span> <span style="color:#e07820;font-weight:700">RunSkimmer</span> = <span style="color:#e74c3c;font-weight:600">OFF</span> <span style="color:#0077cc;font-weight:500">Then</span> <span style="color:#e74c3c;font-weight:600">OFF</span></code></div></div><div id="apex-explore-divider2"></div><div id="apex-explore-preview"><span class="apex-prog-line"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">1</span><span style="color:#0077cc;font-weight:500">Fallback</span> <span style="color:#27ae60;font-weight:600">ON</span> </span><span class="apex-prog-line"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">2</span><span style="color:#0077cc;font-weight:500">Set</span> <span style="color:#27ae60;font-weight:600">ON</span> </span><span class="apex-prog-line match"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">3</span><span style="color:#0077cc;font-weight:500">If</span> <span style="color:#7e57c2">Output</span> <span style="color:#e07820;font-weight:700">RunSkimmer</span> = <span style="color:#e74c3c;font-weight:600">OFF</span> <span style="color:#0077cc;font-weight:500">Then</span> <span style="color:#e74c3c;font-weight:600">OFF</span> </span><span class="apex-prog-line"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">4</span><span style="color:#0077cc;font-weight:500">If</span> SkimSW <span style="color:#999">OPEN</span> <span style="color:#0077cc;font-weight:500">Then</span> <span style="color:#e74c3c;font-weight:600">OFF</span> </span><span class="apex-prog-line"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">5</span><span style="color:#0077cc;font-weight:500">Defer</span> <span style="color:#16a085">000</span>:<span style="color:#16a085">01</span> <span style="color:#0077cc;font-weight:500">Then</span> <span style="color:#27ae60;font-weight:600">ON</span> </span><span class="apex-prog-line"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">6</span></span></div></div></div></body></html>
