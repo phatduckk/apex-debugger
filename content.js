@@ -1363,6 +1363,9 @@
       .apex-prog-line.match { background: rgba(224,120,32,0.15); }
       .af-debug:before { content: "\\f188"; }
       .af-explore:before { content: "\\f06e"; }
+      .af-folder-default:before { content: "\\f249"; }
+      .af-folder-new:before { content: "\\f65e"; }
+      .af-folder-edit:before { content: "\\f044"; }
       #apex-help-body h3, #apex-probe-body h3 {
         color: #e07820; margin: 14px 0 5px; font-size: 11px;
         text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
@@ -2290,6 +2293,24 @@
       btn.innerHTML = '<div class="menu-item-basic"><i class="af af-fw af-explore"></i> Explore</div>';
       btn.addEventListener('click', openExplorePanel);
       helpDropdown.appendChild(btn);
+    }
+
+    const dashLock = document.getElementById('dash-lock');
+    if (dashLock && !document.getElementById('apex-folder-dropdown')) {
+      const group = document.createElement('div');
+      group.id = 'apex-folder-dropdown';
+      group.className = 'btn-group';
+      group.innerHTML =
+        '<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Folder">' +
+          '<i class="af af-fw af-folder"></i> Folder' +
+        '</button>' +
+        '<div class="dropdown-menu dropdown-menu-end">' +
+          '<button type="button" class="dropdown-item"><i class="af af-fw af-folder-default"></i> Default</button>' +
+          '<hr class="dropdown-divider">' +
+          '<button type="button" class="dropdown-item"><i class="af af-fw af-folder-new"></i> New Folder</button>' +
+          '<button type="button" class="dropdown-item"><i class="af af-fw af-folder-edit"></i> Manage Folders</button>' +
+        '</div>';
+      dashLock.insertAdjacentElement('afterend', group);
     }
   }
 
