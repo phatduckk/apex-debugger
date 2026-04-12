@@ -76,16 +76,44 @@ The dashboard lives at `/apex/dash` (see `docs/ex/html-dash.html`).
 
 ```html
 <div class="dash-widget-column" id="dash-widget-column-1">
-  <div class="widget" id="4_1"> ... </div>
-  <div class="widget" id="4_2"> ... </div>
+  <div id="dash-section-1">
+    <div class="dash-widget" id="4_1"> ... </div>
+    <div class="dash-widget" id="4_2"> ... </div>
+  </div>
 </div>
-<div class="dash-widget-column" id="dash-widget-column-2"> ... </div>
-<div class="dash-widget-column" id="dash-widget-column-3"> ... </div>
+<div class="dash-widget-column" id="dash-widget-column-2">
+  <div id="dash-section-2"> ... </div>
+</div>
+<div class="dash-widget-column" id="dash-widget-column-3">
+  <div id="dash-section-3"> ... </div>
+</div>
 ```
 
 - Column IDs are 1-indexed: `dash-widget-column-1`, `dash-widget-column-2`, `dash-widget-column-3`
-- The unused tray is `#unused` (separate from the columns, not a 4th column)
-- Widget `id` attribute = GID (matches layout CSV and `status.json .did`)
+- Each column contains a `div#dash-section-{1,2,3}` which holds the actual widgets
+- The unused tray is `div#dash-widget-unused` containing `div#dash-section-0`
+- Widget class is `dash-widget` (not `widget`) — the `id` attribute is the GID (matches layout CSV and `status.json .did`)
+
+---
+
+## Edit Mode
+
+When the dashboard is unlocked (`div#dash.unlocked`), edit mode activates:
+
+- `div#dash-section-0/1/2/3` each gain class `sortable` — this triggers the dashed orange border via CSS
+- Apex's bundled sort library handles drag-to-reorder within and between sections
+- Each `div.dash-widget` gets a `div.sortable-remove` injected as a child (the X button)
+- Removing a widget moves it from its column section back to `dash-section-0` (the unused tray)
+
+```html
+<!-- edit mode -->
+<div id="dash-section-1" class="sortable">
+  <div class="dash-widget" id="4_1">
+    <div class="sortable-remove"></div>   ← X button
+    ...
+  </div>
+</div>
+```
 
 ---
 
