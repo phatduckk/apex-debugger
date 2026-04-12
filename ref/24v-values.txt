@@ -1,0 +1,15 @@
+when the input/ouput type is 24v here's what the 2 character values mean
+
+These strings are basically:
+[Control Mode][State][Extra Flag]
+
+
+Value:Meaning
+AOF: Auto mode, currently OFF
+AON: Auto mode, currently ON
+ATO: Auto mode, output is ON (older/alt encoding)
+AOF: Auto OFF (most common “off” state)
+FON: Forced ON (manual override ON)
+FOF: Forced OFF (manual override OFF)
+OFF: Explicit OFF (fallback / no program)
+ON: Explicit ON

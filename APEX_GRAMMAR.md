@@ -96,7 +96,7 @@ If FeedB [MMM] Then ON|OFF|[PROFILE]
 - Delay value is in **minutes** (000 = no delay after cycle ends)
 - **Data source**: `istat.feed.active` and `istat.feed.name`
   - `active: 0` = no feed cycle running
-  - When active, `name` indicates which cycle (1=A, 2=B, 3=C, 4=D — needs verification)
+  - When active, `active` may be the letter directly (`"A"`, `"B"`, `"C"`, `"D"`) per API docs, but observed as numeric `name` (1=A, 2=B, 3=C, 4=D) in some firmware — **unverified without a live active-feed capture**
 
 #### If Error
 ```
@@ -220,6 +220,12 @@ Format: `[Control Mode][State][Extra Flag]`
 | `OFF` | Explicit OFF (fallback / no program) | OFF |
 
 Other status[0] values (variable pumps, Cor, WAV, etc.) — treat output as ON if not `AOF`, `FOF`, or `OFF`.
+
+**Robust normalization** (handles unknown future codes):
+- ON if: `status.endsWith('ON')` or `status.endsWith('TO')` or `status === 'TBL'`
+- OFF if: `status.endsWith('OF')` or `status.endsWith('FF')`
+
+**Firmware gotcha**: Some older firmware versions use `state` instead of `status` on output objects. Always check both if parsing raw JSON outside the `istat` wrapper.
 
 `istat.outputs[n].status[2]` (error field):
 - `"OK"` = no error

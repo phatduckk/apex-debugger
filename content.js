@@ -462,14 +462,14 @@
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   function isOutputOn(s) {
-    return s === 'AON' || s === 'ATO' || s === 'FON' || s === 'TBL' || s === 'ON';
+    return s === 'TBL' || s.endsWith('ON') || s.endsWith('TO');
   }
 
   function formatOutputStatus(s) {
-    const ON_CODES  = new Set(['AON', 'ATO', 'FON', 'ON', 'TBL']);
-    const OFF_CODES = new Set(['AOF', 'FOF', 'OFF']);
-    if (ON_CODES.has(s))  return `ON (${s})`;
-    if (OFF_CODES.has(s)) return `OFF (${s})`;
+    const isOn  = s === 'TBL' || s.endsWith('ON') || s.endsWith('TO');
+    const isOff = s.endsWith('OF') || s.endsWith('FF');
+    if (isOn)  return `ON (${s})`;
+    if (isOff) return `OFF (${s})`;
     return s;
   }
 
@@ -663,12 +663,14 @@
     const outputTypes = {};
     const inputDids   = {};
     const outputDids  = {};
+    const inputUnits  = {};
 
     for (const inp of istat.inputs) {
       const key = inp.name.toLowerCase();
       inputs[key] = inp.value;
       if (inp.type !== undefined) inputTypes[key] = inp.type;
       if (inp.did  !== undefined) inputDids[key]  = inp.did;
+      if (inp.unit !== undefined) inputUnits[key] = inp.unit;
     }
     for (const out of istat.outputs) {
       const key = out.name.toLowerCase();
@@ -689,7 +691,7 @@
     // Feed: active=0 means none; name 1=A,2=B,3=C,4=D (verify against real data)
     const activeFeed = istat.feed && istat.feed.active ? istat.feed.name : 0;
 
-    return { inputs, outputs, intensities, inputTypes, outputTypes, inputDids, outputDids, nowMin, dowIndex, activeFeed, monthIndex };
+    return { inputs, outputs, intensities, inputTypes, outputTypes, inputDids, outputDids, inputUnits, nowMin, dowIndex, activeFeed, monthIndex };
   }
 
   // ── Apply / clear colors ───────────────────────────────────────────────────
@@ -890,9 +892,10 @@
         if (probeValue === null) {
           pm = cond.match(/^(\S+)\s+[<>]\s+/i);
           if (pm && !/^(?:Output|Outlet)$/i.test(pm[1])) {
-            const key = pm[1].toLowerCase();
-            const val = inputs[key];
-            if (val !== undefined) probeValue = val;
+            const key  = pm[1].toLowerCase();
+            const val  = inputs[key];
+            const unit = inputUnits[key];
+            if (val !== undefined) probeValue = unit !== undefined ? `${val} ${unit}` : val;
             probeType = inputTypes[key] ?? null;
             probeDid  = inputDids[key]  ?? null;
           }
