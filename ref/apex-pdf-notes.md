@@ -1,5 +1,5 @@
 # Apex PDF Reference Notes
-> Synthesized from: Timers-guide.pdf, Lights-Lunar-guide.pdf, ERR-guide.pdf
+
 > Note: Comprehensive_Reference_Manual.pdf requires poppler to render — content already captured in APEX_GRAMMAR.md
 
 ---
