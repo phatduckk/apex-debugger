@@ -847,14 +847,21 @@
 
       let probeValue = null;
       if (ctx) {
-        const { inputs, outputs, intensities } = ctx;
+        const { inputs, outputs, intensities, nowMin } = ctx;
         let pm;
+
+        // Time HH:MM to HH:MM → show current time
+        if (/^Time\s+\d{1,2}:\d{2}\s+to\s+\d{1,2}:\d{2}$/i.test(cond)) {
+          const h = Math.floor(nowMin / 60);
+          const m = nowMin % 60;
+          probeValue = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        }
 
         // <probe> OPEN|CLOSED
         pm = cond.match(/^(\S+)\s+(OPEN|CLOSED)$/i);
         if (pm) {
           const val = inputs[pm[1].toLowerCase()];
-          if (val !== undefined) probeValue = val === 0 ? 'open' : `closed (${val})`;
+          if (val !== undefined) probeValue = val === 0 ? 'OPEN' : `CLOSED (${val})`;
         }
 
         // <probe> > < threshold (including RT+)
