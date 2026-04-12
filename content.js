@@ -566,13 +566,13 @@
     }
 
     // ── If <input> OPEN|CLOSED ─────────────────────────────────────────────
-    // Confirmed: value 0 = OPEN, value 200 = CLOSED
+    // 0 = OPEN; any non-zero = CLOSED (60, 200, 4, 12, etc. depending on module)
     m = cond.match(/^(\S+)\s+(OPEN|CLOSED)$/i);
     if (m) {
       const val = inputs[m[1].toLowerCase()];
       if (val === undefined) return 'grey';
       const isOpen = m[2].toUpperCase() === 'OPEN';
-      return (isOpen ? val === 0 : val === 200) ? 'green' : 'red';
+      return (isOpen ? val === 0 : val !== 0) ? 'green' : 'red';
     }
 
     // ── If <probe> > < val (with optional RT+ suffix) ──────────────────────
@@ -736,7 +736,7 @@
       } else {
         delete gEl.dataset.apexBeef;
       }
-      const tip = buildTipText(line.textContent, results[i], i === winnerIdx, winnerFinalState);
+      const tip = buildTipText(line.textContent, results[i], i === winnerIdx, winnerFinalState, ctx);
       if (tip) {
         gEl.dataset.apexTip   = tip;
         gEl.dataset.apexColor = results[i];
@@ -816,7 +816,7 @@
 
   // ── Gutter tooltip ────────────────────────────────────────────────────────
 
-  function buildTipText(lineText, result, isWinner, winnerFinalState) {
+  function buildTipText(lineText, result, isWinner, winnerFinalState, ctx) {
     const t = lineText.trim();
     if (!t) return null;
 
@@ -844,7 +844,50 @@
       const cond    = ifm[1];
       const thenVal = ifm[2].toUpperCase();
       const isTrue  = result === 'green';
-      let tip = `Condition: ${cond}\nState: ${isTrue ? 'TRUE' : 'FALSE'}`;
+
+      let probeValue = null;
+      if (ctx) {
+        const { inputs, outputs, intensities } = ctx;
+        let pm;
+
+        // <probe> OPEN|CLOSED
+        pm = cond.match(/^(\S+)\s+(OPEN|CLOSED)$/i);
+        if (pm) {
+          const val = inputs[pm[1].toLowerCase()];
+          if (val !== undefined) probeValue = val === 0 ? 'open' : `closed (${val})`;
+        }
+
+        // <probe> > < threshold (including RT+)
+        if (probeValue === null) {
+          pm = cond.match(/^(\S+)\s+[<>]\s+/i);
+          if (pm && !/^(?:Output|Outlet)$/i.test(pm[1])) {
+            const val = inputs[pm[1].toLowerCase()];
+            if (val !== undefined) probeValue = val;
+          }
+        }
+
+        // Output|Outlet <name> = ON|OFF
+        if (probeValue === null) {
+          pm = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+=\s+(ON|OFF)$/i);
+          if (pm) {
+            const val = outputs[pm[1].toLowerCase()];
+            if (val !== undefined) probeValue = val;
+          }
+        }
+
+        // Output|Outlet <name> Percent > < val
+        if (probeValue === null) {
+          pm = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+Percent\s+[<>]/i);
+          if (pm) {
+            const val = intensities[pm[1].toLowerCase()];
+            if (val !== undefined) probeValue = `${val}%`;
+          }
+        }
+      }
+
+      let tip = `Condition: ${cond}`;
+      if (probeValue !== null) tip += `\nValue: ${probeValue}`;
+      tip += `\nState: ${isTrue ? 'TRUE' : 'FALSE'}`;
       if (isWinner) tip += `\n\n★ This line is responsible for setting the outlet ${thenVal}`;
       return tip;
     }

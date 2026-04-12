@@ -61,7 +61,9 @@ If [INPUT_NAME] OPEN Then ON|OFF|[PROFILE]
 If [INPUT_NAME] CLOSED Then ON|OFF|[PROFILE]
 ```
 - For digital float switches / contact switches
-- OPEN = `value: 0`, CLOSED = `value: 200` (confirmed via physical switch test)
+- **OPEN = `value: 0`; CLOSED = any non-zero value**
+- The Apex encodes module type, port index, and sensor type into the number — so CLOSED can be 60, 200, 4, 12, etc. depending on hardware
+- **Correct evaluation**: `isClosed = value !== 0` (do NOT key off exact numbers)
 - Inputs have `type: "digital"` in the JSON
 - Lookup by name in `istat.inputs[].name`
 - **Data source**: `istat.inputs[n].value` where type === "digital"
@@ -219,6 +221,37 @@ Other status[0] values (variable pumps, Cor, WAV, etc.) — treat output as ON i
 - `"Werr"` = wiring error
 - `"Asnc"` = async (not synchronized)
 - `"RC"` = ? (remote control mode?)
+
+---
+
+## Digital Input Value Decoding
+
+`istat.inputs[n].value` for digital inputs (float switches, optical sensors, leak detectors):
+
+**Core rule: `0` = OPEN (OFF), any non-zero = CLOSED (ON)**
+
+The exact non-zero value encodes module type + port index + sensor type — two switches can both be CLOSED but report different numbers. Never key off the exact value; use `value !== 0`.
+
+| Value | Meaning | Where it shows up |
+|-------|---------|-------------------|
+| `0` | OPEN / OFF | All modules — switch not triggered |
+| `60` | CLOSED / ON | FMM optical sensors, float switches (most common) |
+| `200` | CLOSED / ON | Different module/port encoding (also common) |
+| `4` | CLOSED | Legacy / base unit inputs |
+| `12` | CLOSED | Variation of base inputs |
+| `20` | CLOSED | Some older modules |
+| `28` | CLOSED | Bitmask combo variant |
+| `100` | CLOSED | Some FMM / leak inputs |
+| `196` | CLOSED | Variation near 200 |
+| `204` | CLOSED | Another 200-series variant |
+
+**Module patterns:**
+- FMM optical sensors → usually `60`
+- FMM leak detectors → often `100`–`200` range
+- Base unit / breakout box float switches → often `4`, `12`, `20`, `28`
+- Some FMM ports → `200`
+
+**Normalizer**: `const isClosed = value !== 0;`
 
 ---
 
