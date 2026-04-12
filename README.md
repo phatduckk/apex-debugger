@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icons/icon128.png" width="128" alt="Apex Debugger icon">
+  <img src="icons/regal-1024.png" width="128" alt="Apex Debugger icon">
 </p>
 
 # Apex Debugger
