@@ -74,18 +74,29 @@ So to map a widget on screen to its data:
 
 The dashboard lives at `/apex/dash` (see `docs/ex/html-dash.html`).
 
+Two `div.dash-widget-row` elements are stacked vertically:
+- **Row 1** — `div#dash-widget-unused` (unused tray / `dash-section-0`)
+- **Row 2** — the three columns (`dash-widget-column-1/2/3`)
+
 ```html
-<div class="dash-widget-column" id="dash-widget-column-1">
-  <div id="dash-section-1">
-    <div class="dash-widget" id="4_1"> ... </div>
-    <div class="dash-widget" id="4_2"> ... </div>
+<div class="dash-widget-row">
+  <div id="dash-widget-unused" class="dash-widget-container">
+    <div id="dash-section-0"> ... </div>
   </div>
 </div>
-<div class="dash-widget-column" id="dash-widget-column-2">
-  <div id="dash-section-2"> ... </div>
-</div>
-<div class="dash-widget-column" id="dash-widget-column-3">
-  <div id="dash-section-3"> ... </div>
+<div class="dash-widget-row">
+  <div class="dash-widget-column" id="dash-widget-column-1">
+    <div id="dash-section-1">
+      <div class="dash-widget" id="4_1"> ... </div>
+      <div class="dash-widget" id="4_2"> ... </div>
+    </div>
+  </div>
+  <div class="dash-widget-column" id="dash-widget-column-2">
+    <div id="dash-section-2"> ... </div>
+  </div>
+  <div class="dash-widget-column" id="dash-widget-column-3">
+    <div id="dash-section-3"> ... </div>
+  </div>
 </div>
 ```
 
