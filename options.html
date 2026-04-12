@@ -84,37 +84,6 @@
       color: #555;
       cursor: pointer;
     }
-    .theme-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .theme-swatch {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 9px;
-      border: 2px solid #ddd;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      color: #444;
-      transition: border-color 0.15s;
-      background: #fff;
-      user-select: none;
-    }
-    .theme-swatch:hover { border-color: #bbb; }
-    .theme-swatch.selected { border-color: #e07820; color: #e07820; }
-    .theme-swatch input[type="radio"] { display: none; }
-    .swatch-dot {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      border: 2px solid rgba(0,0,0,0.1);
-    }
   </style>
 </head>
 <body>
@@ -125,39 +94,6 @@
   <div class="checkbox-row">
     <input type="checkbox" id="beefMode">
     <label for="beefMode">Beef Mode</label>
-  </div>
-  <label>Site Theme</label>
-  <div class="theme-grid" id="themeGrid">
-    <label class="theme-swatch selected" data-theme="default">
-      <input type="radio" name="theme" value="default" checked>
-      <span class="swatch-dot" style="background: linear-gradient(135deg, #212529 50%, #f8f9fa 50%)"></span>
-      Default
-    </label>
-    <label class="theme-swatch" data-theme="dark">
-      <input type="radio" name="theme" value="dark">
-      <span class="swatch-dot" style="background: linear-gradient(135deg, #1a1a2e 50%, #e07820 50%)"></span>
-      Dark
-    </label>
-    <label class="theme-swatch" data-theme="ocean">
-      <input type="radio" name="theme" value="ocean">
-      <span class="swatch-dot" style="background: linear-gradient(135deg, #050d1a 50%, #00b4d8 50%)"></span>
-      Ocean
-    </label>
-    <label class="theme-swatch" data-theme="coral">
-      <input type="radio" name="theme" value="coral">
-      <span class="swatch-dot" style="background: linear-gradient(135deg, #120800 50%, #ff6b35 50%)"></span>
-      Coral
-    </label>
-    <label class="theme-swatch" data-theme="lasermelon">
-      <input type="radio" name="theme" value="lasermelon">
-      <span class="swatch-dot" style="background: linear-gradient(135deg, #0e0118 50%, #e8209a 50%)"></span>
-      Lasermelon
-    </label>
-    <label class="theme-swatch" data-theme="beef">
-      <input type="radio" name="theme" value="beef">
-      <span class="swatch-dot" style="background: linear-gradient(135deg, #0d0a0a 50%, #c0392b 50%)"></span>
-      Beef
-    </label>
   </div>
   <button id="save">Save</button>
   <p id="status"></p>
