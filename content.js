@@ -1435,6 +1435,40 @@
       #apex-new-folder-modal .modal-header { background: #222; color: #ccc; border-radius: 6px 6px 0 0; }
       #apex-new-folder-modal .modal-title { font-size: 14px; font-weight: 500; color: #ccc; }
       #apex-new-folder-modal .btn-close { filter: invert(1); }
+      #apex-manage-backdrop {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.5); z-index: 1040;
+      }
+      #apex-manage-folders-modal {
+        display: none; position: fixed; inset: 0;
+        z-index: 1050; align-items: center; justify-content: center;
+      }
+      #apex-manage-folders-modal .modal-dialog {
+        background: #fff; border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+        width: 40vw; min-width: 340px; max-width: 520px;
+        display: flex; flex-direction: column; margin: auto;
+      }
+      #apex-manage-folders-modal .modal-content { display: flex; flex-direction: column; max-height: 70vh; }
+      #apex-manage-folders-modal .modal-header { background: #222; color: #ccc; border-radius: 6px 6px 0 0; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+      #apex-manage-folders-modal .modal-title { font-size: 14px; font-weight: 500; color: #ccc; }
+      #apex-manage-folders-modal .btn-close { filter: invert(1); }
+      #apex-manage-folders-modal .modal-body { overflow-y: auto; flex: 1; padding: 12px 16px; }
+      #apex-manage-folder-list { display: flex; flex-direction: column; gap: 4px; }
+      .apex-manage-row {
+        display: flex; align-items: center; gap: 10px;
+        padding: 8px 10px; background: #f8f8f8; border: 1px solid #e0e0e0;
+        border-radius: 5px; cursor: grab; user-select: none;
+      }
+      .apex-manage-row.dragging { opacity: 0.4; }
+      .apex-manage-row.drag-over { border-color: #e07820; background: #fff4ea; }
+      .apex-manage-handle { color: #bbb; font-size: 14px; flex-shrink: 0; }
+      .apex-manage-icon { font-size: 16px; flex-shrink: 0; }
+      .apex-manage-name { flex: 1; font-size: 14px; color: #333; }
+      .apex-manage-delete {
+        background: none; border: none; cursor: pointer; padding: 2px 4px;
+        font-size: 18px; color: #ff2222 !important; line-height: 1; flex-shrink: 0;
+      }
+      .apex-manage-delete:hover { color: #cc0000 !important; }
       #apex-help-body h3, #apex-probe-body h3 {
         color: #e07820; margin: 14px 0 5px; font-size: 11px;
         text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
@@ -2377,10 +2411,11 @@
           '<button type="button" class="dropdown-item apex-folder-item" data-id="default"><i class="af af-fw af-folder-default"></i> Default</button>' +
           '<hr class="dropdown-divider" id="apex-folders-divider">' +
           '<button type="button" class="dropdown-item" id="apex-new-folder-btn"><i class="af af-fw af-folder-new"></i> New Folder</button>' +
-          '<button type="button" class="dropdown-item"><i class="af af-fw af-folder-edit"></i> Manage Folders</button>' +
+          '<button type="button" class="dropdown-item" id="apex-manage-folders-btn"><i class="af af-fw af-folder-edit"></i> Manage Folders</button>' +
         '</div>';
       dashLock.insertAdjacentElement('afterend', group);
       group.querySelector('#apex-new-folder-btn').addEventListener('click', openNewFolderModal);
+      group.querySelector('#apex-manage-folders-btn').addEventListener('click', openManageFoldersModal);
       // Populate any already-saved folders
       chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => apexFolders.forEach(addFolderToMenu));
     }
@@ -2402,6 +2437,147 @@
     btn.appendChild(icon);
     btn.appendChild(document.createTextNode(' ' + folder.name));
     divider.insertAdjacentElement('beforebegin', btn);
+  }
+
+  function rebuildDropdownOrder(folders) {
+    const menu = document.getElementById('apex-folders-menu');
+    const divider = document.getElementById('apex-folders-divider');
+    if (!menu || !divider) return;
+    menu.querySelectorAll('.apex-folder-item:not([data-id="default"])').forEach(el => el.remove());
+    folders.forEach(folder => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'dropdown-item apex-folder-item';
+      btn.dataset.id = folder.id;
+      const icon = document.createElement('i');
+      icon.className = `af af-fw apex-gp-${folder.glyph.toLowerCase()}`;
+      btn.appendChild(icon);
+      btn.appendChild(document.createTextNode(' ' + folder.name));
+      divider.insertAdjacentElement('beforebegin', btn);
+    });
+  }
+
+  function renderManageList(folders) {
+    const list = document.getElementById('apex-manage-folder-list');
+    if (!list) return;
+    list.innerHTML = '';
+    if (!folders.length) {
+      list.innerHTML = '<p style="color:#999;text-align:center;padding:20px 0;margin:0;">No custom folders yet.</p>';
+      return;
+    }
+    let dragSrc = null;
+    folders.forEach(folder => {
+      const row = document.createElement('div');
+      row.className = 'apex-manage-row';
+      row.draggable = true;
+      row.dataset.id = folder.id;
+
+      const handle = document.createElement('i');
+      handle.className = 'af af-fw apex-gp-f0dc apex-manage-handle';
+
+      const icon = document.createElement('i');
+      icon.className = `af af-fw apex-gp-${folder.glyph.toLowerCase()} apex-manage-icon`;
+
+      const name = document.createElement('span');
+      name.className = 'apex-manage-name';
+      name.textContent = folder.name;
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'apex-manage-delete';
+      del.title = 'Delete';
+      const delIcon = document.createElement('i');
+      delIcon.className = 'af af-fw apex-gp-f057';
+      del.appendChild(delIcon);
+      del.addEventListener('click', () => {
+        chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => {
+          const updated = apexFolders.filter(f => f.id !== folder.id);
+          chrome.storage.sync.set({ apexFolders: updated }, () => {
+            const menuBtn = document.querySelector(`#apex-folders-menu [data-id="${folder.id}"]`);
+            if (menuBtn) menuBtn.remove();
+            renderManageList(updated);
+          });
+        });
+      });
+
+      row.append(handle, icon, name, del);
+
+      row.addEventListener('dragstart', e => {
+        dragSrc = row;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => row.classList.add('dragging'), 0);
+      });
+      row.addEventListener('dragend', () => {
+        row.classList.remove('dragging');
+        list.querySelectorAll('.apex-manage-row').forEach(r => r.classList.remove('drag-over'));
+      });
+      row.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        if (row !== dragSrc) {
+          list.querySelectorAll('.apex-manage-row').forEach(r => r.classList.remove('drag-over'));
+          row.classList.add('drag-over');
+        }
+      });
+      row.addEventListener('drop', e => {
+        e.preventDefault();
+        if (!dragSrc || dragSrc === row) return;
+        const rows = [...list.querySelectorAll('.apex-manage-row')];
+        const srcIdx = rows.indexOf(dragSrc);
+        const dstIdx = rows.indexOf(row);
+        if (srcIdx < dstIdx) row.insertAdjacentElement('afterend', dragSrc);
+        else row.insertAdjacentElement('beforebegin', dragSrc);
+        list.querySelectorAll('.apex-manage-row').forEach(r => r.classList.remove('drag-over'));
+        const newOrder = [...list.querySelectorAll('.apex-manage-row')].map(r => r.dataset.id);
+        chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => {
+          const reordered = newOrder.map(id => apexFolders.find(f => f.id === id)).filter(Boolean);
+          chrome.storage.sync.set({ apexFolders: reordered }, () => rebuildDropdownOrder(reordered));
+        });
+      });
+
+      list.appendChild(row);
+    });
+  }
+
+  function openManageFoldersModal() {
+    const closeManage = () => {
+      const el = document.getElementById('apex-manage-folders-modal');
+      const bd = document.getElementById('apex-manage-backdrop');
+      if (el) el.style.display = 'none';
+      if (bd) bd.style.display = 'none';
+      document.body.style.overflow = '';
+    };
+
+    if (!document.getElementById('apex-manage-folders-modal')) {
+      const bd = document.createElement('div');
+      bd.id = 'apex-manage-backdrop';
+      bd.addEventListener('click', closeManage);
+      document.body.appendChild(bd);
+
+      const el = document.createElement('div');
+      el.id = 'apex-manage-folders-modal';
+      el.innerHTML =
+        '<div class="modal-dialog">' +
+          '<div class="modal-content">' +
+            '<div class="modal-header">' +
+              '<h5 class="modal-title">Manage Folders</h5>' +
+              '<button type="button" class="btn-close" id="apex-manage-close-btn"></button>' +
+            '</div>' +
+            '<div class="modal-body">' +
+              '<div id="apex-manage-folder-list"></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(el);
+      el.querySelector('#apex-manage-close-btn').addEventListener('click', closeManage);
+    }
+
+    chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => {
+      renderManageList(apexFolders);
+      document.getElementById('apex-manage-backdrop').style.display = 'block';
+      document.getElementById('apex-manage-folders-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
   }
 
   // ── New Folder modal ───────────────────────────────────────────────────────
