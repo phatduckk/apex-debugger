@@ -204,17 +204,22 @@ Then [PROFILE_NAME]   ← e.g. "Then RampUp", "Then PF1", "Then Moonlight"
 
 ## Output Status Decoding
 
-`istat.outputs[n].status[0]`:
+`istat.outputs[n].status[0]` for 24v outlets:
+
+Format: `[Control Mode][State][Extra Flag]`
 
 | Value | Meaning | ON/OFF |
 |-------|---------|--------|
-| `AON` | Always ON (manual or program) | ON |
+| `AON` | Auto mode, currently ON | ON |
+| `ATO` | Auto mode, output ON (older/alt encoding) | ON |
+| `FON` | Forced ON (manual override) | ON |
+| `ON`  | Explicit ON | ON |
 | `TBL` | Running on a table/profile | ON |
-| `ON`  | On | ON |
-| `AOF` | Always OFF | OFF |
-| `OFF` | Off | OFF |
+| `AOF` | Auto mode, currently OFF | OFF |
+| `FOF` | Forced OFF (manual override) | OFF |
+| `OFF` | Explicit OFF (fallback / no program) | OFF |
 
-Other status[0] values (variable pumps, Cor, WAV, etc.) — treat output as ON if not AOF/OFF.
+Other status[0] values (variable pumps, Cor, WAV, etc.) — treat output as ON if not `AOF`, `FOF`, or `OFF`.
 
 `istat.outputs[n].status[2]` (error field):
 - `"OK"` = no error
@@ -252,6 +257,27 @@ The exact non-zero value encodes module type + port index + sensor type — two 
 - Some FMM ports → `200`
 
 **Normalizer**: `const isClosed = value !== 0;`
+
+---
+
+## Input / Output Types (`/rest/config`)
+
+The `type` field on inputs and outputs from `/rest/config`:
+
+| Type | Meaning | What it Represents | Example |
+|------|---------|-------------------|---------|
+| `in` | Input | Sensors / read-only data | optical switch, temp probe |
+| `out` | Output | Controllable outlets | solenoid, pump, light |
+| `var` | Variable | Internal/calculated values | virtual outlets, logic results |
+| `probe` | Probe | Specialized sensor type | pH, ORP, salinity |
+| `virt` | Virtual | Software-only outlet | alarms, logic-only outlets |
+| `tile` | UI Tile | Dashboard grouping element | Fusion tiles/groups |
+| `module` | Module | Physical Apex module | FMM, EB832, DOS |
+| `alarm` | Alarm | Alarm status object | email/SMS alarm |
+| `feed` | Feed Mode | Feed cycle state | FeedA, FeedB |
+| `clock` | Clock | System time | Apex internal clock |
+| `status` | Status | System-level status | heartbeat, health |
+| `config` | Config | Configuration object | settings metadata |
 
 ---
 

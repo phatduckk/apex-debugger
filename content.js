@@ -462,7 +462,15 @@
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   function isOutputOn(s) {
-    return s === 'AON' || s === 'TBL' || s === 'ON';
+    return s === 'AON' || s === 'ATO' || s === 'FON' || s === 'TBL' || s === 'ON';
+  }
+
+  function formatOutputStatus(s) {
+    const ON_CODES  = new Set(['AON', 'ATO', 'FON', 'ON', 'TBL']);
+    const OFF_CODES = new Set(['AOF', 'FOF', 'OFF']);
+    if (ON_CODES.has(s))  return `ON (${s})`;
+    if (OFF_CODES.has(s)) return `OFF (${s})`;
+    return s;
   }
 
   // Converts "HH:MM" to total minutes since midnight
@@ -651,14 +659,23 @@
     const inputs      = {};
     const outputs     = {};
     const intensities = {};
+    const inputTypes  = {};
+    const outputTypes = {};
+    const inputDids   = {};
+    const outputDids  = {};
 
     for (const inp of istat.inputs) {
-      inputs[inp.name.toLowerCase()] = inp.value;
+      const key = inp.name.toLowerCase();
+      inputs[key] = inp.value;
+      if (inp.type !== undefined) inputTypes[key] = inp.type;
+      if (inp.did  !== undefined) inputDids[key]  = inp.did;
     }
     for (const out of istat.outputs) {
       const key = out.name.toLowerCase();
       outputs[key]     = out.status[0];
       if (out.intensity !== undefined) intensities[key] = out.intensity;
+      if (out.type      !== undefined) outputTypes[key] = out.type;
+      if (out.did       !== undefined) outputDids[key]  = out.did;
     }
 
     // Current time from Apex clock (Unix timestamp)
@@ -672,7 +689,7 @@
     // Feed: active=0 means none; name 1=A,2=B,3=C,4=D (verify against real data)
     const activeFeed = istat.feed && istat.feed.active ? istat.feed.name : 0;
 
-    return { inputs, outputs, intensities, nowMin, dowIndex, activeFeed, monthIndex };
+    return { inputs, outputs, intensities, inputTypes, outputTypes, inputDids, outputDids, nowMin, dowIndex, activeFeed, monthIndex };
   }
 
   // ── Apply / clear colors ───────────────────────────────────────────────────
@@ -846,8 +863,10 @@
       const isTrue  = result === 'green';
 
       let probeValue = null;
+      let probeType  = null;
+      let probeDid   = null;
       if (ctx) {
-        const { inputs, outputs, intensities, nowMin } = ctx;
+        const { inputs, outputs, intensities, inputTypes, outputTypes, inputDids, outputDids, nowMin } = ctx;
         let pm;
 
         // Time HH:MM to HH:MM → show current time
@@ -860,16 +879,22 @@
         // <probe> OPEN|CLOSED
         pm = cond.match(/^(\S+)\s+(OPEN|CLOSED)$/i);
         if (pm) {
-          const val = inputs[pm[1].toLowerCase()];
+          const key = pm[1].toLowerCase();
+          const val = inputs[key];
           if (val !== undefined) probeValue = val === 0 ? 'OPEN' : `CLOSED (${val})`;
+          probeType = inputTypes[key] ?? null;
+          probeDid  = inputDids[key]  ?? null;
         }
 
         // <probe> > < threshold (including RT+)
         if (probeValue === null) {
           pm = cond.match(/^(\S+)\s+[<>]\s+/i);
           if (pm && !/^(?:Output|Outlet)$/i.test(pm[1])) {
-            const val = inputs[pm[1].toLowerCase()];
+            const key = pm[1].toLowerCase();
+            const val = inputs[key];
             if (val !== undefined) probeValue = val;
+            probeType = inputTypes[key] ?? null;
+            probeDid  = inputDids[key]  ?? null;
           }
         }
 
@@ -877,8 +902,11 @@
         if (probeValue === null) {
           pm = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+=\s+(ON|OFF)$/i);
           if (pm) {
-            const val = outputs[pm[1].toLowerCase()];
-            if (val !== undefined) probeValue = val;
+            const key = pm[1].toLowerCase();
+            const val = outputs[key];
+            if (val !== undefined) probeValue = formatOutputStatus(val);
+            probeType = outputTypes[key] ?? null;
+            probeDid  = outputDids[key]  ?? null;
           }
         }
 
@@ -886,13 +914,18 @@
         if (probeValue === null) {
           pm = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+Percent\s+[<>]/i);
           if (pm) {
-            const val = intensities[pm[1].toLowerCase()];
+            const key = pm[1].toLowerCase();
+            const val = intensities[key];
             if (val !== undefined) probeValue = `${val}%`;
+            probeType = outputTypes[key] ?? null;
+            probeDid  = outputDids[key]  ?? null;
           }
         }
       }
 
       let tip = `Condition: ${cond}`;
+      if (probeType !== null) tip += `\nType: ${probeType}`;
+      if (probeDid  !== null) tip += `\nDID: ${probeDid}`;
       if (probeValue !== null) tip += `\nValue: ${probeValue}`;
       tip += `\nState: ${isTrue ? 'TRUE' : 'FALSE'}`;
       if (isWinner) tip += `\n\n★ This line is responsible for setting the outlet ${thenVal}`;
@@ -1174,7 +1207,7 @@
       <tr><td>If [Probe] &gt; [val] Then ON|OFF</td><td>Temp, pH, ORP, Salt, or any named probe — greater-than comparison.</td></tr>
       <tr><td>If [Probe] &lt; [val] Then ON|OFF</td><td>Same probe, less-than comparison.</td></tr>
       <tr><td>If [Input] OPEN Then ON|OFF</td><td>Digital switch — OPEN = value 0.</td></tr>
-      <tr><td>If [Input] CLOSED Then ON|OFF</td><td>Digital switch — CLOSED = value 200.</td></tr>
+      <tr><td>If [Input] CLOSED Then ON|OFF</td><td>Digital switch — CLOSED = any non-zero value (60, 200, 4, 12, etc. depending on module).</td></tr>
       <tr><td>If Output [name] = ON|OFF Then ON|OFF</td><td>Tests another outlet's current on/off state.</td></tr>
       <tr><td>If Outlet [name] = ON|OFF Then ON|OFF</td><td>Identical to Output (older firmware keyword).</td></tr>
       <tr><td>If Output [name] Percent &gt; [val] Then ON|OFF</td><td>Tests variable output intensity 0–100.</td></tr>
@@ -1200,6 +1233,45 @@
       <tr><td>Min Time MMM:SS Then ON|OFF</td><td>Forces outlet to hold its current state for minimum duration before switching. Requires outlet history.</td></tr>
       <tr><td>When ON|OFF &gt; MMM:SS Then ON|OFF</td><td>Forces outlet to manual OFF if it has been in the specified state longer than the duration. Requires runtime tracking.</td></tr>
       <tr><td>If Power Apex|EB ON|OFF MMM</td><td>Tests power state of base unit or Energy Bar. Partial data only — grey for now.</td></tr>
+    </table>
+
+    <h3>Output status codes</h3>
+    <table>
+      <tr><td>AON</td><td>Auto mode, currently <strong>ON</strong></td></tr>
+      <tr><td>ATO</td><td>Auto mode, output ON — older/alt encoding. <strong>ON</strong></td></tr>
+      <tr><td>FON</td><td>Forced ON (manual override). <strong>ON</strong></td></tr>
+      <tr><td>ON</td><td>Explicit ON. <strong>ON</strong></td></tr>
+      <tr><td>TBL</td><td>Running on a table/profile. <strong>ON</strong></td></tr>
+      <tr><td>AOF</td><td>Auto mode, currently <strong>OFF</strong></td></tr>
+      <tr><td>FOF</td><td>Forced OFF (manual override). <strong>OFF</strong></td></tr>
+      <tr><td>OFF</td><td>Explicit OFF (fallback / no program). <strong>OFF</strong></td></tr>
+    </table>
+
+    <h3>Digital input values</h3>
+    <table>
+      <tr><td>0</td><td>OPEN / OFF — switch not triggered (all modules)</td></tr>
+      <tr><td>60</td><td>CLOSED / ON — FMM optical sensors, float switches (most common)</td></tr>
+      <tr><td>200</td><td>CLOSED / ON — different module/port encoding (also common)</td></tr>
+      <tr><td>4, 12, 20, 28</td><td>CLOSED — base unit / breakout box float switches</td></tr>
+      <tr><td>100</td><td>CLOSED — some FMM / leak inputs</td></tr>
+      <tr><td>196, 204</td><td>CLOSED — 200-series variants</td></tr>
+    </table>
+    <p style="margin:4px 0 0; font-size:11px; color:#777;">Rule: <code>0</code> = OPEN, any non-zero = CLOSED. Two switches can both be CLOSED but report different numbers — don't key off the exact value.</p>
+
+    <h3>Input / output types</h3>
+    <table>
+      <tr><td>in</td><td>Input — sensors / read-only data (optical switch, temp probe)</td></tr>
+      <tr><td>out</td><td>Output — controllable outlets (solenoid, pump, light)</td></tr>
+      <tr><td>var</td><td>Variable — internal/calculated values (virtual outlets, logic results)</td></tr>
+      <tr><td>probe</td><td>Probe — specialized sensor (pH, ORP, salinity)</td></tr>
+      <tr><td>virt</td><td>Virtual — software-only outlet (alarms, logic-only)</td></tr>
+      <tr><td>tile</td><td>UI Tile — dashboard grouping element</td></tr>
+      <tr><td>module</td><td>Module — physical Apex module (FMM, EB832, DOS)</td></tr>
+      <tr><td>alarm</td><td>Alarm — alarm status object (email/SMS)</td></tr>
+      <tr><td>feed</td><td>Feed Mode — feed cycle state (FeedA, FeedB…)</td></tr>
+      <tr><td>clock</td><td>Clock — Apex internal system time</td></tr>
+      <tr><td>status</td><td>Status — system-level status (heartbeat, health)</td></tr>
+      <tr><td>config</td><td>Config — configuration object / settings metadata</td></tr>
     </table>
   `; }
 
