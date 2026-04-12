@@ -86,9 +86,9 @@ The legend explains how the code debugger works, shows which statement types the
 
 ## Installation, Upgrading & Settings
 
-- [Chrome Installation](INSTALL_CHROME.md)
-- [Safari Installation](INSTALL_SAFARI.md)
-- [Settings](SETTINGS.md)
+- [Chrome Installation](docs/INSTALL_CHROME.md)
+- [Safari Installation](docs/INSTALL_SAFARI.md)
+- [Settings](docs/SETTINGS.md)
   - *Change your Apex hostname and enable Beef Mode*
 
 ---
@@ -140,9 +140,15 @@ MIT
 
 ```
 apex-debugger/
-├── manifest.json      # Extension metadata and permissions
-├── content.js         # Core logic: polling, evaluation, overlay rendering
-├── options.html       # Settings UI
-├── options.js         # Settings save/load
-└── APEX_GRAMMAR.md    # Reference doc for Apex programming language grammar
+├── manifest.json        # Extension metadata and permissions
+├── content.js           # Core logic: polling, evaluation, overlay rendering
+├── options.html         # Settings UI
+├── options.js           # Settings save/load
+└── docs/
+    ├── APEX_GRAMMAR.md  # Apex programming language reference
+    ├── INSTALL_CHROME.md
+    ├── INSTALL_SAFARI.md
+    ├── SETTINGS.md
+    ├── ref/             # Research notes and source material
+    └── ex/              # Example JSON responses
 ```
