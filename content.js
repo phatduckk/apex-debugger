@@ -1432,7 +1432,7 @@
       }
       #apex-new-folder-modal .modal-body { overflow-y: auto; flex: 1; padding: 16px 20px; }
       #apex-new-folder-modal .modal-footer { padding: 12px 20px; border-top: 1px solid #dee2e6; display: flex; gap: 8px; justify-content: flex-end; }
-      #apex-new-folder-modal .modal-header { background: #222; color: #ccc; border-radius: 6px 6px 0 0; }
+      #apex-new-folder-modal .modal-header { background: #222; color: #ccc; border-radius: 6px 6px 0 0; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
       #apex-new-folder-modal .modal-title { font-size: 14px; font-weight: 500; color: #ccc; }
       #apex-new-folder-modal .btn-close { filter: invert(1); }
       #apex-manage-backdrop {
@@ -1463,12 +1463,25 @@
       .apex-manage-row.drag-over { border-color: #e07820; background: #fff4ea; }
       .apex-manage-handle { color: #bbb; font-size: 14px; flex-shrink: 0; }
       .apex-manage-icon { font-size: 16px; flex-shrink: 0; }
-      .apex-manage-name { flex: 1; font-size: 14px; color: #333; }
       .apex-manage-delete {
         background: none; border: none; cursor: pointer; padding: 2px 4px;
         font-size: 18px; color: #ff2222 !important; line-height: 1; flex-shrink: 0;
       }
       .apex-manage-delete:hover { color: #cc0000 !important; }
+      .apex-manage-icon { cursor: pointer; transition: color 0.15s; }
+      .apex-manage-icon:hover { color: #e07820; }
+      .apex-manage-name { flex: 1; font-size: 14px; color: #333; cursor: text; }
+      .apex-manage-name-input {
+        flex: 1; border: 1px solid #e07820; border-radius: 3px;
+        padding: 2px 6px; font-size: 14px; outline: none; background: #fff; min-width: 0;
+      }
+      #apex-glyph-popover {
+        position: fixed; z-index: 99999;
+        background: #fff; border: 1px solid #dee2e6; border-radius: 6px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+        gap: 4px; padding: 8px; width: 294px; max-height: 220px; overflow-y: auto;
+      }
       #apex-help-body h3, #apex-probe-body h3 {
         color: #e07820; margin: 14px 0 5px; font-size: 11px;
         text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
@@ -2457,6 +2470,48 @@
     });
   }
 
+  function updateFolderInStorage(id, patch, callback) {
+    chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => {
+      const updated = apexFolders.map(f => f.id === id ? { ...f, ...patch } : f);
+      chrome.storage.sync.set({ apexFolders: updated }, () => callback && callback(updated));
+    });
+  }
+
+  function showGlyphPopover(anchorEl, currentGlyph, onSelect) {
+    const existing = document.getElementById('apex-glyph-popover');
+    if (existing) { existing.remove(); return; }
+
+    const pop = document.createElement('div');
+    pop.id = 'apex-glyph-popover';
+    FOLDER_GLYPHS.forEach(g => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'apex-glyph-btn' + (g === currentGlyph ? ' selected' : '');
+      btn.title = g;
+      const icon = document.createElement('i');
+      icon.className = `af af-fw apex-gp-${g.toLowerCase()}`;
+      btn.appendChild(icon);
+      btn.addEventListener('click', e => { e.stopPropagation(); onSelect(g); pop.remove(); });
+      pop.appendChild(btn);
+    });
+    document.body.appendChild(pop);
+
+    const rect = anchorEl.getBoundingClientRect();
+    pop.style.top  = (rect.bottom + 4) + 'px';
+    pop.style.left = rect.left + 'px';
+    const pr = pop.getBoundingClientRect();
+    if (pr.right > window.innerWidth - 8) pop.style.left = (window.innerWidth - 8 - pr.width) + 'px';
+    if (pr.bottom > window.innerHeight - 8) pop.style.top = (rect.top - pr.height - 4) + 'px';
+
+    const dismiss = e => {
+      if (!pop.contains(e.target) && e.target !== anchorEl) {
+        pop.remove();
+        document.removeEventListener('click', dismiss, true);
+      }
+    };
+    setTimeout(() => document.addEventListener('click', dismiss, true), 0);
+  }
+
   function renderManageList(folders) {
     const list = document.getElementById('apex-manage-folder-list');
     if (!list) return;
@@ -2477,10 +2532,48 @@
 
       const icon = document.createElement('i');
       icon.className = `af af-fw apex-gp-${folder.glyph.toLowerCase()} apex-manage-icon`;
+      icon.addEventListener('click', e => {
+        e.stopPropagation();
+        showGlyphPopover(icon, folder.glyph, newGlyph => {
+          folder.glyph = newGlyph;
+          icon.className = `af af-fw apex-gp-${newGlyph.toLowerCase()} apex-manage-icon`;
+          updateFolderInStorage(folder.id, { glyph: newGlyph }, () => {
+            const menuIcon = document.querySelector(`#apex-folders-menu [data-id="${folder.id}"] i`);
+            if (menuIcon) menuIcon.className = `af af-fw apex-gp-${newGlyph.toLowerCase()}`;
+          });
+        });
+      });
 
       const name = document.createElement('span');
       name.className = 'apex-manage-name';
       name.textContent = folder.name;
+      name.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'apex-manage-name-input';
+        input.value = folder.name;
+        name.replaceWith(input);
+        input.focus();
+        input.select();
+        const save = () => {
+          const newName = input.value.trim() || folder.name;
+          folder.name = newName;
+          name.textContent = newName;
+          input.replaceWith(name);
+          updateFolderInStorage(folder.id, { name: newName }, () => {
+            const menuBtn = document.querySelector(`#apex-folders-menu [data-id="${folder.id}"]`);
+            if (menuBtn) {
+              const t = [...menuBtn.childNodes].find(n => n.nodeType === 3);
+              if (t) t.textContent = ' ' + newName;
+            }
+          });
+        };
+        input.addEventListener('blur', save);
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+          if (e.key === 'Escape') { input.value = folder.name; input.blur(); }
+        });
+      });
 
       const del = document.createElement('button');
       del.type = 'button';
