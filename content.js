@@ -30,6 +30,42 @@
   const HELP_MAX_H   = () => Math.round(window.innerHeight * 0.80);
   const HELP_DEF_H   = 340;
 
+  const FOLDER_GLYPHS = [
+    'F660',
+    'E001','E002','E003','E004','E005','E006','E007',
+    'F001','F002','F005','F007','F00C','F00D','F00E','F010','F011','F012','F013',
+    'F015','F017','F019','F01E','F021','F022','F023','F026','F027','F028','F02B',
+    'F02D','F02E','F02F','F030','F031','F03A','F03E','F040','F041','F042','F043',
+    'F044','F047','F048','F049','F04A','F04B','F04C','F04D','F04E','F050','F051',
+    'F052','F053','F054','F055','F056','F057','F058','F059','F05A','F05B','F05E',
+    'F060','F061','F062','F063','F064','F065','F066','F067','F068','F06A','F06E',
+    'F070','F071','F075','F077','F078','F07B','F07C','F07D','F07E','F080','F084',
+    'F085','F08B','F08D','F08E','F090','F093','F09C','F0A0','F0A1','F0A4','F0A5',
+    'F0A6','F0A7','F0A8','F0A9','F0AA','F0AB','F0AD','F0AE','F0B0','F0C0','F0C1',
+    'F0C2','F0C3','F0C4','F0C5','F0C7','F0C8','F0C9','F0CA','F0CB','F0D0','F0D7',
+    'F0D8','F0D9','F0DA','F0DC','F0DD','F0DE','F0E0','F0E2','F0E3','F0E4','F0E7',
+    'F0E8','F0EA','F0EB','F0EC','F0ED','F0EE','F0F0','F0F1','F0F3','F0F9','F0FA',
+    'F0FE','F100','F101','F102','F103','F104','F105','F106','F107','F108','F10A',
+    'F10B','F110','F111','F118','F119','F11A','F121','F124','F127','F128','F129',
+    'F12A','F130','F131','F133','F137','F138','F139','F13A','F13B','F144','F145',
+    'F146','F14A','F14B','F14C','F14D','F150','F151','F152','F15B','F15C','F164',
+    'F165','F16B','F16D','F16E','F179','F17A','F17B','F185','F186','F187','F188',
+    'F191','F192','F199','F1C0','F1C1','F1C5','F1C6','F1C7','F1C8','F1C9','F1CD',
+    'F1D8','F1DA','F1DE','F1E2','F1EB','F1EC','F1F6','F1F8','F1FB','F1FE','F200',
+    'F201','F204','F205','F21B','F21E','F234','F249','F24D','F254','F267','F268',
+    'F269','F26B','F271','F272','F273','F274','F28B','F28D','F2B9','F2BB','F2C1',
+    'F2C2','F2C7','F2C8','F2C9','F2CA','F2CB','F2D3','F2E7','F2F5','F2F6','F2FD',
+    'F2FE','F304','F30F','F316','F317','F318','F319','F31A','F31C','F31D','F321',
+    'F322','F323','F324','F325','F328','F329','F32A','F32B','F32C','F32D','F32E',
+    'F330','F331','F333','F334','F339','F33A','F33B','F33C','F33D','F33E','F340',
+    'F341','F342','F343','F344','F345','F34E','F3C1','F3C5','F3E0','F3F0','F3F1',
+    'F3F2','F46C','F46D','F477','F479','F481','F500','F54C','F552','F56C','F56D',
+    'F56E','F56F','F572','F573','F574','F575','F576','F578','F5B7','F5C7','F5E8',
+    'F5EB','F5F8','F601','F602','F603','F60B','F611','F643','F64D','F659','F65A',
+    'F65B','F65C','F65D','F65E','F65F','F672','F673','F681','F682','F689',
+    'F690','F6A4','F6A8','F6A9','F6AC','F6C3','F6C4','F6DD','F72E',
+  ];
+
   // ── Themes ─────────────────────────────────────────────────────────────────
 
   const BEEF_BG_URL = chrome.runtime.getURL('img/beef.svg');
@@ -1315,7 +1351,8 @@
     if (document.getElementById('apex-debug-styles')) return;
     const s = document.createElement('style');
     s.id = 'apex-debug-styles';
-    s.textContent = `
+    const glyphRules = FOLDER_GLYPHS.map(g => `.apex-gp-${g.toLowerCase()}:before{content:"\\${g.toLowerCase()}"}`).join('\n');
+    s.textContent = glyphRules + `
       #apex-help-panel {
         position: fixed; bottom: 0; left: 0; right: 0;
         height: ${HELP_DEF_H}px;
@@ -1366,6 +1403,38 @@
       .af-folder-default:before { content: "\\f249"; }
       .af-folder-new:before { content: "\\f65e"; }
       .af-folder-edit:before { content: "\\f044"; }
+      .apex-glyph-btn {
+        width: 42px; height: 42px; padding: 0; border: 1px solid transparent;
+        background: none; border-radius: 4px; cursor: pointer; display: flex;
+        align-items: center; justify-content: center; font-size: 18px; color: #444;
+      }
+      .apex-glyph-btn:hover { background: #e8e8e8; border-color: #ccc; }
+      .apex-glyph-btn.selected { background: #e07820; border-color: #c96a18; color: #fff; }
+      #apex-glyph-grid { max-height: 276px; overflow-y: auto; display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 4px;
+        padding: 8px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; }
+      #apex-modal-backdrop {
+        display: none; position: fixed; inset: 0;
+        background: rgba(0,0,0,0.5); z-index: 1040;
+      }
+      #apex-new-folder-modal {
+        display: none; position: fixed; inset: 0;
+        z-index: 1050; align-items: center; justify-content: center;
+      }
+      #apex-new-folder-modal .modal-dialog {
+        background: #fff; border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+        width: 50vw; min-width: 380px; max-width: 640px;
+        max-height: 80vh; display: flex; flex-direction: column;
+        margin: auto;
+      }
+      #apex-new-folder-modal .modal-content {
+        display: flex; flex-direction: column; max-height: 80vh;
+      }
+      #apex-new-folder-modal .modal-body { overflow-y: auto; flex: 1; padding: 16px 20px; }
+      #apex-new-folder-modal .modal-footer { padding: 12px 20px; border-top: 1px solid #dee2e6; display: flex; gap: 8px; justify-content: flex-end; }
+      #apex-new-folder-modal .modal-header { background: #222; color: #ccc; border-radius: 6px 6px 0 0; }
+      #apex-new-folder-modal .modal-title { font-size: 14px; font-weight: 500; color: #ccc; }
+      #apex-new-folder-modal .btn-close { filter: invert(1); }
       #apex-help-body h3, #apex-probe-body h3 {
         color: #e07820; margin: 14px 0 5px; font-size: 11px;
         text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
@@ -2301,17 +2370,136 @@
       group.id = 'apex-folder-dropdown';
       group.className = 'btn-group';
       group.innerHTML =
-        '<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Folder">' +
-          '<i class="af af-fw af-folder"></i> Folder' +
+        '<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Folders">' +
+          '<i class="af af-fw af-folder"></i> Folders' +
         '</button>' +
-        '<div class="dropdown-menu dropdown-menu-end">' +
-          '<button type="button" class="dropdown-item"><i class="af af-fw af-folder-default"></i> Default</button>' +
-          '<hr class="dropdown-divider">' +
-          '<button type="button" class="dropdown-item"><i class="af af-fw af-folder-new"></i> New Folder</button>' +
+        '<div class="dropdown-menu dropdown-menu-end" id="apex-folders-menu">' +
+          '<button type="button" class="dropdown-item apex-folder-item" data-id="default"><i class="af af-fw af-folder-default"></i> Default</button>' +
+          '<hr class="dropdown-divider" id="apex-folders-divider">' +
+          '<button type="button" class="dropdown-item" id="apex-new-folder-btn"><i class="af af-fw af-folder-new"></i> New Folder</button>' +
           '<button type="button" class="dropdown-item"><i class="af af-fw af-folder-edit"></i> Manage Folders</button>' +
         '</div>';
       dashLock.insertAdjacentElement('afterend', group);
+      group.querySelector('#apex-new-folder-btn').addEventListener('click', openNewFolderModal);
+      // Populate any already-saved folders
+      chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => apexFolders.forEach(addFolderToMenu));
     }
+  }
+
+  // ── Folders helpers ────────────────────────────────────────────────────────
+
+  function addFolderToMenu(folder) {
+    const menu = document.getElementById('apex-folders-menu');
+    const divider = document.getElementById('apex-folders-divider');
+    if (!menu || !divider) return;
+    if (menu.querySelector(`[data-id="${folder.id}"]`)) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'dropdown-item apex-folder-item';
+    btn.dataset.id = folder.id;
+    const icon = document.createElement('i');
+    icon.className = `af af-fw apex-gp-${folder.glyph.toLowerCase()}`;
+    btn.appendChild(icon);
+    btn.appendChild(document.createTextNode(' ' + folder.name));
+    divider.insertAdjacentElement('beforebegin', btn);
+  }
+
+  // ── New Folder modal ───────────────────────────────────────────────────────
+
+  function openNewFolderModal() {
+    const closeModal = () => {
+      const el = document.getElementById('apex-new-folder-modal');
+      const bd = document.getElementById('apex-modal-backdrop');
+      if (el) el.style.display = 'none';
+      if (bd) bd.style.display = 'none';
+      document.body.style.overflow = '';
+    };
+
+    if (!document.getElementById('apex-new-folder-modal')) {
+      // Backdrop
+      const backdrop = document.createElement('div');
+      backdrop.id = 'apex-modal-backdrop';
+      backdrop.addEventListener('click', closeModal);
+      document.body.appendChild(backdrop);
+
+      // Modal
+      const el = document.createElement('div');
+      el.id = 'apex-new-folder-modal';
+      el.innerHTML =
+        '<div class="modal-dialog">' +
+          '<div class="modal-content">' +
+            '<div class="modal-header">' +
+              '<h5 class="modal-title">New Folder</h5>' +
+              '<button type="button" class="btn-close" id="apex-folder-close-btn"></button>' +
+            '</div>' +
+            '<div class="modal-body">' +
+              '<div class="mb-3">' +
+                '<label class="form-label" for="apex-folder-name-input">Name</label>' +
+                '<input type="text" class="form-control" id="apex-folder-name-input" placeholder="Folder name">' +
+              '</div>' +
+              '<div class="mb-1">' +
+                '<label class="form-label">Icon</label>' +
+                '<div id="apex-glyph-grid"></div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="modal-footer">' +
+              '<button type="button" class="btn btn-secondary" id="apex-folder-cancel-btn">Cancel</button>' +
+              '<button type="button" class="btn btn-primary" id="apex-folder-create-btn">Create</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(el);
+
+      el.querySelector('#apex-folder-close-btn').addEventListener('click', closeModal);
+      el.querySelector('#apex-folder-cancel-btn').addEventListener('click', closeModal);
+
+      // Populate glyph grid
+      const grid = el.querySelector('#apex-glyph-grid');
+      let selectedGlyph = 'F660';
+      FOLDER_GLYPHS.forEach(g => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'apex-glyph-btn';
+        btn.title = g;
+        btn.dataset.glyph = g;
+        const icon = document.createElement('i');
+        icon.className = `af af-fw apex-gp-${g.toLowerCase()}`;
+        btn.appendChild(icon);
+        btn.addEventListener('click', () => {
+          grid.querySelectorAll('.apex-glyph-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedGlyph = g;
+        });
+        grid.appendChild(btn);
+      });
+
+      el.querySelector('#apex-folder-create-btn').addEventListener('click', () => {
+        const name = el.querySelector('#apex-folder-name-input').value.trim();
+        if (!name) { el.querySelector('#apex-folder-name-input').focus(); return; }
+        const folder = {
+          id: 'folder_' + Date.now(),
+          name,
+          glyph: selectedGlyph || 'F660',
+          sections: ['', '', '', ''],
+        };
+        chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => {
+          apexFolders.push(folder);
+          chrome.storage.sync.set({ apexFolders }, () => {
+            addFolderToMenu(folder);
+            closeModal();
+          });
+        });
+      });
+    }
+
+    const modalEl = document.getElementById('apex-new-folder-modal');
+    modalEl.querySelector('#apex-folder-name-input').value = '';
+    modalEl.querySelectorAll('.apex-glyph-btn').forEach(b => b.classList.remove('selected'));
+    modalEl.querySelector('.apex-glyph-btn[data-glyph="F660"]').classList.add('selected');
+    document.getElementById('apex-modal-backdrop').style.display = 'block';
+    modalEl.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    modalEl.querySelector('#apex-folder-name-input').focus();
   }
 
   // ── Navigation reset ───────────────────────────────────────────────────────
