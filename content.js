@@ -563,6 +563,16 @@
       return isOutputOn(out) === targetOn ? 'green' : 'red';
     }
 
+    // ── If Output|Outlet <name> Watts|Amps > < val ────────────────────────
+    m = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+(Watts|Amps)\s+([<>])\s+([0-9.]+)$/i);
+    if (m) {
+      const val = getPowerValue(m[1], m[2], ctx);
+      if (val === undefined) return 'grey';
+      const threshold = parseFloat(m[4]);
+      return m[3] === '>' ? (val > threshold ? 'green' : 'red')
+                          : (val < threshold ? 'green' : 'red');
+    }
+
     // ── If Output|Outlet <name> Percent > < val ────────────────────────────
     m = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+Percent\s+([<>])\s+([0-9.]+)$/i);
     if (m) {
@@ -635,6 +645,25 @@
     return 'grey';
   }
 
+  function getPowerValue(name, unit, ctx) {
+    const key     = name.toLowerCase();
+    const isWatts = unit.toLowerCase() === 'watts';
+    const suffix  = isWatts ? 'w' : 'a';
+
+    // Standard path: inputs named <name>W / <name>A
+    // Covers eb832 (port-based, exposed as named inputs) and most standard outputs
+    const direct = ctx.inputs[key + suffix];
+    if (direct !== undefined) return direct;
+
+    // Array fallback for COR pumps only — watts at status[6], no amps available
+    const status = ctx.outputStatuses?.[key];
+    const type   = (ctx.outputTypes?.[key] || '').toLowerCase();
+    if (!status || !type) return undefined;
+
+    if (type.startsWith('cor')) return isWatts ? parseFloat(status[6]) : undefined;
+    return undefined; // wav, dos, pm, trident — no power data in status array
+  }
+
   function getLineValues(text, ctx) {
     const { inputs, outputs, intensities, inputUnits, nowMin, dowIndex, activeFeed, season, monthIndex } = ctx;
     const t   = text.trim();
@@ -666,6 +695,13 @@
       const val = outputs[m[1].toLowerCase()];
       if (val === undefined) return null;
       return { current: fmt(val), test: fmt(m[2].toUpperCase()) };
+    }
+
+    m = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+(Watts|Amps)\s+([<>])\s+([0-9.]+)$/i);
+    if (m) {
+      const val = getPowerValue(m[1], m[2], ctx);
+      if (val === undefined) return null;
+      return { current: `${val} ${m[2].toLowerCase()}`, test: `${m[3]} ${parseFloat(m[4])}` };
     }
 
     m = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+Percent\s+([<>])\s+([0-9.]+)$/i);
@@ -739,9 +775,11 @@
       if (inp.did  !== undefined) inputDids[key]  = inp.did;
       if (inp.unit !== undefined) inputUnits[key] = inp.unit;
     }
+    const outputStatuses = {};
     for (const out of istat.outputs) {
       const key = out.name.toLowerCase();
-      outputs[key]     = out.status[0];
+      outputs[key]        = out.status[0];
+      outputStatuses[key] = out.status;
       if (out.intensity !== undefined) intensities[key] = out.intensity;
       if (out.type      !== undefined) outputTypes[key] = out.type;
       if (out.did       !== undefined) outputDids[key]  = out.did;
@@ -758,13 +796,13 @@
     // Feed: active=0 means none; name 1=A,2=B,3=C,4=D (verify against real data)
     const activeFeed = istat.feed && istat.feed.active ? istat.feed.name : 0;
 
-    return { inputs, outputs, intensities, inputTypes, outputTypes, inputDids, outputDids, inputUnits, nowMin, dowIndex, activeFeed, monthIndex };
+    return { inputs, outputs, outputStatuses, intensities, inputTypes, outputTypes, inputDids, outputDids, inputUnits, nowMin, dowIndex, activeFeed, monthIndex };
   }
 
   // ── Apply / clear colors ───────────────────────────────────────────────────
 
   function applyColors(ctx) {
-    const lines     = document.querySelectorAll('.cm-content .cm-line');
+    const lines     = [...document.querySelectorAll('.cm-content .cm-line')];
     // Index 0 is the invisible spacer; real lines start at 1
     const gutterEls = document.querySelectorAll('.cm-lineNumbers .cm-gutterElement');
 
@@ -786,6 +824,15 @@
       }
     });
 
+    // If any grey If/Then ON|OFF line exists after the winner (or anywhere when no winner
+    // was found), we can't know the true last-true — invalidate the winner.
+    const uncertainWinner = lines.some((line, i) => {
+      if (results[i] !== 'grey') return false;
+      if (i <= winnerIdx) return false;
+      return /\bThen\s+(ON|OFF)\s*$/i.test(line.textContent.trim());
+    });
+    if (uncertainWinner) { winnerIdx = -1; winnerFinalState = null; }
+
     // Pass 3: apply
     // Line background — use nth-child CSS rule so it survives element recreation by CodeMirror
     let winnerStyle = document.getElementById('apex-winner-style');
@@ -794,6 +841,31 @@
       winnerStyle.id = 'apex-winner-style';
       document.head.appendChild(winnerStyle);
     }
+    // Eval info banner
+    let evalBanner = document.getElementById('apex-eval-banner');
+    let bannerText  = null;
+    let bannerStyle = null;
+    if (uncertainWinner) {
+      bannerText  = '<i class="af af-fw" style="font-style:normal;color:#856404">&#xF011;</i> Outlet state unknown — unevaluable line(s) present.';
+      bannerStyle = 'padding:4px 8px;background:#fff3cd;color:#856404;font-size:0.8rem;border-bottom:1px solid #ffc107;font-weight:600;';
+    } else if (winnerIdx >= 0) {
+      const state = winnerFinalState === 'ON' ? 'ON' : 'OFF';
+      const color = winnerFinalState === 'ON' ? '#198754' : '#dc3545';
+      bannerText  = `<i class="af af-fw" style="font-style:normal;color:${color}">&#xF011;</i> Outlet is ${state} because of line ${winnerIdx + 1}.`;
+      bannerStyle = `padding:4px 8px;background:#f8f9fa;color:${color};font-size:0.8rem;border-bottom:1px solid #dee2e6;font-weight:600;`;
+    }
+    if (bannerText) {
+      if (!evalBanner) {
+        evalBanner = document.createElement('div');
+        evalBanner.id = 'apex-eval-banner';
+        document.querySelector('.cm-editor')?.before(evalBanner);
+      }
+      evalBanner.style.cssText = bannerStyle;
+      evalBanner.innerHTML     = bannerText;
+    } else {
+      evalBanner?.remove();
+    }
+
     if (winnerIdx < 0) {
       winnerStyle.textContent = '';
     } else {
@@ -863,6 +935,7 @@
   function clearColors() {
     const winnerStyle = document.getElementById('apex-winner-style');
     if (winnerStyle) winnerStyle.textContent = '';
+    document.getElementById('apex-eval-banner')?.remove();
     document.querySelectorAll('.cm-lineNumbers .cm-gutterElement')
       .forEach(el => {
         el.style.backgroundColor = '';
@@ -970,6 +1043,15 @@
           const h = Math.floor(nowMin / 60);
           const m = nowMin % 60;
           probeValue = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        }
+
+        // Output|Outlet <name> Watts|Amps
+        pm = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+(Watts|Amps)\s+[<>]/i);
+        if (pm) {
+          const val = getPowerValue(pm[1], pm[2], ctx);
+          if (val !== undefined) probeValue = `${val} ${pm[2].toLowerCase()}`;
+          probeType = outputTypes[pm[1].toLowerCase()] ?? null;
+          probeDid  = outputDids[pm[1].toLowerCase()]  ?? null;
         }
 
         // <probe> OPEN|CLOSED
