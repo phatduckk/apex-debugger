@@ -2431,14 +2431,14 @@
       group.id = 'apex-folder-dropdown';
       group.className = 'btn-group';
       group.innerHTML =
-        '<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Folders">' +
-          '<i class="af af-fw af-folder"></i> Default Folder' +
+        '<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Dashboards">' +
+          '<i class="af af-fw af-folder"></i> Default Dashboard' +
         '</button>' +
         '<div class="dropdown-menu dropdown-menu-end" id="apex-folders-menu">' +
-          '<button type="button" class="dropdown-item apex-folder-item" data-id="default"><i class="af af-fw af-folder-default"></i> Default Folder</button>' +
+          '<button type="button" class="dropdown-item apex-folder-item" data-id="default"><i class="af af-fw af-folder-default"></i> Default Dashboard</button>' +
           '<hr class="dropdown-divider" id="apex-folders-divider">' +
-          '<button type="button" class="dropdown-item" id="apex-new-folder-btn"><i class="af af-fw af-folder-new"></i> New Folder</button>' +
-          '<button type="button" class="dropdown-item" id="apex-manage-folders-btn"><i class="af af-fw af-folder-edit"></i> Manage Folders</button>' +
+          '<button type="button" class="dropdown-item" id="apex-new-folder-btn"><i class="af af-fw af-folder-new"></i> New Dashboard</button>' +
+          '<button type="button" class="dropdown-item" id="apex-manage-folders-btn"><i class="af af-fw af-folder-edit"></i> Manage Dashboards</button>' +
         '</div>';
       dashLock.insertAdjacentElement('afterend', group);
       group.querySelector('#apex-new-folder-btn').addEventListener('click', openNewFolderModal);
@@ -2499,7 +2499,7 @@
     const toggle = document.querySelector('#apex-folder-dropdown .dropdown-toggle');
     if (!toggle) return;
     if (!folder) {
-      toggle.innerHTML = '<i class="af af-fw af-folder"></i> Default Folder';
+      toggle.innerHTML = '<i class="af af-fw af-folder"></i> Default Dashboard';
     } else {
       toggle.innerHTML = `<i class="af af-fw apex-gp-${folder.glyph.toLowerCase()}"></i> ${folder.name}`;
     }
@@ -2804,7 +2804,7 @@
         '<div class="modal-dialog">' +
           '<div class="modal-content">' +
             '<div class="modal-header">' +
-              '<h5 class="modal-title">Manage Folders</h5>' +
+              '<h5 class="modal-title">Manage Dashboards</h5>' +
               '<button type="button" class="btn-close" id="apex-manage-close-btn"></button>' +
             '</div>' +
             '<div class="modal-body">' +
@@ -2812,7 +2812,7 @@
             '</div>' +
             '<hr style="margin:0">' +
             '<div id="apex-manage-folders-footer">' +
-              '<button type="button" id="apex-folders-export-link">Download customizations</button>' +
+              '<button type="button" id="apex-folders-export-link">Backup dashboard customizations</button>' +
               '<button type="button" id="apex-folders-import-btn-styled"><i class="af af-fw apex-gp-f150"></i> Import</button>' +
               '<input type="file" id="apex-folders-import-input" accept=".json" style="display:none">' +
             '</div>' +
@@ -2893,13 +2893,13 @@
         '<div class="modal-dialog">' +
           '<div class="modal-content">' +
             '<div class="modal-header">' +
-              '<h5 class="modal-title">New Folder</h5>' +
+              '<h5 class="modal-title">New Dashboard</h5>' +
               '<button type="button" class="btn-close" id="apex-folder-close-btn"></button>' +
             '</div>' +
             '<div class="modal-body">' +
               '<div class="mb-3">' +
                 '<label class="form-label" for="apex-folder-name-input">Name</label>' +
-                '<input type="text" class="form-control" id="apex-folder-name-input" placeholder="Folder name">' +
+                '<input type="text" class="form-control" id="apex-folder-name-input" placeholder="Dashboard name">' +
               '</div>' +
               '<div class="mb-1">' +
                 '<label class="form-label">Icon</label>' +
