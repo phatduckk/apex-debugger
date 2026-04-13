@@ -3,6 +3,7 @@
 
   let STATUS_URL  = '';
   let CONFIG_URL  = '';
+  let LAYOUT_URL  = '';
   const POLL_MS   = 5000;
 
   let enabled        = false;
@@ -18,6 +19,11 @@
   let helpOpen    = false;
   let probeOpen   = false;
   let exploreOpen = false;
+  let activeFolder    = 'default';
+  let layoutSnapshot  = null; // original sections[] from /rest/layout, saved before first folder switch
+  let layoutObserver  = null;
+  let layoutSaveTimer = null;
+  let folderDropdownInjected = false;
   let lastUrl    = location.href;
 
   let debugMode      = false;
@@ -2354,6 +2360,8 @@
       const clearBtn = card.querySelector('#apex-unused-search-clear');
       const typeSelect = card.querySelector('#apex-unused-type');
 
+      unusedSection?.querySelectorAll(':scope > :not(.dash-widget)').forEach(el => { el.style.display = 'none'; });
+
       const filterWidgets = () => {
         const q = searchInput.value.toLowerCase();
         const t = typeSelect.value;
@@ -2412,16 +2420,21 @@
     }
 
     const dashLock = document.getElementById('dash-lock');
+    if (!folderDropdownInjected) {
+      const stale = document.getElementById('apex-folder-dropdown');
+      if (stale) stale.remove();
+    }
     if (dashLock && !document.getElementById('apex-folder-dropdown')) {
+      folderDropdownInjected = true;
       const group = document.createElement('div');
       group.id = 'apex-folder-dropdown';
       group.className = 'btn-group';
       group.innerHTML =
         '<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Folders">' +
-          '<i class="af af-fw af-folder"></i> Folders' +
+          '<i class="af af-fw af-folder"></i> Default Folder' +
         '</button>' +
         '<div class="dropdown-menu dropdown-menu-end" id="apex-folders-menu">' +
-          '<button type="button" class="dropdown-item apex-folder-item" data-id="default"><i class="af af-fw af-folder-default"></i> Default</button>' +
+          '<button type="button" class="dropdown-item apex-folder-item" data-id="default"><i class="af af-fw af-folder-default"></i> Default Folder</button>' +
           '<hr class="dropdown-divider" id="apex-folders-divider">' +
           '<button type="button" class="dropdown-item" id="apex-new-folder-btn"><i class="af af-fw af-folder-new"></i> New Folder</button>' +
           '<button type="button" class="dropdown-item" id="apex-manage-folders-btn"><i class="af af-fw af-folder-edit"></i> Manage Folders</button>' +
@@ -2429,6 +2442,7 @@
       dashLock.insertAdjacentElement('afterend', group);
       group.querySelector('#apex-new-folder-btn').addEventListener('click', openNewFolderModal);
       group.querySelector('#apex-manage-folders-btn').addEventListener('click', openManageFoldersModal);
+      group.querySelector('[data-id="default"]').addEventListener('click', () => switchToFolder('default'));
       // Populate any already-saved folders
       chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => apexFolders.forEach(addFolderToMenu));
     }
@@ -2449,6 +2463,7 @@
     icon.className = `af af-fw apex-gp-${folder.glyph.toLowerCase()}`;
     btn.appendChild(icon);
     btn.appendChild(document.createTextNode(' ' + folder.name));
+    btn.addEventListener('click', () => switchToFolder(folder.id));
     divider.insertAdjacentElement('beforebegin', btn);
   }
 
@@ -2467,6 +2482,146 @@
       btn.appendChild(icon);
       btn.appendChild(document.createTextNode(' ' + folder.name));
       divider.insertAdjacentElement('beforebegin', btn);
+    });
+  }
+
+  function getFolderSections() {
+    return {
+      s0: document.getElementById('dash-section-0'),
+      s1: document.getElementById('dash-section-1'),
+      s2: document.getElementById('dash-section-2'),
+      s3: document.getElementById('dash-section-3'),
+    };
+  }
+
+  function updateFolderToggleLabel(folder) {
+    const toggle = document.querySelector('#apex-folder-dropdown .dropdown-toggle');
+    if (!toggle) return;
+    if (!folder) {
+      toggle.innerHTML = '<i class="af af-fw af-folder"></i> Default Folder';
+    } else {
+      toggle.innerHTML = `<i class="af af-fw apex-gp-${folder.glyph.toLowerCase()}"></i> ${folder.name}`;
+    }
+  }
+
+  function collectWidgets() {
+    const { s0, s1, s2, s3 } = getFolderSections();
+    const all = {};
+    [s0, s1, s2, s3].forEach(sec => {
+      if (sec) sec.querySelectorAll('.dash-widget').forEach(w => { if (w.id) all[w.id] = w; });
+    });
+    return all;
+  }
+
+  function detachAllWidgets(all) {
+    // Move every widget into a fragment — detaches from DOM without destroying nodes
+    const frag = document.createDocumentFragment();
+    Object.values(all).forEach(w => frag.appendChild(w));
+    return frag;
+  }
+
+  function saveFolderLayoutNow() {
+    if (activeFolder === 'default') return;
+    const { s1, s2, s3 } = getFolderSections();
+    const toCSV = sec => [...(sec ? sec.querySelectorAll('.dash-widget') : [])].map(w => w.id).filter(Boolean).join(',');
+    const sections = [toCSV(s1), toCSV(s2), toCSV(s3), ''];
+    chrome.storage.sync.get({ apexSections: {} }, ({ apexSections }) => {
+      apexSections[activeFolder] = sections;
+      chrome.storage.sync.set({ apexSections });
+    });
+  }
+
+  function startWatchingLayout() {
+    if (layoutObserver) layoutObserver.disconnect();
+    layoutObserver = new MutationObserver(() => {
+      clearTimeout(layoutSaveTimer);
+      layoutSaveTimer = setTimeout(saveFolderLayoutNow, 400);
+    });
+    ['dash-section-1', 'dash-section-2', 'dash-section-3'].forEach(id => {
+      const sec = document.getElementById(id);
+      if (sec) layoutObserver.observe(sec, { childList: true });
+    });
+  }
+
+  function stopWatchingLayout() {
+    clearTimeout(layoutSaveTimer);
+    if (layoutObserver) { layoutObserver.disconnect(); layoutObserver = null; }
+  }
+
+  async function applyFolderLayout(folder, sections) {
+    const { s0, s1, s2, s3 } = getFolderSections();
+    if (!s1 || !s2 || !s3) return;
+
+    // Fetch and save the real layout from the controller before first folder switch
+    if (!layoutSnapshot) {
+      try {
+        const r = await fetch(`${LAYOUT_URL}?_=${Date.now()}`, { cache: 'no-store' });
+        const { sections: orig } = await r.json();
+        layoutSnapshot = orig;
+      } catch (_) {
+        layoutSnapshot = null;
+      }
+    }
+
+    const all = collectWidgets();
+    const frag = detachAllWidgets(all);
+
+    const col1 = (sections[0] || '').split(',').filter(Boolean);
+    const col2 = (sections[1] || '').split(',').filter(Boolean);
+    const col3 = (sections[2] || '').split(',').filter(Boolean);
+
+    col1.forEach(gid => { if (all[gid]) s1.appendChild(all[gid]); });
+    col2.forEach(gid => { if (all[gid]) s2.appendChild(all[gid]); });
+    col3.forEach(gid => { if (all[gid]) s3.appendChild(all[gid]); });
+
+    if (s0) while (frag.firstChild) s0.appendChild(frag.firstChild);
+
+    const unusedContainer = document.getElementById('dash-widget-unused');
+
+    document.documentElement.setAttribute('data-apex-folder-mode', 'true');
+    activeFolder = folder.id;
+    updateFolderToggleLabel(folder);
+    startWatchingLayout();
+  }
+
+  function switchToDefault() {
+    stopWatchingLayout();
+
+    const snap = layoutSnapshot;
+    layoutSnapshot = null;
+    activeFolder = 'default';
+    updateFolderToggleLabel(null);
+
+    if (!snap) {
+      document.documentElement.removeAttribute('data-apex-folder-mode');
+      return;
+    }
+
+    const { s0, s1, s2, s3 } = getFolderSections();
+    const all = collectWidgets();
+    const frag = detachAllWidgets(all);
+
+    (snap[0] || '').split(',').filter(Boolean).forEach(gid => { if (all[gid]) s1?.appendChild(all[gid]); });
+    (snap[1] || '').split(',').filter(Boolean).forEach(gid => { if (all[gid]) s2?.appendChild(all[gid]); });
+    (snap[2] || '').split(',').filter(Boolean).forEach(gid => { if (all[gid]) s3?.appendChild(all[gid]); });
+    (snap[3] || '').split(',').filter(Boolean).forEach(gid => { if (all[gid]) s0?.appendChild(all[gid]); });
+    if (s0) while (frag.firstChild) s0.appendChild(frag.firstChild);
+
+    // Stamp our restoration POST so the interceptor lets only it through
+    fetch(LAYOUT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Apex-Ext-Restore': '1' },
+      body: JSON.stringify({ sections: snap }),
+    }).finally(() => {
+      document.documentElement.removeAttribute('data-apex-folder-mode');
+    }).catch(() => {});
+  }
+
+  function switchToFolder(folderId) {
+    if (folderId === 'default') { switchToDefault(); return; }
+    chrome.storage.sync.get({ apexFolders: [], apexSections: {} }, ({ apexFolders, apexSections }) => {
+      const folder = apexFolders.find(f => f.id === folderId);
+      if (folder) applyFolderLayout(folder, apexSections[folderId] || ['', '', '', '']);
     });
   }
 
@@ -2583,9 +2738,10 @@
       delIcon.className = 'af af-fw apex-gp-f057';
       del.appendChild(delIcon);
       del.addEventListener('click', () => {
-        chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => {
+        chrome.storage.sync.get({ apexFolders: [], apexSections: {} }, ({ apexFolders, apexSections }) => {
           const updated = apexFolders.filter(f => f.id !== folder.id);
-          chrome.storage.sync.set({ apexFolders: updated }, () => {
+          delete apexSections[folder.id];
+          chrome.storage.sync.set({ apexFolders: updated, apexSections }, () => {
             const menuBtn = document.querySelector(`#apex-folders-menu [data-id="${folder.id}"]`);
             if (menuBtn) menuBtn.remove();
             renderManageList(updated);
@@ -2745,15 +2901,11 @@
       el.querySelector('#apex-folder-create-btn').addEventListener('click', () => {
         const name = el.querySelector('#apex-folder-name-input').value.trim();
         if (!name) { el.querySelector('#apex-folder-name-input').focus(); return; }
-        const folder = {
-          id: 'folder_' + Date.now(),
-          name,
-          glyph: selectedGlyph || 'F660',
-          sections: ['', '', '', ''],
-        };
-        chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => {
+        const folder = { id: 'folder_' + Date.now(), name, glyph: selectedGlyph || 'F660' };
+        chrome.storage.sync.get({ apexFolders: [], apexSections: {} }, ({ apexFolders, apexSections }) => {
           apexFolders.push(folder);
-          chrome.storage.sync.set({ apexFolders }, () => {
+          apexSections[folder.id] = ['', '', '', ''];
+          chrome.storage.sync.set({ apexFolders, apexSections }, () => {
             addFolderToMenu(folder);
             closeModal();
           });
@@ -2778,6 +2930,7 @@
     if (helpOpen)     closeHelpPanel();
     if (exploreOpen)  closeExplorePanel();
     if (probeOpen)    closeProbePanel();
+    if (layoutSnapshot) switchToDefault();
     editorSnapshot = null;
   }
 
@@ -2810,12 +2963,16 @@
 
     STATUS_URL = `http://${hostname}/cgi-bin/status.json`;
     CONFIG_URL = `http://${hostname}/rest/config`;
+    LAYOUT_URL = `http://${hostname}/rest/layout`;
 
     injectTheme(theme);
     injectStyles();
     initGutterTooltip();
 
-    const observer = new MutationObserver(() => { injectButton(); injectDashIcons(); });
+    const observer = new MutationObserver(() => {
+      try { injectButton(); injectDashIcons(); }
+      catch (_) { observer.disconnect(); }
+    });
     observer.observe(document.body, { childList: true, subtree: true });
 
     injectButton();

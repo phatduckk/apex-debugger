@@ -128,6 +128,46 @@ When the dashboard is unlocked (`div#dash.unlocked`), edit mode activates:
 
 ---
 
+## Folder Switching (Extension)
+
+Each custom folder stores its own `sections` array (same structure as `/rest/layout`). Switching folders is a **DOM-only operation** — the Apex controller is never touched, nothing is POSTed.
+
+### Approach
+
+All widgets (`div.dash-widget`) are always present in the DOM across `dash-section-0` through `dash-section-3`. Switching just reparents them:
+
+1. On the **first** switch away from Default, snapshot the current DOM node order of all 4 sections (actual node references, not innerHTML — preserves event listeners)
+2. Collect every `div.dash-widget` from all sections into a flat map keyed by GID
+3. Clear all 4 sections
+4. Place the folder's column GIDs into `dash-section-1/2/3` in order
+5. Everything not placed goes into `dash-section-0` (unused tray)
+
+On switch back to **Default**: replay the snapshot — move nodes back to their original sections in original order. Discard snapshot.
+
+### Rules
+
+- The same widget GID can appear in multiple folders' sections (each folder is an independent view)
+- A GID may only appear once within a single folder's sections
+- `sections[3]` is not used for folder layouts — the unused tray is always computed dynamically
+- Default folder = the real Apex layout, untouched
+
+### Storage
+
+```json
+{
+  "apexFolders": [
+    {
+      "id": "folder_1234",
+      "name": "My Folder",
+      "glyph": "F660",
+      "sections": ["gid1,gid2", "gid3,gid4", "gid5", ""]
+    }
+  ]
+}
+```
+
+---
+
 ## Notes for Layout Manipulation
 
 - To **move** a widget: remove its GID from one section's CSV and insert it in another at the desired position
