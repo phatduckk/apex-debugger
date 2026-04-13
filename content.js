@@ -24,6 +24,7 @@
   let layoutObserver  = null;
   let layoutSaveTimer = null;
   let folderDropdownInjected = false;
+  let lastFolderApplied = false;
   let lastUrl    = location.href;
 
   let debugMode      = false;
@@ -2447,6 +2448,14 @@
       // Populate any already-saved folders
       chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => apexFolders.forEach(addFolderToMenu));
     }
+
+    // Re-apply last active dashboard once widgets are in the DOM
+    if (!lastFolderApplied && document.querySelector('#dash-section-1 > .dash-widget')) {
+      lastFolderApplied = true;
+      chrome.storage.local.get({ lastActiveDashboard: 'default' }, ({ lastActiveDashboard }) => {
+        if (lastActiveDashboard !== 'default') switchToFolder(lastActiveDashboard);
+      });
+    }
   }
 
   // ── Folders helpers ────────────────────────────────────────────────────────
@@ -2576,30 +2585,36 @@
 
     document.documentElement.setAttribute('data-apex-folder-mode', 'true');
     activeFolder = folder.id;
+    chrome.storage.local.set({ lastActiveDashboard: folder.id });
     updateFolderToggleLabel(folder);
     startWatchingLayout();
   }
 
-  function switchToDefault() {
+  function switchToDefault({ domRestore = true } = {}) {
     stopWatchingLayout();
 
     const snap = layoutSnapshot;
     layoutSnapshot = null;
     activeFolder = 'default';
-    updateFolderToggleLabel(null);
+    if (domRestore) {
+      updateFolderToggleLabel(null);
+      chrome.storage.local.set({ lastActiveDashboard: 'default' });
+    }
 
     if (!snap) {
       document.documentElement.removeAttribute('data-apex-folder-mode');
       return;
     }
 
-    const { s0, s1, s2, s3 } = getFolderSections();
+    if (domRestore) {
+      const { s0, s1, s2, s3 } = getFolderSections();
 
-    // Move nodes directly back — no GID lookup, preserves original order exactly
-    snap.s1.forEach(n => s1?.appendChild(n));
-    snap.s2.forEach(n => s2?.appendChild(n));
-    snap.s3.forEach(n => s3?.appendChild(n));
-    snap.s0.forEach(n => s0?.appendChild(n));
+      // Move nodes directly back — no GID lookup, preserves original order exactly
+      snap.s1.forEach(n => s1?.appendChild(n));
+      snap.s2.forEach(n => s2?.appendChild(n));
+      snap.s3.forEach(n => s3?.appendChild(n));
+      snap.s0.forEach(n => s0?.appendChild(n));
+    }
 
     // Stamp our restoration POST so the interceptor lets only it through
     const toCSV = arr => arr.map(n => n.id).filter(Boolean).join(',');
@@ -2969,7 +2984,9 @@
     if (helpOpen)     closeHelpPanel();
     if (exploreOpen)  closeExplorePanel();
     if (probeOpen)    closeProbePanel();
-    if (layoutSnapshot) switchToDefault();
+    const onDash = location.pathname === '/apex/dash';
+    if (layoutSnapshot) switchToDefault({ domRestore: onDash });
+    if (!onDash) lastFolderApplied = false;
     editorSnapshot = null;
   }
 
