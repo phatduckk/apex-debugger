@@ -635,6 +635,73 @@
     return 'grey';
   }
 
+  function getLineValues(text, ctx) {
+    const { inputs, outputs, intensities, inputUnits, nowMin, dowIndex, activeFeed, season, monthIndex } = ctx;
+    const t   = text.trim();
+    const ifm = t.match(/^If\s+(.+?)\s+Then\s+(\S+)$/i);
+    if (!ifm) return null;
+    const cond = ifm[1].trim();
+    const fmt  = v => typeof v === 'string' ? `"${v}"` : v;
+    let m;
+
+    m = cond.match(/^Time\s+(\d{1,2}:\d{2})\s+to\s+(\d{1,2}:\d{2})$/i);
+    if (m) {
+      const h = Math.floor(nowMin / 60), min = nowMin % 60;
+      return { current: `${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`, test: `${m[1]} to ${m[2]}` };
+    }
+
+    m = cond.match(/^DOW\s+([SMTWTFS\-]{7})$/i);
+    if (m) {
+      return { current: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dowIndex], test: m[1].toUpperCase() };
+    }
+
+    m = cond.match(/^(FeedA|FeedB|FeedC|FeedD)\s+\d+$/i);
+    if (m) {
+      const feedNames = { 1: 'FeedA', 2: 'FeedB', 3: 'FeedC', 4: 'FeedD' };
+      return { current: activeFeed ? feedNames[activeFeed] : 'None', test: m[1] };
+    }
+
+    m = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+=\s+(ON|OFF)$/i);
+    if (m) {
+      const val = outputs[m[1].toLowerCase()];
+      if (val === undefined) return null;
+      return { current: fmt(val), test: fmt(m[2].toUpperCase()) };
+    }
+
+    m = cond.match(/^(?:Output|Outlet)\s+(\S+)\s+Percent\s+([<>])\s+([0-9.]+)$/i);
+    if (m) {
+      const pct = intensities[m[1].toLowerCase()];
+      if (pct === undefined) return null;
+      return { current: pct, test: `${m[2]} ${parseFloat(m[3])}` };
+    }
+
+    m = cond.match(/^(\S+)\s+(OPEN|CLOSED)$/i);
+    if (m) {
+      const val = inputs[m[1].toLowerCase()];
+      if (val === undefined) return null;
+      return { current: val, test: fmt(m[2].toUpperCase()) };
+    }
+
+    m = cond.match(/^(\S+)\s+([<>])\s+(.+)$/i);
+    if (m) {
+      const val  = inputs[m[1].toLowerCase()];
+      if (val === undefined) return null;
+      const unit = inputUnits[m[1].toLowerCase()];
+      const cur  = unit !== undefined ? `${val} ${unit}` : val;
+      if (/^RT\+/i.test(m[3])) {
+        if (!season) return { current: cur, test: 'RT+ (no season data)' };
+        const diff      = parseFloat(m[3].slice(3)) || 0;
+        const threshold = season.temp[monthIndex] + diff;
+        return { current: cur, test: `${m[2]} ${threshold} (RT+${diff >= 0 ? '+' : ''}${diff})` };
+      }
+      const threshold = parseFloat(m[3]);
+      if (isNaN(threshold)) return null;
+      return { current: cur, test: `${m[2]} ${threshold}` };
+    }
+
+    return null;
+  }
+
   // ── Status fetch ───────────────────────────────────────────────────────────
 
   async function fetchStatus() {
@@ -775,14 +842,20 @@
       const code = line.textContent.trim();
       if (!code) return;
       const gutterColor = results[i] ?? 'neutral';
-      const reason = tips[i] ? tips[i].split('\n')[0] : gutterColor;
-      const lineColor = i === winnerIdx ? (winnerFinalState === 'ON' ? 'green' : 'red') : null;
-      const lineReason = lineColor ? `sets outlet ${winnerFinalState}` : 'not colored';
-      console.log(
+      const reason      = tips[i] ? tips[i].split('\n')[0] : gutterColor;
+      const lineColor   = i === winnerIdx ? (winnerFinalState === 'ON' ? 'green' : 'red') : null;
+      const lineReason  = lineColor ? `sets outlet ${winnerFinalState}` : 'not colored';
+      const vals        = getLineValues(line.textContent, ctx);
+      let entry =
         `\tLine ${String(i + 1).padStart(numW)}: ${code}\n` +
         `\t\tGutter: ${gutterColor} | ${reason}\n` +
-        `\t\tLine: ${lineColor ?? 'none'} | ${lineReason}`
-      );
+        `\t\tLine:   ${lineColor ?? 'none'} | ${lineReason}`;
+      if (vals) {
+        entry +=
+          `\n\t\tCurrent value: ${vals.current}` +
+          `\n\t\tTest value:    ${vals.test}`;
+      }
+      console.log(entry);
     });
     console.groupEnd();
   }
