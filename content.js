@@ -2544,19 +2544,14 @@
     if (layoutObserver) { layoutObserver.disconnect(); layoutObserver = null; }
   }
 
-  async function applyFolderLayout(folder, sections) {
+  function applyFolderLayout(folder, sections) {
     const { s0, s1, s2, s3 } = getFolderSections();
     if (!s1 || !s2 || !s3) return;
 
-    // Fetch and save the real layout from the controller before first folder switch
+    // Snapshot actual DOM node references — restored directly, no GID lookup that can miss
     if (!layoutSnapshot) {
-      try {
-        const r = await fetch(`${LAYOUT_URL}?_=${Date.now()}`, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' } });
-        const { sections: orig } = await r.json();
-        layoutSnapshot = orig;
-      } catch (_) {
-        layoutSnapshot = null;
-      }
+      const toNodes = sec => [...(sec ? sec.querySelectorAll(':scope > .dash-widget') : [])];
+      layoutSnapshot = { s1: toNodes(s1), s2: toNodes(s2), s3: toNodes(s3), s0: toNodes(s0) };
     }
 
     const all = collectWidgets();
@@ -2594,20 +2589,19 @@
     }
 
     const { s0, s1, s2, s3 } = getFolderSections();
-    const all = collectWidgets();
-    const frag = detachAllWidgets(all);
 
-    (snap[0] || '').split(',').filter(Boolean).forEach(gid => { if (all[gid]) s1?.appendChild(all[gid]); });
-    (snap[1] || '').split(',').filter(Boolean).forEach(gid => { if (all[gid]) s2?.appendChild(all[gid]); });
-    (snap[2] || '').split(',').filter(Boolean).forEach(gid => { if (all[gid]) s3?.appendChild(all[gid]); });
-    (snap[3] || '').split(',').filter(Boolean).forEach(gid => { if (all[gid]) s0?.appendChild(all[gid]); });
-    if (s0) while (frag.firstChild) s0.appendChild(frag.firstChild);
+    // Move nodes directly back — no GID lookup, preserves original order exactly
+    snap.s1.forEach(n => s1?.appendChild(n));
+    snap.s2.forEach(n => s2?.appendChild(n));
+    snap.s3.forEach(n => s3?.appendChild(n));
+    snap.s0.forEach(n => s0?.appendChild(n));
 
     // Stamp our restoration POST so the interceptor lets only it through
+    const toCSV = arr => arr.map(n => n.id).filter(Boolean).join(',');
     fetch(LAYOUT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Apex-Ext-Restore': '1' },
-      body: JSON.stringify({ sections: snap }),
+      body: JSON.stringify({ sections: [toCSV(snap.s0), toCSV(snap.s1), toCSV(snap.s2), toCSV(snap.s3)] }),
     }).finally(() => {
       document.documentElement.removeAttribute('data-apex-folder-mode');
     }).catch(() => {});

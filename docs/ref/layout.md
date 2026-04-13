@@ -21,8 +21,8 @@
 ```
 
 - `sections` is an array of comma-separated GID strings
-- The first 3 entries map to the 3 visible dashboard columns (`dash-widget-column-1/2/3`)
-- The 4th entry is the **unused widgets tray** (`#unused`) — widgets not placed in any column
+- `sections[0]` is the **unused widgets tray** (`#unused`) — widgets not placed in any column
+- `sections[1]`, `sections[2]`, `sections[3]` map to the 3 visible dashboard columns (`dash-widget-column-1/2/3`)
 
 ---
 
@@ -52,8 +52,9 @@ GIDs match the `did` field in `status.json`. Most are plain device IDs (`module_
 
 ```
 /rest/layout
-  sections[n]          ← column index (0-based)
-    → CSV of GIDs      ← ordered list of widgets in that column
+  sections[0]          ← unused tray (not a column)
+  sections[1..3]       ← columns 1, 2, 3
+    → CSV of GIDs      ← ordered list of widgets in that column/tray
          ↕
 /cgi-bin/status.json
   [*].did              ← same GID value → gives you name, type, value/status
@@ -161,6 +162,8 @@ On switch back to **Default**: replay the snapshot — move nodes back to their 
       "name": "My Folder",
       "glyph": "F660",
       "sections": ["gid1,gid2", "gid3,gid4", "gid5", ""]
+      // NOTE: extension-internal format — sections[0..2] = columns 1/2/3, sections[3] unused
+      // This differs from Apex's /rest/layout where sections[0] is the unused tray
     }
   ]
 }
