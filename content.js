@@ -744,6 +744,7 @@
     }
 
     // Gutter: per-line color + tooltip data
+    const tips = [];
     lines.forEach((line, i) => {
       const gEl = gutterEls[i + 1];
       if (!gEl) return;
@@ -756,6 +757,7 @@
         delete gEl.dataset.apexBeef;
       }
       const tip = buildTipText(line.textContent, results[i], i === winnerIdx, winnerFinalState, ctx);
+      tips[i] = tip;
       if (tip) {
         gEl.dataset.apexTip   = tip;
         gEl.dataset.apexColor = results[i];
@@ -764,6 +766,25 @@
         delete gEl.dataset.apexColor;
       }
     });
+
+    // Console log: line-by-line evaluation summary
+    const probeName = (document.getElementById('output-name') || document.getElementById('input-name-value'))?.value?.trim() || '?';
+    const numW = String(lines.length).length;
+    console.group(`EVALUATING ${probeName.toUpperCase()}`);
+    lines.forEach((line, i) => {
+      const code = line.textContent.trim();
+      if (!code) return;
+      const gutterColor = results[i] ?? 'neutral';
+      const reason = tips[i] ? tips[i].split('\n')[0] : gutterColor;
+      const lineColor = i === winnerIdx ? (winnerFinalState === 'ON' ? 'green' : 'red') : null;
+      const lineReason = lineColor ? `sets outlet ${winnerFinalState}` : 'not colored';
+      console.log(
+        `\tLine ${String(i + 1).padStart(numW)}: ${code}\n` +
+        `\t\tGutter: ${gutterColor} | ${reason}\n` +
+        `\t\tLine: ${lineColor ?? 'none'} | ${lineReason}`
+      );
+    });
+    console.groupEnd();
   }
 
   function clearColors() {
