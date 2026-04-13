@@ -5,11 +5,12 @@
   let CONFIG_URL  = '';
   const POLL_MS   = 5000;
 
-  let enabled    = false;
-  let pollTimer  = null;
-  let lastCtx    = null;
-  let lastSeason = null;
-  let beefMode   = false;
+  let enabled        = false;
+  let pollTimer      = null;
+  let lastCtx        = null;
+  let lastSeason     = null;
+  let beefMode       = false;
+  let editorSnapshot = null;
   let editorObserver = null;
   let helpOpen    = false;
   let probeOpen   = false;
@@ -806,6 +807,11 @@
     // Index 0 is the invisible spacer; real lines start at 1
     const gutterEls = document.querySelectorAll('.cm-lineNumbers .cm-gutterElement');
 
+    // Snapshot editor content on first call after page load; detect unsaved edits thereafter
+    const currentCode = lines.map(l => l.textContent).join('\n');
+    if (editorSnapshot === null) editorSnapshot = currentCode;
+    const editorDirty = currentCode !== editorSnapshot;
+
     // Pass 1: evaluate every line
     const results = Array.from(lines).map(line => evaluateLine(line.textContent, ctx));
 
@@ -849,9 +855,11 @@
       bannerText  = '<i class="af af-fw" style="font-style:normal;color:#856404">&#xF011;</i> Outlet state unknown — unevaluable line(s) present.';
       bannerStyle = 'padding:4px 8px;background:#fff3cd;color:#856404;font-size:0.8rem;border-bottom:1px solid #ffc107;font-weight:600;';
     } else if (winnerIdx >= 0) {
-      const state = winnerFinalState === 'ON' ? 'ON' : 'OFF';
-      const color = winnerFinalState === 'ON' ? '#198754' : '#dc3545';
-      bannerText  = `<i class="af af-fw" style="font-style:normal;color:${color}">&#xF011;</i> Outlet is ${state} because of line ${winnerIdx + 1}.`;
+      const state  = winnerFinalState === 'ON' ? 'ON' : 'OFF';
+      const color  = winnerFinalState === 'ON' ? '#198754' : '#dc3545';
+      const verb   = editorDirty ? 'would be' : 'is';
+      const suffix = editorDirty ? ' (unsaved)' : '';
+      bannerText  = `<i class="af af-fw" style="font-style:normal;color:${color}">&#xF011;</i> Outlet ${verb} ${state} because of line ${winnerIdx + 1}${suffix}.`;
       bannerStyle = `padding:4px 8px;background:#f8f9fa;color:${color};font-size:0.8rem;border-bottom:1px solid #dee2e6;font-weight:600;`;
     }
     if (bannerText) {
@@ -1017,11 +1025,11 @@
     // Set ON / Set OFF
     if (/^Set\s+ON$/i.test(t)) {
       return 'Always executes → sets outlet ON' +
-        (isWinner ? '\n\n★ This line is responsible for setting the outlet ON' : '');
+        (isWinner ? '\n\n\uF011 This line is responsible for setting the outlet ON' : '');
     }
     if (/^Set\s+OFF$/i.test(t)) {
       return 'Always executes → sets outlet OFF' +
-        (isWinner ? '\n\n★ This line is responsible for setting the outlet OFF' : '');
+        (isWinner ? '\n\n\uF011 This line is responsible for setting the outlet OFF' : '');
     }
 
     // If ... Then ...
@@ -1107,7 +1115,7 @@
       if (probeDid  !== null) tip += `\nDID: ${probeDid}`;
       if (probeValue !== null) tip += `\nValue: ${probeValue}`;
       tip += `\nState: ${isTrue ? 'TRUE' : 'FALSE'}`;
-      if (isWinner) tip += `\n\n★ This line is responsible for setting the outlet ${thenVal}`;
+      if (isWinner) tip += `\n\n\uF011 This line is responsible for setting the outlet ${thenVal}`;
       return tip;
     }
 
@@ -1124,7 +1132,9 @@
       if (!el) { tip.style.display = 'none'; return; }
 
       const rect = el.getBoundingClientRect();
-      tip.textContent = el.dataset.apexTip;
+      tip.innerHTML = el.dataset.apexTip
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/\uF011/g, '<span style="font-family:ApexFusion">&#xF011;</span>');
       tip.style.borderColor = { green: '#4caf50', red: '#e05555', grey: '#999', neutral: '#666' }[el.dataset.apexColor] ?? '#888';
       tip.style.top  = rect.top + 'px';
       tip.style.left = (rect.right + 10) + 'px';
@@ -2133,6 +2143,7 @@
     if (helpOpen)     closeHelpPanel();
     if (exploreOpen)  closeExplorePanel();
     if (probeOpen)    closeProbePanel();
+    editorSnapshot = null;
   }
 
   // ── Init ───────────────────────────────────────────────────────────────────
