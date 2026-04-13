@@ -1459,6 +1459,11 @@
       #apex-manage-folders-modal .modal-title { font-size: 14px; font-weight: 500; color: #ccc; }
       #apex-manage-folders-modal .btn-close { filter: invert(1); }
       #apex-manage-folders-modal .modal-body { overflow-y: auto; flex: 1; padding: 12px 16px; }
+      #apex-manage-folders-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: #fff; border-radius: 0 0 6px 6px; }
+      #apex-folders-export-link { color: #e07820; text-decoration: none; font-size: 13px; cursor: pointer; background: none; border: none; padding: 0; }
+      #apex-folders-export-link:hover { text-decoration: underline; color: #c96a18; }
+      #apex-folders-import-btn-styled { background: #e07820; border: none; color: #fff; border-radius: 4px; padding: 5px 12px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+      #apex-folders-import-btn-styled:hover { background: #c96a18; }
       #apex-manage-folder-list { display: flex; flex-direction: column; gap: 4px; }
       .apex-manage-row {
         display: flex; align-items: center; gap: 10px;
@@ -2805,14 +2810,58 @@
             '<div class="modal-body">' +
               '<div id="apex-manage-folder-list"></div>' +
             '</div>' +
+            '<hr style="margin:0">' +
+            '<div id="apex-manage-folders-footer">' +
+              '<button type="button" id="apex-folders-export-link">Download customizations</button>' +
+              '<button type="button" id="apex-folders-import-btn-styled"><i class="af af-fw apex-gp-f150"></i> Import</button>' +
+              '<input type="file" id="apex-folders-import-input" accept=".json" style="display:none">' +
+            '</div>' +
           '</div>' +
         '</div>';
       document.body.appendChild(el);
       el.querySelector('#apex-manage-close-btn').addEventListener('click', closeManage);
+
+      el.querySelector('#apex-folders-export-link').addEventListener('click', () => {
+        chrome.storage.sync.get({ apexFolders: [], apexSections: {} }, ({ apexFolders, apexSections }) => {
+          const now = new Date();
+          const pad = n => String(n).padStart(2, '0');
+          const name = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}.json`;
+          const blob = new Blob([JSON.stringify({ apexFolders, apexSections }, null, 2)], { type: 'application/json' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = name;
+          a.click();
+          URL.revokeObjectURL(a.href);
+        });
+      });
+
+      const importInput = el.querySelector('#apex-folders-import-input');
+      el.querySelector('#apex-folders-import-btn-styled').addEventListener('click', () => importInput.click());
+      importInput.addEventListener('change', () => {
+        const file = importInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+          try {
+            const { apexFolders, apexSections } = JSON.parse(e.target.result);
+            if (!Array.isArray(apexFolders) || typeof apexSections !== 'object') throw new Error();
+            chrome.storage.sync.set({ apexFolders, apexSections }, () => {
+              rebuildDropdownOrder(apexFolders);
+              renderManageList(apexFolders);
+            });
+          } catch (_) {
+            alert('Invalid backup file.');
+          }
+        };
+        reader.readAsText(file);
+        importInput.value = '';
+      });
     }
 
     chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => {
       renderManageList(apexFolders);
+      const exportLink = document.getElementById('apex-folders-export-link');
+      if (exportLink) exportLink.style.display = apexFolders.length ? '' : 'none';
       document.getElementById('apex-manage-backdrop').style.display = 'block';
       document.getElementById('apex-manage-folders-modal').style.display = 'flex';
       document.body.style.overflow = 'hidden';
