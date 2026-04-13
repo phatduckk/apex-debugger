@@ -2332,12 +2332,9 @@
       const card = document.createElement('div');
       card.className = 'card mt-2';
       card.style.cssText = 'border-bottom-left-radius:0;border-bottom-right-radius:0;';
-      const h5 = document.createElement('h5');
-      h5.id = 'apex-unused-header';
-      h5.className = 'card-header d-flex justify-content-between align-items-center';
-      h5.innerHTML = '<span>Unused Widgets</span>';
       const filterRow = document.createElement('div');
-      filterRow.className = 'row g-1 p-2 border-bottom';
+      filterRow.id = 'apex-unused-header';
+      filterRow.className = 'card-header row g-1';
       filterRow.innerHTML =
         '<div class="col-md-6">' +
           '<div class="input-group">' +
@@ -2352,7 +2349,6 @@
             '<option value="">Loading...</option>' +
           '</select>' +
         '</div>';
-      card.appendChild(h5);
       card.appendChild(filterRow);
       unusedContainer.insertBefore(card, unusedSection);
 
@@ -2555,7 +2551,7 @@
     // Fetch and save the real layout from the controller before first folder switch
     if (!layoutSnapshot) {
       try {
-        const r = await fetch(`${LAYOUT_URL}?_=${Date.now()}`, { cache: 'no-store' });
+        const r = await fetch(`${LAYOUT_URL}?_=${Date.now()}`, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' } });
         const { sections: orig } = await r.json();
         layoutSnapshot = orig;
       } catch (_) {
