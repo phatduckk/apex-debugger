@@ -1420,47 +1420,7 @@
       #apex-glyph-grid { max-height: 276px; overflow-y: auto; display: grid;
         grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 4px;
         padding: 8px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; }
-      #apex-modal-backdrop {
-        display: none; position: fixed; inset: 0;
-        background: rgba(0,0,0,0.5); z-index: 1040;
-      }
-      #apex-new-folder-modal {
-        display: none; position: fixed; inset: 0;
-        z-index: 1050; align-items: center; justify-content: center;
-      }
-      #apex-new-folder-modal .modal-dialog {
-        background: #fff; border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.28);
-        width: 50vw; min-width: 380px; max-width: 640px;
-        max-height: 80vh; display: flex; flex-direction: column;
-        margin: auto;
-      }
-      #apex-new-folder-modal .modal-content {
-        display: flex; flex-direction: column; max-height: 80vh;
-      }
-      #apex-new-folder-modal .modal-body { overflow-y: auto; flex: 1; padding: 16px 20px; }
-      #apex-new-folder-modal .modal-footer { padding: 12px 20px; border-top: 1px solid #dee2e6; display: flex; gap: 8px; justify-content: flex-end; }
-      #apex-new-folder-modal .modal-header { background: #222; color: #ccc; border-radius: 6px 6px 0 0; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
-      #apex-new-folder-modal .modal-title { font-size: 14px; font-weight: 500; color: #ccc; }
-      #apex-new-folder-modal .btn-close { filter: invert(1); }
-      #apex-manage-backdrop {
-        display: none; position: fixed; inset: 0;
-        background: rgba(0,0,0,0.5); z-index: 1040;
-      }
-      #apex-manage-folders-modal {
-        display: none; position: fixed; inset: 0;
-        z-index: 1050; align-items: center; justify-content: center;
-      }
-      #apex-manage-folders-modal .modal-dialog {
-        background: #fff; border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.28);
-        width: 40vw; min-width: 340px; max-width: 520px;
-        display: flex; flex-direction: column; margin: auto;
-      }
-      #apex-manage-folders-modal .modal-content { display: flex; flex-direction: column; max-height: 70vh; }
-      #apex-manage-folders-modal .modal-header { background: #222; color: #ccc; border-radius: 6px 6px 0 0; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
-      #apex-manage-folders-modal .modal-title { font-size: 14px; font-weight: 500; color: #ccc; }
-      #apex-manage-folders-modal .btn-close { filter: invert(1); }
-      #apex-manage-folders-modal .modal-body { overflow-y: auto; flex: 1; padding: 12px 16px; }
-      #apex-manage-folders-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: #fff; border-radius: 0 0 6px 6px; }
+      #apex-manage-folders-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: #fff; border-radius: 0 0 calc(0.5rem - 1px) calc(0.5rem - 1px); }
       #apex-folders-export-link { color: #e07820; text-decoration: none; font-size: 13px; cursor: pointer; background: none; border: none; padding: 0; }
       #apex-folders-export-link:hover { text-decoration: underline; color: #c96a18; }
       #apex-folders-import-btn-styled { background: #e07820; border: none; color: #fff; border-radius: 4px; padding: 5px 12px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
@@ -2801,22 +2761,19 @@
   function openManageFoldersModal() {
     const closeManage = () => {
       const el = document.getElementById('apex-manage-folders-modal');
-      const bd = document.getElementById('apex-manage-backdrop');
-      if (el) el.style.display = 'none';
-      if (bd) bd.style.display = 'none';
-      document.body.style.overflow = '';
+      if (el) { el.classList.remove('show'); el.style.display = 'none'; }
+      document.getElementById('apex-modal-backdrop')?.remove();
+      document.body.classList.remove('modal-open');
     };
 
     if (!document.getElementById('apex-manage-folders-modal')) {
-      const bd = document.createElement('div');
-      bd.id = 'apex-manage-backdrop';
-      bd.addEventListener('click', closeManage);
-      document.body.appendChild(bd);
-
       const el = document.createElement('div');
       el.id = 'apex-manage-folders-modal';
+      el.className = 'modal fade';
+      el.tabIndex = -1;
+      el.setAttribute('role', 'dialog');
       el.innerHTML =
-        '<div class="modal-dialog">' +
+        '<div class="modal-dialog modal-dialog-centered">' +
           '<div class="modal-content">' +
             '<div class="modal-header">' +
               '<h5 class="modal-title">Manage Dashboards</h5>' +
@@ -2834,6 +2791,7 @@
           '</div>' +
         '</div>';
       document.body.appendChild(el);
+      el.addEventListener('click', e => { if (e.target === el) closeManage(); });
       el.querySelector('#apex-manage-close-btn').addEventListener('click', closeManage);
 
       el.querySelector('#apex-folders-export-link').addEventListener('click', () => {
@@ -2877,9 +2835,15 @@
       renderManageList(apexFolders);
       const exportLink = document.getElementById('apex-folders-export-link');
       if (exportLink) exportLink.style.display = apexFolders.length ? '' : 'none';
-      document.getElementById('apex-manage-backdrop').style.display = 'block';
-      document.getElementById('apex-manage-folders-modal').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
+      const el = document.getElementById('apex-manage-folders-modal');
+      el.style.display = 'block';
+      el.classList.add('show');
+      const bd = document.createElement('div');
+      bd.id = 'apex-modal-backdrop';
+      bd.className = 'modal-backdrop fade show';
+      bd.addEventListener('click', closeManage);
+      document.body.appendChild(bd);
+      document.body.classList.add('modal-open');
     });
   }
 
@@ -2888,24 +2852,19 @@
   function openNewFolderModal() {
     const closeModal = () => {
       const el = document.getElementById('apex-new-folder-modal');
-      const bd = document.getElementById('apex-modal-backdrop');
-      if (el) el.style.display = 'none';
-      if (bd) bd.style.display = 'none';
-      document.body.style.overflow = '';
+      if (el) { el.classList.remove('show'); el.style.display = 'none'; }
+      document.getElementById('apex-modal-backdrop')?.remove();
+      document.body.classList.remove('modal-open');
     };
 
     if (!document.getElementById('apex-new-folder-modal')) {
-      // Backdrop
-      const backdrop = document.createElement('div');
-      backdrop.id = 'apex-modal-backdrop';
-      backdrop.addEventListener('click', closeModal);
-      document.body.appendChild(backdrop);
-
-      // Modal
       const el = document.createElement('div');
       el.id = 'apex-new-folder-modal';
+      el.className = 'modal fade';
+      el.tabIndex = -1;
+      el.setAttribute('role', 'dialog');
       el.innerHTML =
-        '<div class="modal-dialog">' +
+        '<div class="modal-dialog modal-dialog-centered">' +
           '<div class="modal-content">' +
             '<div class="modal-header">' +
               '<h5 class="modal-title">New Dashboard</h5>' +
@@ -2928,6 +2887,7 @@
           '</div>' +
         '</div>';
       document.body.appendChild(el);
+      el.addEventListener('click', e => { if (e.target === el) closeModal(); });
 
       el.querySelector('#apex-folder-close-btn').addEventListener('click', closeModal);
       el.querySelector('#apex-folder-cancel-btn').addEventListener('click', closeModal);
@@ -2971,9 +2931,14 @@
     modalEl.querySelector('#apex-folder-name-input').value = '';
     modalEl.querySelectorAll('.apex-glyph-btn').forEach(b => b.classList.remove('selected'));
     modalEl.querySelector('.apex-glyph-btn[data-glyph="F660"]').classList.add('selected');
-    document.getElementById('apex-modal-backdrop').style.display = 'block';
-    modalEl.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    modalEl.style.display = 'block';
+    modalEl.classList.add('show');
+    const bd = document.createElement('div');
+    bd.id = 'apex-modal-backdrop';
+    bd.className = 'modal-backdrop fade show';
+    bd.addEventListener('click', closeModal);
+    document.body.appendChild(bd);
+    document.body.classList.add('modal-open');
     modalEl.querySelector('#apex-folder-name-input').focus();
   }
 
