@@ -155,19 +155,84 @@ On switch back to **Default**: replay the snapshot — move nodes back to their 
 ### Storage
 
 ```json
+// chrome.storage.sync
 {
   "apexFolders": [
-    {
-      "id": "folder_1234",
-      "name": "My Folder",
-      "glyph": "F660",
-      "sections": ["gid1,gid2", "gid3,gid4", "gid5", ""]
-      // NOTE: extension-internal format — sections[0..2] = columns 1/2/3, sections[3] unused
-      // This differs from Apex's /rest/layout where sections[0] is the unused tray
-    }
-  ]
+    { "id": "folder_1234", "name": "My Folder", "glyph": "F660" }
+  ],
+  "apexSections": {
+    "folder_1234": ["gid1,gid2", "gid3,gid4", "gid5,apex_div_111", ""]
+  }
 }
 ```
+
+> **Note:** `apexSections[folderId]` indices `[0..2]` = columns 1/2/3, `[3]` = unused (ignored). This differs from Apex's `/rest/layout` where `sections[0]` is the unused tray.
+
+---
+
+## Custom Widgets (Extension-injected)
+
+The extension can inject synthetic `div.dash-widget` elements that don't exist in Apex. These participate in layout switching exactly like native widgets — they're reparented during folder switches and their IDs are saved in the sections CSV.
+
+### Divider Widget
+
+A section header/divider that users can drag into any column. Multiple instances are allowed.
+
+**DOM structure:**
+```html
+<!-- placed instance (in a column) -->
+<div class="dash-widget" id="apex_div_1234567890"
+     data-apex-widget="divider" data-apex-type="divider">
+  <span class="dash-widget-name" style="display:none">Divider</span>
+  <div class="card">
+    <h6 class="card-header text-center">Section Title</h6>
+  </div>
+  <div class="sortable-remove"></div>
+</div>
+
+<!-- template in unused tray — no sortable-remove -->
+<div class="dash-widget" id="apex_div_template" ...>
+  ...no sortable-remove...
+</div>
+```
+
+**ID scheme:**
+| ID | Meaning |
+|----|---------|
+| `apex_div_template` | Always-present source in unused tray — never saved to layout, no X button |
+| `apex_div_TIMESTAMP` | Placed instance — saved in sections CSV, has X button |
+
+**Lifecycle:**
+1. On folder switch → any saved `apex_div_*` IDs in sections CSV are recreated from `apexDividers` storage before `collectWidgets` runs
+2. Template is injected into `dash-section-0` after layout is applied (`injectDividerTemplate`)
+3. When user drags template to a column → `promoteDividerTemplate` fires on `pointerup` (bubble phase, 50ms deferred), finds the template outside s0, assigns a permanent timestamp ID, appends a `sortable-remove` div, wires up dblclick, saves to `apexDividers`, re-injects a fresh template into s0
+4. On switch back to Default → all `[data-apex-widget="divider"]` elements are removed before snapshot restore (`cleanupDividers`)
+
+**X button visibility:**
+- Controlled entirely via inline `style.visibility` (CSS selectors on `#dash.unlocked` did not work reliably)
+- `syncDividerX()` sets `visibility: visible/hidden` on all `.sortable-remove` inside `[data-apex-widget="divider"]` based on `#dash.classList.contains('unlocked')`
+- `syncDividerX` is called: after `applyFolderLayout`, after `promoteDividerTemplate`, and on every `#dash` class change via `dividerUnlockObserver` (MutationObserver set up in `watchDividerTemplate`)
+- Template (`apex_div_template`) has no `sortable-remove` at all — no X ever
+
+**Gotchas for future custom widgets:**
+- The Apex sortable library commits DOM placement asynchronously after `pointerup` — detecting drag completion via MutationObserver on s0 fires too early (element is still detached). Use `pointerup` in bubble phase + `setTimeout(50ms)`.
+- `.dash-widget-container .sortable-remove` (Apex CSS) provides all visual styling for the X button (position, size, icon). Your widget must be inside `.dash-widget-container` for the X to render. Columns are wrapped in `.dash-widget-container`; the unused tray wrapper also has it.
+- `syncDividerX` must be called after any batch of dividers is inserted into the DOM — the unlock observer only fires on class changes, not on new element insertion.
+- Don't fight Apex CSS with `!important` for `visibility` on `.sortable-remove` — use inline styles instead.
+
+**Text editing:** Double-click a placed instance → inline `contentEditable` edit → saved to `apexDividers` on blur or Enter (Escape reverts).
+
+**Storage:**
+```json
+{
+  "apexDividers": {
+    "apex_div_1234567890": { "text": "Dosing" },
+    "apex_div_9876543210": { "text": "Lighting" }
+  }
+}
+```
+
+**Filtering:** `data-apex-type="divider"` participates in the unused tray type dropdown. Hidden `span.dash-widget-name` containing "Divider" makes text search work. The type option is only injected when a custom folder is active (not on the default dashboard).
 
 ---
 
@@ -175,5 +240,5 @@ On switch back to **Default**: replay the snapshot — move nodes back to their 
 
 - To **move** a widget: remove its GID from one section's CSV and insert it in another at the desired position
 - To **reorder** within a column: reorder the GIDs in that section's CSV
-- Changes need to be POSTed back to `/rest/layout` to persist
 - The `sections` array index maps to column order left-to-right
+- Custom `apex_div_*` IDs are valid section entries — treat them the same as native GIDs

@@ -22,8 +22,18 @@
   let layoutSnapshot  = null; // original sections[] from /rest/layout, saved before first folder switch
   let layoutObserver  = null;
   let layoutSaveTimer = null;
-  let folderDropdownInjected = false;
-  let lastFolderApplied = false;
+  let folderDropdownInjected    = false;
+  let lastFolderApplied         = false;
+  let dividerTemplateObserver   = null;
+  let dividerPointerUpHandler   = null;
+  let dividerUnlockObserver     = null;
+
+  function syncDividerX() {
+    const unlocked = document.getElementById('dash')?.classList.contains('unlocked') ?? false;
+    document.querySelectorAll('[data-apex-widget="divider"] .sortable-remove').forEach(el => {
+      el.style.visibility = unlocked ? 'visible' : 'hidden';
+    });
+  }
   let lastUrl    = location.href;
 
   let debugMode      = false;
@@ -2356,6 +2366,8 @@
             const name = widget.querySelector('[class*="-name"]')?.textContent?.trim();
             const type = name ? nameTypeMap.get(name) : undefined;
             if (type) { widget.dataset.apexType = type; types.add(type); }
+            // Preserve pre-stamped types (e.g. custom divider widgets)
+            else if (widget.dataset.apexType) types.add(widget.dataset.apexType);
           });
           const fmtType = t => t.length === 3 ? t.toUpperCase() : t.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
           typeSelect.innerHTML = '<option value="">All Types</option>';
@@ -2366,6 +2378,7 @@
             typeSelect.appendChild(opt);
           });
           typeSelect.disabled = false;
+          if (activeFolder !== 'default') ensureDividerInTypeSelect();
         } catch (_) {}
       })();
     }
@@ -2454,6 +2467,157 @@
     });
   }
 
+  // ── Custom divider widget ──────────────────────────────────────────────────
+
+  function createDividerElement(id, text) {
+    const el = document.createElement('div');
+    el.className = 'dash-widget';
+    el.id = id;
+    el.dataset.apexWidget = 'divider';
+    el.dataset.apexType   = 'divider';
+    el.innerHTML =
+      '<span class="dash-widget-name" style="display:none">Divider</span>' +
+      '<div class="card"><h6 class="card-header text-center" style="cursor:default">' +
+        (text || 'Divider') +
+      '</h6></div>' +
+      (id !== 'apex_div_template' ? '<div class="sortable-remove"></div>' : '');
+    if (id !== 'apex_div_template') {
+      const xBtn = el.querySelector('.sortable-remove');
+      xBtn.style.visibility = document.getElementById('dash')?.classList.contains('unlocked') ? 'visible' : 'hidden';
+      xBtn.addEventListener('click', () => {
+        chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
+          delete apexDividers[el.id];
+          chrome.storage.sync.set({ apexDividers });
+        });
+        el.remove();
+      });
+
+      el.querySelector('h6').addEventListener('dblclick', () => {
+        const h6 = el.querySelector('h6');
+        const prev = h6.textContent;
+        h6.contentEditable = 'true';
+        h6.focus();
+        document.execCommand('selectAll');
+        const commit = () => {
+          h6.contentEditable = 'false';
+          const val = h6.textContent.trim() || 'Divider';
+          h6.textContent = val;
+          chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
+            apexDividers[el.id] = { text: val };
+            chrome.storage.sync.set({ apexDividers });
+          });
+        };
+        h6.addEventListener('blur', commit, { once: true });
+        h6.addEventListener('keydown', e => {
+          if (e.key === 'Enter')  { e.preventDefault(); h6.blur(); }
+          if (e.key === 'Escape') { h6.textContent = prev; h6.style.cursor = 'default'; h6.blur(); }
+        });
+      });
+    }
+    return el;
+  }
+
+  function ensureDividerInTypeSelect() {
+    const sel = document.getElementById('apex-unused-type');
+    if (!sel || sel.querySelector('[value="divider"]')) return;
+    const opt = document.createElement('option');
+    opt.value       = 'divider';
+    opt.textContent = 'Divider';
+    sel.appendChild(opt);
+    sel.disabled = false;
+  }
+
+  function injectDividerTemplate(s0) {
+    if (!s0 || s0.querySelector('#apex_div_template')) return;
+    s0.appendChild(createDividerElement('apex_div_template', 'Divider'));
+    ensureDividerInTypeSelect();
+    watchDividerTemplate(s0);
+  }
+
+  function promoteDividerTemplate(s0) {
+    const placed = document.querySelector('[data-apex-widget="divider"][id="apex_div_template"]');
+    console.log('[apex-ext] promoteDividerTemplate — placed:', placed, 'parent:', placed?.parentElement?.id);
+    if (!placed || placed.parentElement === s0) return; // still in s0, nothing to do
+    const newId = 'apex_div_' + Date.now();
+    const text  = placed.querySelector('h6')?.textContent?.trim() || 'Divider';
+    placed.id = newId;
+    // Add the X button
+    const xBtn = document.createElement('div');
+    xBtn.className = 'sortable-remove';
+    xBtn.style.visibility = document.getElementById('dash')?.classList.contains('unlocked') ? 'visible' : 'hidden';
+    xBtn.addEventListener('click', () => {
+      chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
+        delete apexDividers[placed.id];
+        chrome.storage.sync.set({ apexDividers });
+      });
+      placed.remove();
+    });
+    placed.appendChild(xBtn);
+    placed.querySelector('h6').addEventListener('dblclick', () => {
+      const h6   = placed.querySelector('h6');
+      const prev = h6.textContent;
+      h6.contentEditable = 'true';
+      h6.style.cursor = 'text';
+      h6.focus();
+      document.execCommand('selectAll');
+      const commit = () => {
+        h6.contentEditable = 'false';
+        h6.style.cursor = 'default';
+        const val = h6.textContent.trim() || 'Divider';
+        h6.textContent = val;
+        chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
+          apexDividers[placed.id] = { text: val };
+          chrome.storage.sync.set({ apexDividers });
+        });
+      };
+      h6.addEventListener('blur', commit, { once: true });
+      h6.addEventListener('keydown', e => {
+        if (e.key === 'Enter')  { e.preventDefault(); h6.blur(); }
+        if (e.key === 'Escape') { h6.textContent = prev; h6.style.cursor = 'default'; h6.blur(); }
+      });
+    });
+    chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
+      apexDividers[newId] = { text };
+      chrome.storage.sync.set({ apexDividers });
+    });
+    injectDividerTemplate(s0);
+    syncDividerX();
+  }
+
+  function watchDividerTemplate(s0) {
+    if (dividerTemplateObserver) dividerTemplateObserver.disconnect();
+    dividerTemplateObserver = new MutationObserver(() => {
+      // Placed instance landed back in s0 via X button — remove it
+      s0.querySelectorAll('[data-apex-widget="divider"]:not(#apex_div_template)').forEach(el => {
+        chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
+          delete apexDividers[el.id];
+          chrome.storage.sync.set({ apexDividers });
+        });
+        el.remove();
+      });
+    });
+    // Watch the entire dash container so we catch the template arriving in any column
+    const dashContainer = document.getElementById('dash');
+    if (dashContainer) {
+      dividerTemplateObserver.observe(dashContainer, { childList: true, subtree: true });
+      // Keep X visibility in sync with unlocked class
+      if (dividerUnlockObserver) dividerUnlockObserver.disconnect();
+      dividerUnlockObserver = new MutationObserver(syncDividerX);
+      dividerUnlockObserver.observe(dashContainer, { attributes: true, attributeFilter: ['class'] });
+    }
+    // Promote after drag ends — use bubbling so sortable has already committed placement
+    if (dividerPointerUpHandler) document.removeEventListener('pointerup', dividerPointerUpHandler, false);
+    dividerPointerUpHandler = () => setTimeout(() => promoteDividerTemplate(s0), 50);
+    document.addEventListener('pointerup', dividerPointerUpHandler, false);
+  }
+
+  function cleanupDividers() {
+    if (dividerTemplateObserver) { dividerTemplateObserver.disconnect(); dividerTemplateObserver = null; }
+    if (dividerUnlockObserver)   { dividerUnlockObserver.disconnect();   dividerUnlockObserver   = null; }
+    if (dividerPointerUpHandler) { document.removeEventListener('pointerup', dividerPointerUpHandler, false); dividerPointerUpHandler = null; }
+    document.querySelectorAll('[data-apex-widget="divider"]').forEach(el => el.remove());
+  }
+
   function getFolderSections() {
     return {
       s0: document.getElementById('dash-section-0'),
@@ -2517,7 +2681,7 @@
     if (layoutObserver) { layoutObserver.disconnect(); layoutObserver = null; }
   }
 
-  function applyFolderLayout(folder, sections) {
+  function applyFolderLayout(folder, sections, dividers = {}) {
     const { s0, s1, s2, s3 } = getFolderSections();
     if (!s1 || !s2 || !s3) return;
 
@@ -2526,6 +2690,11 @@
       const toNodes = sec => [...(sec ? sec.querySelectorAll(':scope > .dash-widget') : [])];
       layoutSnapshot = { s1: toNodes(s1), s2: toNodes(s2), s3: toNodes(s3), s0: toNodes(s0) };
     }
+
+    // Create divider DOM nodes for any instances in this folder's saved sections
+    const savedIds = sections.flatMap(csv => (csv || '').split(',').filter(Boolean));
+    savedIds.filter(id => id.startsWith('apex_div_') && !document.getElementById(id))
+      .forEach(id => s0?.appendChild(createDividerElement(id, dividers[id]?.text || 'Divider')));
 
     const all = collectWidgets();
     const frag = detachAllWidgets(all);
@@ -2547,6 +2716,8 @@
     chrome.storage.local.set({ lastActiveDashboard: folder.id });
     updateFolderToggleLabel(folder);
     startWatchingLayout();
+    injectDividerTemplate(s0);
+    syncDividerX();
 
     // If all columns are empty, open the unused drawer as a hint
     if (!col1.length && !col2.length && !col3.length) {
@@ -2575,6 +2746,8 @@
       return;
     }
 
+    cleanupDividers();
+
     if (domRestore) {
       const { s0, s1, s2, s3 } = getFolderSections();
 
@@ -2588,11 +2761,60 @@
     document.documentElement.removeAttribute('data-apex-folder-mode');
   }
 
+  // ── Storage sanitizers ─────────────────────────────────────────────────────
+  // Called on every read from storage and on import. Strip/fix garbage silently
+  // rather than crashing or rendering a broken dashboard.
+
+  function sanitizeFolders(raw) {
+    if (!Array.isArray(raw)) return [];
+    return raw
+      .filter(f => f && typeof f.id === 'string' && f.id && typeof f.name === 'string')
+      .map(f => ({ id: f.id, name: f.name, glyph: typeof f.glyph === 'string' ? f.glyph : 'F660' }));
+  }
+
+  // Known custom widget prefixes. Anything starting with apex_ that isn't in
+  // this list is stripped — handles future versions that drop a widget type.
+  const KNOWN_APEX_PREFIXES = ['apex_div_'];
+
+  function sanitizeSections(raw) {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+    const out = {};
+    for (const [folderId, val] of Object.entries(raw)) {
+      if (typeof folderId !== 'string' || !folderId) continue;
+      const arr = Array.isArray(val) ? val : ['', '', '', ''];
+      out[folderId] = Array.from({ length: 4 }, (_, i) => {
+        const csv = typeof arr[i] === 'string' ? arr[i] : '';
+        return csv.split(',')
+          .map(g => g.trim())
+          .filter(g => {
+            if (!g) return false;
+            if (g.startsWith('apex_')) return KNOWN_APEX_PREFIXES.some(p => g.startsWith(p));
+            return true; // native GID
+          })
+          .join(',');
+      });
+    }
+    return out;
+  }
+
+  function sanitizeDividers(raw) {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+    const out = {};
+    for (const [id, val] of Object.entries(raw)) {
+      if (typeof id !== 'string' || !id.startsWith('apex_div_')) continue;
+      out[id] = { text: typeof val?.text === 'string' && val.text ? val.text : 'Divider' };
+    }
+    return out;
+  }
+
   function switchToFolder(folderId) {
     if (folderId === 'default') { switchToDefault(); return; }
-    chrome.storage.sync.get({ apexFolders: [], apexSections: {} }, ({ apexFolders, apexSections }) => {
+    chrome.storage.sync.get({ apexFolders: [], apexSections: {}, apexDividers: {} }, (raw) => {
+      const apexFolders  = sanitizeFolders(raw.apexFolders);
+      const apexSections = sanitizeSections(raw.apexSections);
+      const apexDividers = sanitizeDividers(raw.apexDividers);
       const folder = apexFolders.find(f => f.id === folderId);
-      if (folder) applyFolderLayout(folder, apexSections[folderId] || ['', '', '', '']);
+      if (folder) applyFolderLayout(folder, apexSections[folderId] || ['', '', '', ''], apexDividers);
     });
   }
 
@@ -2818,8 +3040,10 @@
         const reader = new FileReader();
         reader.onload = e => {
           try {
-            const { apexFolders, apexSections } = JSON.parse(e.target.result);
-            if (!Array.isArray(apexFolders) || typeof apexSections !== 'object') throw new Error();
+            const parsed = JSON.parse(e.target.result);
+            const apexFolders  = sanitizeFolders(parsed.apexFolders);
+            const apexSections = sanitizeSections(parsed.apexSections);
+            if (!apexFolders.length && !Object.keys(apexSections).length) throw new Error('empty or unrecognized import');
             chrome.storage.sync.set({ apexFolders, apexSections }, () => {
               rebuildDropdownOrder(apexFolders);
               renderManageList(apexFolders);
@@ -2924,7 +3148,7 @@
           chrome.storage.sync.set({ apexFolders, apexSections }, () => {
             addFolderToMenu(folder);
             closeModal();
-            applyFolderLayout(folder, apexSections[folder.id]);
+            applyFolderLayout(folder, apexSections[folder.id], {});
           });
         });
       });
