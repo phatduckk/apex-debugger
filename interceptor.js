@@ -1,14 +1,9 @@
 (function () {
   var origFetch = window.fetch;
   window.fetch = function (url, opts) {
-    if (opts && opts.method === 'POST' && String(url).includes('/rest/layout')) {
-      var headers = opts.headers || {};
-      var isOurs = (typeof headers.get === 'function'
-        ? headers.get('X-Apex-Ext-Restore')
-        : headers['X-Apex-Ext-Restore']) === '1';
-      if (document.documentElement.hasAttribute('data-apex-folder-mode') && !isOurs) {
-        return Promise.resolve(new Response('{}', { status: 200, headers: { 'Content-Type': 'application/json' } }));
-      }
+    if (opts && opts.method === 'POST' && String(url).includes('/rest/layout') &&
+        document.documentElement.hasAttribute('data-apex-folder-mode')) {
+      return Promise.resolve(new Response('{}', { status: 200, headers: { 'Content-Type': 'application/json' } }));
     }
     return origFetch.apply(this, arguments);
   };

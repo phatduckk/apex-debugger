@@ -3,7 +3,6 @@
 
   let STATUS_URL  = '';
   let CONFIG_URL  = '';
-  let LAYOUT_URL  = '';
   const POLL_MS   = 5000;
 
   let enabled        = false;
@@ -2576,15 +2575,7 @@
       snap.s0.forEach(n => s0?.appendChild(n));
     }
 
-    // Stamp our restoration POST so the interceptor lets only it through
-    const toCSV = arr => arr.map(n => n.id).filter(Boolean).join(',');
-    fetch(LAYOUT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Apex-Ext-Restore': '1' },
-      body: JSON.stringify({ sections: [toCSV(snap.s0), toCSV(snap.s1), toCSV(snap.s2), toCSV(snap.s3)] }),
-    }).finally(() => {
-      document.documentElement.removeAttribute('data-apex-folder-mode');
-    }).catch(() => {});
+    document.documentElement.removeAttribute('data-apex-folder-mode');
   }
 
   function switchToFolder(folderId) {
@@ -2984,7 +2975,6 @@
 
     STATUS_URL = `http://${hostname}/cgi-bin/status.json`;
     CONFIG_URL = `http://${hostname}/rest/config`;
-    LAYOUT_URL = `http://${hostname}/rest/layout`;
 
     injectTheme(theme);
     injectStyles();
