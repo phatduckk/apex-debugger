@@ -17,6 +17,12 @@
   let exploreOpen = false;
   let lastUrl    = location.href;
 
+  let debugMode      = false;
+  let debugDid       = null;
+  let debugIstat     = null;
+  let debugConfig    = null;
+  let debugLogLines  = false;
+
   const HELP_MIN_H   = 160;
   const HELP_MAX_H   = () => Math.round(window.innerHeight * 0.80);
   const HELP_DEF_H   = 340;
@@ -494,6 +500,7 @@
   // ── Condition evaluator ────────────────────────────────────────────────────
 
   function evaluateLine(text, ctx) {
+    if (text.includes('If Error Apex ')) return 'comment';
     const { inputs, outputs, intensities, nowMin, dowIndex, activeFeed, season, monthIndex } = ctx;
     const t = text.trim();
 
@@ -742,6 +749,7 @@
   // ── Status fetch ───────────────────────────────────────────────────────────
 
   async function fetchStatus() {
+    if (debugMode && debugIstat) return debugIstat;
     try {
       const r = await fetch(STATUS_URL, { cache: 'no-store' });
       return (await r.json()).istat;
@@ -751,6 +759,7 @@
   }
 
   async function fetchSeason() {
+    if (debugMode && debugConfig) return debugConfig.season || null;
     try {
       const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
       return (await r.json()).season || null;
@@ -852,7 +861,12 @@
     let bannerText  = null;
     let bannerStyle = null;
     if (uncertainWinner) {
-      bannerText  = '<i class="af af-fw" style="font-style:normal;color:#856404">&#xF011;</i> Outlet state unknown — unevaluable line(s) present.';
+      const greyLineNums = lines
+        .map((line, i) => (results[i] === 'grey' && i > winnerIdx && /\bThen\s+(ON|OFF)\s*$/i.test(line.textContent.trim())) ? i + 1 : null)
+        .filter(n => n !== null);
+      const last = greyLineNums.pop();
+      const lineList = greyLineNums.length ? greyLineNums.join(', ') + ' & ' + last : String(last);
+      bannerText  = `<i class="af af-fw" style="font-style:normal;color:#856404">&#xF011;</i> Outlet state unknown. Cannot evaluate lines: ${lineList}.`;
       bannerStyle = 'padding:4px 8px;background:#fff3cd;color:#856404;font-size:0.8rem;border-bottom:1px solid #ffc107;font-weight:600;';
     } else if (winnerIdx >= 0) {
       const state  = winnerFinalState === 'ON' ? 'ON' : 'OFF';
@@ -914,7 +928,8 @@
       }
     });
 
-    // Console log: line-by-line evaluation summary
+    // Console log: line-by-line evaluation summary (off by default)
+    if (!debugLogLines) return;
     const probeName = (document.getElementById('output-name') || document.getElementById('input-name-value'))?.value?.trim() || '?';
     const numW = String(lines.length).length;
     console.group(`EVALUATING ${probeName.toUpperCase()}`);
@@ -1013,6 +1028,7 @@
   function buildTipText(lineText, result, isWinner, winnerFinalState, ctx) {
     const t = lineText.trim();
     if (!t) return null;
+    if (result === 'comment') return null;
 
     if (result === 'neutral') {
       return 'Neutral — no effect on outlet state';
@@ -1120,6 +1136,120 @@
     }
 
     return null;
+  }
+
+  // ── Debug panel ────────────────────────────────────────────────────────────
+
+  function debugCheckReady() {
+    const drop = document.getElementById('apex-dbg-drop');
+    if (drop) {
+      const has = [debugIstat ? 'status.json ✓' : null, debugConfig ? 'config ✓' : null].filter(Boolean);
+      const missing = [debugIstat ? null : 'status.json', debugConfig ? null : 'config'].filter(Boolean);
+      drop.textContent = has.join('  ') + (missing.length ? '  — still need: ' + missing.join(', ') : '');
+    }
+    if (!debugIstat || !debugConfig) return;
+    const sel = document.getElementById('apex-dbg-did');
+    const go  = document.getElementById('apex-dbg-go');
+    if (!sel || !go) return;
+
+    // Populate dropdown from oconf
+    const all = [...(debugConfig.oconf || []), ...(debugConfig.iconf || [])]
+      .filter(o => o.name && o.prog)
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+    sel.innerHTML = all
+      .map(o => `<option value="${esc(String(o.did))}">${esc(o.name)} — ${esc(String(o.did))}</option>`)
+      .join('');
+    sel.style.display = 'inline-block';
+    go.style.display  = 'inline-block';
+  }
+
+  function identifyAndStoreDebugFile(json, filename) {
+    if (json.istat) {
+      debugIstat = json.istat;
+    } else if (json.oconf || json.iconf) {
+      debugConfig = json;
+    } else {
+      alert(`Can't identify "${filename}" — expected istat, oconf, or iconf at the top level.`);
+      return;
+    }
+    debugCheckReady();
+  }
+
+  function readDebugFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try { identifyAndStoreDebugFile(JSON.parse(e.target.result), file.name); }
+      catch (_) { alert('Invalid JSON: ' + file.name); }
+    };
+    reader.readAsText(file);
+  }
+
+  function loadDebugProgram() {
+    const sel   = document.getElementById('apex-dbg-did');
+    if (!sel || !debugConfig || !debugIstat) return;
+    const did   = sel.value;
+    const entry = [...(debugConfig.oconf || []), ...(debugConfig.iconf || [])].find(o => String(o.did) === String(did));
+    if (!entry) { alert('No program found for DID: ' + did); return; }
+
+    const editor = document.querySelector('.cm-content');
+    if (!editor) { alert('No code editor found on this page.'); return; }
+
+    debugDid = did;
+
+    // Load program into CodeMirror editor via paste event (CM6 handles this reliably)
+    editor.focus();
+    const editorSel = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(editor);
+    editorSel.removeAllRanges();
+    editorSel.addRange(range);
+
+    const dt = new DataTransfer();
+    dt.setData('text/plain', (entry.prog || '').trimEnd());
+    editor.dispatchEvent(new ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true }));
+
+    // Reset snapshot so it doesn't show as dirty, then evaluate
+    editorSnapshot = null;
+    fetchSeason().then(s => { lastSeason = s; refresh(); });
+  }
+
+  function injectDebugPanel() {
+    if (document.getElementById('apex-debug-panel')) return;
+    const panel = document.createElement('div');
+    panel.id = 'apex-debug-panel';
+    panel.style.cssText = 'margin:12px 0;padding:10px 14px;border:2px dashed #f90;border-radius:6px;background:#fffdf0;font-size:0.82rem;';
+
+    panel.innerHTML =
+      `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px">` +
+        `<span style="font-weight:700;color:#c60">⚠ Debug Mode</span>` +
+        `<select id="apex-dbg-did" style="display:none;max-width:220px"></select>` +
+        `<button id="apex-dbg-go" style="display:none;padding:2px 10px;cursor:pointer">Go</button>` +
+        `<button id="apex-dbg-close" style="margin-left:auto;padding:2px 10px;cursor:pointer">✕ Close</button>` +
+      `</div>` +
+      `<div id="apex-dbg-drop" style="border:2px dashed #f90;border-radius:4px;padding:14px;text-align:center;color:#a66;font-size:0.8rem;cursor:default">` +
+        `Drop status.json &amp; config here` +
+      `</div>`;
+
+    const anchor = document.querySelector('div#content');
+    if (anchor) anchor.after(panel);
+    else document.body.appendChild(panel);
+
+    const drop = document.getElementById('apex-dbg-drop');
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.background = '#fff3cd'; });
+    drop.addEventListener('dragleave', ()  => { drop.style.background = ''; });
+    drop.addEventListener('drop', e => {
+      e.preventDefault();
+      drop.style.background = '';
+      [...e.dataTransfer.files].forEach(readDebugFile);
+    });
+
+    document.getElementById('apex-dbg-go').addEventListener('click', loadDebugProgram);
+    document.getElementById('apex-dbg-close').addEventListener('click', closeDebugPanel);
+  }
+
+  function closeDebugPanel() {
+    debugMode = false; debugDid = null; debugIstat = null; debugConfig = null;
+    document.getElementById('apex-debug-panel')?.remove();
   }
 
   function initGutterTooltip() {
@@ -2145,6 +2275,27 @@
     if (probeOpen)    closeProbePanel();
     editorSnapshot = null;
   }
+
+  // ── Debug entry point ──────────────────────────────────────────────────────
+
+  // CSP blocks inline script injection so showCodeDebug() can't be placed on
+  // the page window directly. Trigger it via a custom event instead:
+  //   document.dispatchEvent(new CustomEvent('apex:showCodeDebug'))
+
+  document.addEventListener('apex:logLineEvaluation', () => {
+    debugLogLines = !debugLogLines;
+    console.log(`%c[Apex Debugger] Line evaluation logging ${debugLogLines ? 'ON' : 'OFF'}`, 'color:#f90;font-weight:bold');
+  });
+
+  document.addEventListener('apex:showCodeDebug', () => {
+    if (!/\/apex\/config\//.test(location.pathname)) {
+      console.warn('[Apex Debugger] showCodeDebug: only works on /apex/config/ pages');
+      return;
+    }
+    debugMode = true;
+    injectDebugPanel();
+    console.log('%c[Apex Debugger] Debug mode ON — load files to continue', 'color:#f90;font-weight:bold');
+  });
 
   // ── Init ───────────────────────────────────────────────────────────────────
 
