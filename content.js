@@ -2547,6 +2547,16 @@
     chrome.storage.local.set({ lastActiveDashboard: folder.id });
     updateFolderToggleLabel(folder);
     startWatchingLayout();
+
+    // If all columns are empty, open the unused drawer as a hint
+    if (!col1.length && !col2.length && !col3.length) {
+      requestAnimationFrame(() => {
+        const icon = document.getElementById('dash-covers-icon');
+        if (icon && icon.classList.contains('af-rotate-180')) {
+          document.getElementById('dash-lock')?.click();
+        }
+      });
+    }
   }
 
   function switchToDefault({ domRestore = true } = {}) {
@@ -2706,6 +2716,7 @@
             const menuBtn = document.querySelector(`#apex-folders-menu [data-id="${folder.id}"]`);
             if (menuBtn) menuBtn.remove();
             renderManageList(updated);
+            if (activeFolder === folder.id) switchToDefault();
           });
         });
       });
@@ -2913,6 +2924,7 @@
           chrome.storage.sync.set({ apexFolders, apexSections }, () => {
             addFolderToMenu(folder);
             closeModal();
+            applyFolderLayout(folder, apexSections[folder.id]);
           });
         });
       });
