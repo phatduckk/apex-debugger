@@ -1043,7 +1043,7 @@
       let probeType  = null;
       let probeDid   = null;
       if (ctx) {
-        const { inputs, outputs, intensities, inputTypes, outputTypes, inputDids, outputDids, nowMin } = ctx;
+        const { inputs, outputs, intensities, inputTypes, outputTypes, inputDids, outputDids, inputUnits, nowMin } = ctx;
         let pm;
 
         // Time HH:MM to HH:MM → show current time
