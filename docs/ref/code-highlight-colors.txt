@@ -1,0 +1,276 @@
+Here is an example for every single type of Apex code/command.
+Any probe/input/output name that has prefix "___" means I personally dont have that probe/module/ouput type.
+
+Syntax Highlighty colors:
+
+#8959a8: (purple)
+	Fallback
+	Set
+	If
+	Then
+	Defer
+	Min
+	OSC
+	WHEN
+	to (ex: If Time 08:00 to 20:00 Then ON ["to" in this line])
+rgb(34, 17, 153) (Midnight Blue)
+	OFF
+	ON
+rgb(0, 136, 85) (green)
+	proble|output|input names (includes virtual outlets etc)		
+	profile names (If Time 10:00 to 18:00 Then PROFILE_NAME, SET PROFILE_NAME etc)
+#f5871f (orange)
+	values in code
+	examples ("VALUE" as placeholder:
+		If Time VALUE to VALUE Then ON
+		If Cax18 < VALUE Then ON
+		If Alkx18 > VALUE Then OFF
+		If FeedA VALUE Then On
+		Defer VALUE Then ON
+		Min Time VALUE Then OFF
+rgb(66, 113, 174) (medium blue)
+	apex keywords:
+		Time
+		FeedA
+		FeedB
+		FeedC
+		FeedD
+		Output
+		Power
+		Apex
+		Error
+rgb(84, 84, 84) (dark gray):
+	>
+	<
+	=
+	pretty much everything else
+
+
+
+
+
+
+########################################
+# BASIC OUTLET STRUCTURE
+########################################
+Fallback OFF
+Set OFF
+
+########################################
+# SIMPLE CONDITIONS
+########################################
+If Temp > 78.5 Then ON
+If Temp < 77.5 Then OFF
+
+If pH > 8.40 Then OFF
+If pH < 7.90 Then ON
+
+If ORP < 300 Then ON
+If ORP > 350 Then OFF
+
+########################################
+# TIME BASED
+########################################
+If Time 08:00 to 20:00 Then ON
+If Time 20:00 to 08:00 Then OFF
+
+########################################
+# FEED MODES
+########################################
+If FeedA 000 Then OFF
+If FeedB 000 Then OFF
+If FeedC 005 Then ON
+
+########################################
+# DEFER / MIN TIME
+########################################
+Defer 001:00 Then ON
+Defer 000:30 Then OFF
+
+Min Time 005:00 Then OFF
+Min Time 010:00 Then ON
+
+########################################
+# OSC (OSCILLATE)
+########################################
+OSC 000:00/005:00/005:00 Then ON
+
+########################################
+# OUTPUT DEPENDENCY
+########################################
+If Output Return_Etc = OFF Then OFF
+If Output Skimmer = OFF Then OFF
+If Output UV = ON Then ON
+
+########################################
+# VIRTUAL OUTLETS
+########################################
+If Output Feeding = ON Then OFF
+If Output RunSkimmer = OFF Then OFF
+
+########################################
+# SWITCH INPUTS (FLOATS / SENSORS)
+########################################
+If Switch ATOLOW OPEN Then ON
+If Switch ATOMAX CLOSED Then OFF
+
+If Switch SkimSW CLOSED Then OFF
+
+########################################
+# ANALOG INPUTS (FMM / LEVELS)
+########################################
+If RES_LV < 5.0 Then OFF
+If Rtn_lv > 9.0 Then OFF
+
+########################################
+# POWER MONITORING
+########################################
+If Power Apex Off 000 Then OFF
+If Power Apex Off 005 Then ON
+
+########################################
+# ERROR HANDLING
+########################################
+If Error Return_Etc Then OFF
+If Error Return_UV Then OFF
+
+########################################
+# DOS / DOSER CONTROL
+########################################
+If Time 00:00 to 00:10 Then ON
+If Output AWC_Enabled = OFF Then OFF
+
+########################################
+# TRIDENT / PROBE BASED
+########################################
+If Alkx18 < 7.50 Then ON
+If Alkx18 > 8.50 Then OFF
+
+If Cax18 < 420 Then ON
+If Mgx18 < 1200 Then ON
+
+########################################
+# WAV / VORTECH / PROFILE USAGE
+########################################
+Set Lagoon
+If Time 10:00 to 18:00 Then ReefCrest
+If FeedA 000 Then Constant
+
+########################################
+# PROFILE EXAMPLES
+########################################
+If Time 09:00 to 18:00 Then Profile DayFlow
+If Time 18:00 to 09:00 Then Profile NightFlow
+
+########################################
+# 0-10V VARIABLE SPEED
+########################################
+Set OFF
+If Time 08:00 to 20:00 Then ON
+If Temp > 79.0 Then OFF
+
+########################################
+# ADVANCED LOGIC COMBINATIONS
+########################################
+If Temp > 80.0 Then OFF
+If Temp < 76.0 Then ON
+If Temp > 78.0 Then ON
+Defer 002:00 Then ON
+Min Time 005:00 Then OFF
+
+########################################
+# MULTI-CONDITION CASCADE
+########################################
+If Output Return_Etc = OFF Then OFF
+If FeedA 000 Then OFF
+If Switch ATOMAX CLOSED Then OFF
+If Temp > 79.0 Then OFF
+If Temp < 78.0 Then ON
+
+########################################
+# ALARM OUTLET
+########################################
+Fallback OFF
+Set OFF
+If Temp > 81.0 Then ON
+If Temp < 75.0 Then ON
+If pH > 8.50 Then ON
+If pH < 7.70 Then ON
+If ORP < 250 Then ON
+
+########################################
+# EMAIL / ALERT
+########################################
+Set OFF
+If Output SndAlm_I6 = ON Then ON
+
+########################################
+# COR PUMP (RETURN_Etc)
+########################################
+Fallback ON
+Set ON
+If FeedA 000 Then OFF
+If Output ATO_EMPTY = ON Then OFF
+If Error Return_Etc Then OFF
+
+########################################
+# OZONE CONTROL
+########################################
+Fallback OFF
+Set OFF
+If ORP < 320 Then ON
+If ORP > 350 Then OFF
+If FeedA 000 Then OFF
+
+########################################
+# SKIMMER CONTROL
+########################################
+Fallback OFF
+Set ON
+If FeedA 000 Then OFF
+If Output Return_Etc = OFF Then OFF
+Defer 005:00 Then ON
+
+########################################
+# ATO CONTROL
+########################################
+Fallback OFF
+Set OFF
+If Switch ATOLOW OPEN Then ON
+If Switch ATOMAX CLOSED Then OFF
+Defer 000:30 Then ON
+Min Time 001:00 Then OFF
+
+########################################
+# MADE-UP (MISSING MODULES)
+########################################
+If ___PAR > 300 Then OFF
+If ___Leak CLOSED Then OFF
+If ___Flow < 20 Then OFF
+If ___Salinity > 36.0 Then OFF
+If ___CO2 ON Then OFF
+
+########################################
+# CHAOTIC / EDGE CASES
+########################################
+If Temp > 78.0 Then ON
+If Temp > 79.0 Then OFF
+If Temp > 80.0 Then ON
+
+########################################
+# DEFAULT FALLBACK VARIATIONS
+########################################
+Fallback ON
+Set ON
+
+########################################
+# WHEN (LESS COMMON)
+########################################
+When On > 010:00 Then OFF
+When Off > 005:00 Then ON
+
+########################################
+# FINAL SAFETY OVERRIDE
+########################################
+If Power Apex Off 000 Then OFF
+If Error Apex Then OFF
