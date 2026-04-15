@@ -1930,6 +1930,7 @@
   async function openExplorePanel() {
     injectExplorePanel();
     requestAnimationFrame(() => document.getElementById('apex-explore-panel').classList.add('open'));
+    document.getElementById('apex-explore-btn')?.classList.add('active');
     exploreOpen = true;
 
     // Wire left/right divider resizer
@@ -2138,6 +2139,7 @@
   function closeExplorePanel() {
     const panel = document.getElementById('apex-explore-panel');
     if (panel) panel.classList.remove('open');
+    document.getElementById('apex-explore-btn')?.classList.remove('active');
     exploreOpen = false;
   }
 
@@ -2383,15 +2385,8 @@
       })();
     }
 
-    const helpDropdown = document.querySelector('[title="Help"] ~ .dropdown-menu, [title="Help"] + .dropdown-menu');
-    if (helpDropdown && !helpDropdown.querySelector('.apex-explore-item')) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'dropdown-item apex-explore-item';
-      btn.innerHTML = '<div class="menu-item-basic"><i class="af af-fw af-explore"></i> Explore</div>';
-      btn.addEventListener('click', openExplorePanel);
-      helpDropdown.appendChild(btn);
-    }
+    // Remove any stale explore item from help dropdown (legacy location)
+    document.querySelector('.apex-explore-item')?.remove();
 
     const dashLock = document.getElementById('dash-lock');
     if (!folderDropdownInjected) {
@@ -2419,6 +2414,18 @@
       group.querySelector('[data-id="default"]').addEventListener('click', () => switchToFolder('default'));
       // Populate any already-saved folders
       chrome.storage.sync.get({ apexFolders: [] }, ({ apexFolders }) => apexFolders.forEach(addFolderToMenu));
+    }
+
+    const folderGroup = document.getElementById('apex-folder-dropdown');
+    if (folderGroup && !document.getElementById('apex-explore-btn')) {
+      const exploreBtn = document.createElement('button');
+      exploreBtn.id        = 'apex-explore-btn';
+      exploreBtn.type      = 'button';
+      exploreBtn.title     = 'Explore';
+      exploreBtn.className = 'btn btn-secondary';
+      exploreBtn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF00E;</i>';
+      exploreBtn.addEventListener('click', () => exploreOpen ? closeExplorePanel() : openExplorePanel());
+      folderGroup.insertAdjacentElement('beforebegin', exploreBtn);
     }
 
     // Re-apply last active dashboard once widgets are in the DOM
