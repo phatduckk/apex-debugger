@@ -4,12 +4,12 @@
 
 For most outputs, power data is exposed as separate entries in `status.json` under `inputs`:
 
-| Suffix | Meaning |
-|--------|---------|
-| `<name>W` | Watts |
-| `<name>A` | Amps |
+| Suffix | `type` field | Meaning |
+|--------|-------------|---------|
+| `<name>W` | `pwr` | Watts |
+| `<name>A` | `Amps` | Amps |
 
-**Example:** An output named `outputX` → look for inputs named `outputXW` (watts) and `outputXA` (amps).
+**Example:** An output named `outputX` → look for inputs named `outputXW` (watts, `type: "pwr"`) and `outputXA` (amps, `type: "Amps"`).
 
 > This pattern applies to most inputs/outputs. For inputs specifically, this is the expected path — the array-status fallback below has not been observed on inputs, though it can't be ruled out.
 
