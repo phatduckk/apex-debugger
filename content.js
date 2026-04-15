@@ -1406,7 +1406,7 @@
       #apex-probe-left { overflow-y: auto; padding: 10px 16px 16px; width: 40%; flex-shrink: 0; }
       #apex-probe-divider { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
       #apex-probe-divider:hover, #apex-probe-divider.dragging { background: #aaa; }
-      #apex-probe-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #fff; font-family: monospace; font-size: 12px; line-height: 1.7; }
+      #apex-probe-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #fff; font-family: "Source Code Pro", monospace; font-size: 16px; font-weight: 400; line-height: 22.4px; }
       #apex-probe-right p { color: #bbb; margin: 0; font-family: system-ui, sans-serif; }
       .apex-probe-row { cursor: pointer; }
       .apex-probe-row:hover td { background: rgba(0,119,204,0.06) !important; }
@@ -1596,7 +1596,7 @@
       #apex-explore-divider2:hover, #apex-explore-divider2.dragging { background: #bbb; }
       #apex-explore-panel.preview-open #apex-explore-divider2 { width: 5px; }
       #apex-explore-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #f5f5f5; }
-      #apex-explore-preview { width: 0; flex-shrink: 0; overflow: hidden; background: #fff; font-size: 12px; white-space: pre; font-family: monospace; border-left: 1px solid #e0e0e0; transition: width 0.2s ease, padding 0.2s ease; padding: 0; }
+      #apex-explore-preview { width: 0; flex-shrink: 0; overflow: hidden; background: #fff; font-size: 12px; white-space: pre; font-family: "Source Code Pro", monospace; border-left: 1px solid #e0e0e0; transition: width 0.2s ease, padding 0.2s ease; padding: 0; }
       #apex-explore-panel.preview-open #apex-explore-preview { width: 340px; padding: 10px 16px 16px; overflow-y: auto; }
       #apex-explore-preview p { white-space: normal; font-family: inherit; color: #888; margin: 0; }
       .apex-explore-ref.active { background: #fff3e8; }
@@ -1796,29 +1796,31 @@
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  function highlightLine(raw, probeName) {
+  function highlightLine(raw, probeName, knownNames = []) {
     const escapedProbe = probeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const re = new RegExp([
+    const otherNames = knownNames
+      .filter(n => n && n.toLowerCase() !== probeName.toLowerCase())
+      .map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const parts = [
       `(?<probe>${escapedProbe})`,
-      `(?<kw>\\b(?:If|Then|Set|Fallback|OSC|Defer|Min\\s+Time|When)\\b)`,
-      `(?<on>\\bON\\b)`,
-      `(?<off>\\bOFF\\b)`,
-      `(?<type>\\b(?:Output|Outlet|Input|Time|DOW|Sun|Moon|Error|FeedA|FeedB|FeedC|FeedD|Power|Apex|EB|Percent)\\b)`,
+      otherNames.length ? `(?<name>${otherNames.join('|')})` : null,
+      `(?<kw>\\b(?:If|ON|OFF|OPEN|CLOSED|Output|Outlet|Input|Error|FeedA|FeedB|FeedC|FeedD|DOW|Sun|Moon|Power|EB|Percent)\\b)`,
+      `(?<flow>\\b(?:Then|Set|Fallback|OSC|Defer|Min\\s+Time|When|to)\\b)`,
       `(?<rt>RT\\+[-\\d.]*)`,
-      `(?<op>\\b(?:OPEN|CLOSED|to)\\b|[><]=?)`,
+      `(?<op>[><]=?|=)`,
       `(?<time>\\d{1,2}:\\d{2}(?::\\d{2})?)`,
       `(?<num>\\d+\\.?\\d*)`,
-    ].join('|'), 'gi');
+    ].filter(Boolean);
+    const re = new RegExp(parts.join('|'), 'gi');
     const styles = {
-      probe: 'color:#e07820;font-weight:700',
-      kw:    'color:#0077cc;font-weight:500',
-      on:    'color:#27ae60;font-weight:600',
-      off:   'color:#e74c3c;font-weight:600',
-      type:  'color:#7e57c2',
-      rt:    'color:#e07820',
-      op:    'color:#999',
-      time:  'color:#16a085',
-      num:   'color:#16a085',
+      probe: 'color:rgb(0,136,85);font-weight:700',
+      name:  'color:rgb(0,136,85);font-weight:600',
+      kw:    'color:rgb(57,65,148)',
+      flow:  'color:rgb(155,89,182)',
+      rt:    'color:rgb(245,135,31)',
+      op:    'color:rgb(245,135,31)',
+      time:  'color:rgb(245,135,31)',
+      num:   'color:rgb(245,135,31)',
     };
     let out = '', last = 0, m;
     while ((m = re.exec(raw)) !== null) {
@@ -2074,7 +2076,7 @@
             preview.innerHTML = lines.map((line, i) => {
               const n = i + 1;
               const cls = 'apex-prog-line' + (n === matchNum ? ' match' : '');
-              return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name)}</span>`;
+              return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name, allProbes.map(p => p.name))}</span>`;
             }).join('');
             document.getElementById('apex-explore-panel')?.classList.add('preview-open');
             requestAnimationFrame(() => preview.querySelector('.match')?.scrollIntoView({ block: 'center' }));
