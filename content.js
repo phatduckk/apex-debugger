@@ -1590,11 +1590,14 @@
       .apex-explore-probe { padding: 6px 12px; cursor: pointer; font-size: 12px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .apex-explore-probe:hover { background: #f5f5f5; }
       .apex-explore-probe.active { background: #e07820; color: #fff; }
-      #apex-explore-divider, #apex-explore-divider2 { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
-      #apex-explore-divider:hover, #apex-explore-divider.dragging,
+      #apex-explore-divider { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
+      #apex-explore-divider:hover, #apex-explore-divider.dragging { background: #bbb; }
+      #apex-explore-divider2 { width: 0; overflow: hidden; background: #ddd; flex-shrink: 0; transition: width 0.2s ease, background 0.15s; cursor: col-resize; }
       #apex-explore-divider2:hover, #apex-explore-divider2.dragging { background: #bbb; }
+      #apex-explore-panel.preview-open #apex-explore-divider2 { width: 5px; }
       #apex-explore-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #f5f5f5; }
-      #apex-explore-preview { width: 340px; flex-shrink: 0; overflow-y: auto; padding: 10px 16px 16px; background: #fff; font-size: 12px; white-space: pre; font-family: monospace; border-left: 1px solid #e0e0e0; }
+      #apex-explore-preview { width: 0; flex-shrink: 0; overflow: hidden; background: #fff; font-size: 12px; white-space: pre; font-family: monospace; border-left: 1px solid #e0e0e0; transition: width 0.2s ease, padding 0.2s ease; padding: 0; }
+      #apex-explore-panel.preview-open #apex-explore-preview { width: 340px; padding: 10px 16px 16px; overflow-y: auto; }
       #apex-explore-preview p { white-space: normal; font-family: inherit; color: #888; margin: 0; }
       .apex-explore-ref.active { background: #fff3e8; }
       #apex-explore-right h3 { color: #e07820; margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; }
@@ -2051,6 +2054,7 @@
       right.querySelectorAll('.apex-explore-toggle button').forEach(btn => {
         btn.addEventListener('click', () => {
           exploreMode = btn.dataset.mode;
+          document.getElementById('apex-explore-panel')?.classList.remove('preview-open');
           renderRefs(name);
         });
       });
@@ -2072,7 +2076,8 @@
               const cls = 'apex-prog-line' + (n === matchNum ? ' match' : '');
               return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name)}</span>`;
             }).join('');
-            preview.querySelector('.match')?.scrollIntoView({ block: 'center' });
+            document.getElementById('apex-explore-panel')?.classList.add('preview-open');
+            requestAnimationFrame(() => preview.querySelector('.match')?.scrollIntoView({ block: 'center' }));
           });
         });
       }
@@ -2086,6 +2091,7 @@
       document.querySelectorAll('.apex-explore-keyword').forEach(el =>
         el.classList.toggle('active', el.dataset.name === name)
       );
+      document.getElementById('apex-explore-panel')?.classList.remove('preview-open');
       renderRefs(name);
     }
 
