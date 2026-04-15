@@ -60,7 +60,23 @@ Fields:
 - value: current reading
 - unit: measurement unit (F, C, pH, mV, etc.)
 
-Outputs (type: "out") represent controllable devices like outlets, solenoids, pumps, and lights. Their state is represented as a string in the `status` field.
+Outputs (type: "out") represent controllable devices like outlets, solenoids, pumps, and lights. Their state is represented as an **array** in the `status` field (not a plain string).
+
+## Output status array structure
+
+The `status` field on each output is an array. Index meaning is consistent across most output types:
+
+| Index | Name            | Meaning                                      | Example Values                  | Notes                                      |
+|-------|-----------------|----------------------------------------------|---------------------------------|--------------------------------------------|
+| `[0]` | State / Mode    | Primary state or type indicator              | `ON`, `OFF`, `TBL`, `AUTO`      | Always present; most important field       |
+| `[1]` | Value           | Numeric/raw value (if applicable)            | `953`, `8.21`, `120`            | Empty for virtual outputs                  |
+| `[2]` | Status / Health | Device/probe health status                   | `OK`, `ERR`, `UNK`             | Usually present                            |
+| `[3]` | Extra / Flags   | Additional info (alarms, flags, conditions)  | `""`, `ALM`, `Fallback`         | Optional, varies by device/module          |
+
+DOS outputs have a 5-element array — `[3]` = cumulative volume (mL), `[4]` = daily rate (mL/day).
+MXM lights shift `OK` to `[3]` and use `[2]` for control mode (e.g. `Cnst`).
+
+We only read `status[0]` for outlet state evaluation.
 
 Common status values:
 - AOF: Auto mode, currently OFF

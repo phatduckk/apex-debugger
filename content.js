@@ -8,7 +8,10 @@
   let enabled        = false;
   let pollTimer      = null;
   let lastCtx        = null;
-  let lastSeason     = null;
+  let lastSeason        = null;
+  let lastFeedIntervals = [0, 0, 0, 0]; // seconds, indexed 0=FeedA … 3=FeedD
+  let feedEndedAt       = {};           // { 1: Date.now(), … } keyed by feed number
+  let prevFeed          = { name: 0, active: 0 };
   let beefMode       = false;
   let editorSnapshot = null;
   let editorObserver = null;
@@ -501,7 +504,7 @@
 
   function evaluateLine(text, ctx) {
     if (text.includes('If Error Apex ')) return 'comment';
-    const { inputs, outputs, intensities, nowMin, dowIndex, activeFeed, season, monthIndex } = ctx;
+    const { inputs, outputs, intensities, nowMin, dowIndex, activeFeed, season, monthIndex, feedEndedAt } = ctx;
     const t = text.trim();
 
     // Blank lines → neutral
@@ -555,11 +558,20 @@
     }
 
     // ── If FeedA/B/C/D MMM ─────────────────────────────────────────────────
-    m = cond.match(/^(FeedA|FeedB|FeedC|FeedD)\s+\d+$/i);
+    // MMM = delay in minutes the condition stays true AFTER the feed ends.
+    // 000 = only true while feed is running; >0 = also true for MMM min after.
+    m = cond.match(/^(FeedA|FeedB|FeedC|FeedD)\s+(\d+)$/i);
     if (m) {
       const feedMap = { feeda: 1, feedb: 2, feedc: 3, feedd: 4 };
       const expected = feedMap[m[1].toLowerCase()];
-      return activeFeed === expected ? 'green' : 'red';
+      const delayMs  = parseInt(m[2], 10) * 60 * 1000;
+      if (activeFeed === expected) return 'green';
+      if (delayMs > 0) {
+        const endedAt = feedEndedAt?.[expected];
+        if (endedAt !== undefined) return Date.now() - endedAt < delayMs ? 'green' : 'red';
+        return 'grey'; // feed not seen ending since load — window unknown
+      }
+      return 'red';
     }
 
     // ── If Output|Outlet <name> = ON|OFF ───────────────────────────────────
@@ -758,13 +770,20 @@
     }
   }
 
-  async function fetchSeason() {
-    if (debugMode && debugConfig) return debugConfig.season || null;
+  async function fetchConfig() {
+    if (debugMode && debugConfig) return {
+      season:        debugConfig.season || null,
+      feedIntervals: debugConfig.misc?.feedInterval || [0, 0, 0, 0],
+    };
     try {
-      const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
-      return (await r.json()).season || null;
+      const r    = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
+      const json = await r.json();
+      return {
+        season:        json.season || null,
+        feedIntervals: json.misc?.feedInterval || [0, 0, 0, 0],
+      };
     } catch (_) {
-      return null;
+      return { season: null, feedIntervals: [0, 0, 0, 0] };
     }
   }
 
@@ -803,7 +822,7 @@
     // Month index for season arrays: 0=Jan, 11=Dec
     const monthIndex = now.getMonth();
 
-    // Feed: active=0 means none; name 1=A,2=B,3=C,4=D (verify against real data)
+    // Feed: active = seconds remaining (0 = none); name 1=FeedA, 2=FeedB, 3=FeedC, 4=FeedD
     const activeFeed = istat.feed && istat.feed.active ? istat.feed.name : 0;
 
     return { inputs, outputs, outputStatuses, intensities, inputTypes, outputTypes, inputDids, outputDids, inputUnits, nowMin, dowIndex, activeFeed, monthIndex };
@@ -972,7 +991,15 @@
     if (!enabled) return;
     const istat = await fetchStatus();
     if (!istat) return;
-    lastCtx = { ...buildContext(istat), season: lastSeason };
+
+    // Track feed → inactive transitions for delay-window evaluation
+    const feed = istat.feed || { name: 0, active: 0 };
+    if (prevFeed.active > 0 && feed.active === 0 && prevFeed.name > 0) {
+      feedEndedAt[prevFeed.name] = Date.now();
+    }
+    prevFeed = { name: feed.name, active: feed.active };
+
+    lastCtx = { ...buildContext(istat), season: lastSeason, feedEndedAt };
     applyColors(lastCtx);
   }
 
@@ -1035,7 +1062,7 @@
     }
 
     if (result === 'grey') {
-      return 'Cannot evaluate\nRequires outlet history or data not in status.json\n(Sun, Moon, OSC, Defer, Min Time, When, Power…)';
+      return 'Cannot evaluate\nRequires outlet history or data not in status.json\n(Sun, Moon, OSC, Defer, Min Time, When, Power, Feed delay…)';
     }
 
     // Set ON / Set OFF
@@ -1210,7 +1237,7 @@
 
     // Reset snapshot so it doesn't show as dirty, then evaluate
     editorSnapshot = null;
-    fetchSeason().then(s => { lastSeason = s; refresh(); });
+    fetchConfig().then(({ season, feedIntervals }) => { lastSeason = season; lastFeedIntervals = feedIntervals; refresh(); });
   }
 
   function injectDebugPanel() {
@@ -1531,7 +1558,7 @@
       <tr><td>If Outlet [name] = ON|OFF Then ON|OFF</td><td>Identical to Output (older firmware keyword).</td></tr>
       <tr><td>If Output [name] Percent &gt; [val] Then ON|OFF</td><td>Tests variable output intensity 0–100.</td></tr>
       <tr><td>If Output [name] Percent &lt; [val] Then ON|OFF</td><td>Same, less-than.</td></tr>
-      <tr><td>If FeedA|B|C|D MMM Then ON|OFF</td><td>True if that feed cycle is active. MMM = delay minutes after cycle ends.</td></tr>
+      <tr><td>If FeedA|B|C|D MMM Then ON|OFF</td><td>True while that feed cycle is running. MMM = minutes to stay true after it ends. If MMM &gt; 0 and feed is not active, shown grey — post-feed window can't be determined from status alone.</td></tr>
       <tr><td>If Error [name] Then ON|OFF</td><td>True if the named outlet is in ERR state (overload / short circuit).</td></tr>
       <tr><td>If Sun [+/-MMM]/[+/-MMM] Then ON|OFF</td><td>True if current time is between (sunrise + offset1) and (sunset + offset2). Data from /rest/config.</td></tr>
       <tr><td>If Moon [+/-MMM]/[+/-MMM] Then ON|OFF</td><td>True if current time is between (moonrise + offset1) and (moonset + offset2). Data from /rest/config.</td></tr>
@@ -2040,7 +2067,7 @@
 
     if (enabled) {
       btn && btn.classList.add('active');
-      fetchSeason().then(s => { lastSeason = s; refresh(); });
+      fetchConfig().then(({ season, feedIntervals }) => { lastSeason = season; lastFeedIntervals = feedIntervals; refresh(); });
       pollTimer = setInterval(refresh, POLL_MS);
       startEditorObserver();
     } else {
