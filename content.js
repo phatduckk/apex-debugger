@@ -1804,8 +1804,9 @@
     const parts = [
       `(?<probe>${escapedProbe})`,
       otherNames.length ? `(?<name>${otherNames.join('|')})` : null,
-      `(?<kw>\\b(?:If|ON|OFF|OPEN|CLOSED|Output|Outlet|Input|Error|FeedA|FeedB|FeedC|FeedD|DOW|Sun|Moon|Power|EB|Percent)\\b)`,
-      `(?<flow>\\b(?:Then|Set|Fallback|OSC|Defer|Min\\s+Time|When|to)\\b)`,
+      `(?<ctrl>\\b(?:If|Then|Set|Fallback|Defer|Min|OSC|When|to)\\b)`,
+      `(?<state>\\b(?:ON|OFF|OPEN|CLOSED)\\b)`,
+      `(?<type>\\b(?:Time|FeedA|FeedB|FeedC|FeedD|Output|Switch|Power|Apex|Error|Input|Outlet|Sun|Moon|DOW|EB|Percent|Amps|Watts)\\b)`,
       `(?<rt>RT\\+[-\\d.]*)`,
       `(?<op>[><]=?|=)`,
       `(?<time>\\d{1,2}:\\d{2}(?::\\d{2})?)`,
@@ -1815,12 +1816,13 @@
     const styles = {
       probe: 'color:rgb(0,136,85);font-weight:700',
       name:  'color:rgb(0,136,85);font-weight:600',
-      kw:    'color:rgb(57,65,148)',
-      flow:  'color:rgb(155,89,182)',
-      rt:    'color:rgb(245,135,31)',
-      op:    'color:rgb(245,135,31)',
-      time:  'color:rgb(245,135,31)',
-      num:   'color:rgb(245,135,31)',
+      ctrl:  'color:#8959a8',
+      state: 'color:rgb(34,17,153)',
+      type:  'color:rgb(66,113,174)',
+      rt:    'color:#f5871f',
+      op:    'color:rgb(84,84,84)',
+      time:  'color:#f5871f',
+      num:   'color:#f5871f',
     };
     let out = '', last = 0, m;
     while ((m = re.exec(raw)) !== null) {
@@ -2021,7 +2023,7 @@
           ? `<h3>Referenced in (${refs.length})</h3>` + refs.map(r =>
               `<div class="apex-explore-ref" data-did="${esc(String(r.did))}" style="cursor:pointer">` +
                 `<div style="font-weight:700;margin-bottom:2px"><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank" style="color:inherit;text-decoration:none">${esc(r.name)}</a></div>` +
-                `<code style="font-size:11px">${highlightLine(r.line, name)}</code>` +
+                `<code style="font-size:11px">${highlightLine(r.line, name, allProbes.map(p => p.name))}</code>` +
               `</div>`).join('')
           : `<h3>Referenced in</h3><p style="color:#888;margin:8px 0 0">No other probes reference <strong>${esc(name)}</strong>.</p>`;
       } else {

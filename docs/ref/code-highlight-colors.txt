@@ -36,6 +36,8 @@ rgb(66, 113, 174) (medium blue)
 		FeedC
 		FeedD
 		Output
+		Amps
+		Watts
 		Power
 		Apex
 		Error
