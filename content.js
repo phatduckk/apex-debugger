@@ -2911,21 +2911,24 @@
     const sorted = [...analyses].sort((a, b) => ORDER[a.status] - ORDER[b.status]);
 
     body.innerHTML =
-      `<p style="margin:0 0 10px;font-size:13px;color:#555">Review the dashboards found in your backup:</p>` +
+      `<p style="margin:0 0 8px;font-size:13px;color:#555">Review the dashboards found in your backup:</p>` +
+      `<div style="display:flex;flex-direction:column;gap:4px">` +
       sorted.map((a, i) =>
-        `<div style="border:1px solid #e0e0e0;border-radius:4px;padding:8px 10px;margin-bottom:6px;">` +
-          `<div style="display:flex;align-items:center;gap:8px;">` +
+        `<div style="background:#f8f8f8;border:1px solid #e0e0e0;border-radius:5px;padding:8px 10px">` +
+          `<div style="display:flex;align-items:center;gap:8px">` +
             `<i class="af apex-gp-${ICON[a.status]}" style="color:${COLOR[a.status]};font-size:16px;flex-shrink:0"></i>` +
-            `<span style="font-weight:600;flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.folder.name)}</span>` +
-            `<select class="apex-import-action form-select form-select-sm" style="width:auto;min-width:190px" data-idx="${i}">` +
+            `<span style="font-weight:600;font-size:13px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.folder.name)}</span>` +
+            `<select class="apex-import-action form-select form-select-sm" data-idx="${i}" style="width:auto;flex-shrink:0">` +
               (a.selected === null ? `<option value="" selected disabled>Choose an action…</option>` : '') +
               a.options.map(o => `<option value="${o.value}"${a.selected === o.value ? ' selected' : ''}>${o.label}</option>`).join('') +
             `</select>` +
           `</div>` +
-          (a.message ? `<div style="margin-top:4px;padding-left:24px;font-size:12px;color:#666">${a.message}</div>` : '') +
+          (a.message ? `<div style="margin:4px 0 0 24px;font-size:12px;color:#666">${a.message}</div>` : '') +
         `</div>`
       ).join('') +
-      `<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px;">` +
+      `</div>` +
+      `<hr style="margin:10px -16px 0">` +
+      `<div style="display:flex;gap:8px;justify-content:flex-end;margin:0 -16px -16px;padding:10px 16px">` +
         `<button class="btn btn-sm btn-secondary" id="apex-import-review-cancel">Cancel</button>` +
         `<button class="btn btn-sm" id="apex-import-review-confirm" style="background:#e07820;border-color:#e07820;color:#fff"><i class="af apex-gp-f56d" style="margin-right:5px"></i>Confirm Import</button>` +
       `</div>`;
@@ -3197,7 +3200,7 @@
       el.tabIndex = -1;
       el.setAttribute('role', 'dialog');
       el.innerHTML =
-        '<div class="modal-dialog modal-dialog-centered">' +
+        '<div class="modal-dialog modal-dialog-centered" style="max-width:640px">' +
           '<div class="modal-content">' +
             '<div class="modal-header">' +
               '<h5 class="modal-title">Manage Dashboards</h5>' +
