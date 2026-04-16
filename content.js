@@ -2817,104 +2817,183 @@
     return `${baseName}(${n})`;
   }
 
-  function getNameCollisions(importedFolders, currentFolders) {
+  function analyzeImportFolder(folder, importedSections, parsedCustomElements, currentFolders) {
+    const currentById   = new Map(currentFolders.map(f => [f.id, f]));
     const currentByName = new Map(currentFolders.map(f => [f.name.toLowerCase(), f]));
-    return importedFolders
-      .filter(f => {
-        const existing = currentByName.get(f.name.toLowerCase());
-        return existing && existing.id !== f.id;
-      })
-      .map(f => ({ imported: f, existing: currentByName.get(f.name.toLowerCase()) }));
-  }
+    const existingById   = currentById.get(folder.id);
+    const existingByName = currentByName.get(folder.name.toLowerCase());
+    const sections = importedSections[folder.id] || ['', '', '', ''];
 
-  function resolveCollisions(collisions, currentSections, finalFolders, finalSections, onComplete) {
-    const modal = document.getElementById('apex-manage-folders-modal');
-    const allNames = new Set(finalFolders.map(f => f.name.toLowerCase()));
-    let idx = 0;
-
-    function next() {
-      modal.querySelector('.apex-collision-prompt')?.remove();
-      if (idx >= collisions.length) { onComplete(finalFolders, finalSections); return; }
-
-      const { imported, existing } = collisions[idx];
-      const suggestedName = nextAvailableName(imported.name, allNames);
-
-      const div = document.createElement('div');
-      div.className = 'apex-collision-prompt';
-      div.style.cssText = 'background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:10px 14px;margin:0 0 10px;font-size:13px;';
-      div.innerHTML =
-        `<strong>"${esc(imported.name)}"</strong> already exists. What should we do?` +
-        `<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">` +
-          `<button class="btn btn-sm btn-danger" data-action="replace">Replace existing</button>` +
-          `<button class="btn btn-sm btn-warning" data-action="rename">Import as &ldquo;${esc(suggestedName)}&rdquo;</button>` +
-          `<button class="btn btn-sm btn-secondary" data-action="cancel">Cancel import</button>` +
-        `</div>`;
-
-      modal.querySelector('.modal-body').prepend(div);
-
-      div.querySelectorAll('[data-action]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const action = btn.dataset.action;
-          div.remove();
-          if (action === 'cancel') return;
-          if (action === 'rename') {
-            const fi = finalFolders.findIndex(f => f.id === imported.id);
-            if (fi !== -1) finalFolders[fi] = { ...finalFolders[fi], name: suggestedName };
-            finalFolders.push(existing);
-            finalSections[existing.id] = currentSections[existing.id] || ['', '', '', ''];
-            allNames.add(suggestedName.toLowerCase());
-          }
-          idx++;
-          next();
+    // Unknown GIDs on this system (only checkable when on dashboard)
+    const liveWidgets = collectWidgets();
+    let unknownGids = 0;
+    if (Object.keys(liveWidgets).length) {
+      sections.forEach(csv => {
+        if (!csv) return;
+        csv.split(',').forEach(g => {
+          g = g.trim();
+          if (!g || g.startsWith('apex_')) return;
+          if (!liveWidgets[g]) unknownGids++;
         });
       });
     }
 
-    next();
-  }
-
-  function countSectionGids(sections) {
-    let n = 0;
-    for (const cols of Object.values(sections || {})) {
-      if (!Array.isArray(cols)) continue;
-      cols.forEach(csv => { if (typeof csv === 'string') csv.split(',').forEach(g => { if (g.trim()) n++; }); });
+    // Unsupported custom widget types referenced by this folder
+    const knownCwTypes = new Set(['cw_divider']);
+    const folderGids = new Set(sections.flatMap(csv => csv ? csv.split(',').map(g => g.trim()).filter(Boolean) : []));
+    let skippedCw = 0;
+    for (const [id, val] of Object.entries(parsedCustomElements || {})) {
+      if (folderGids.has(id) && val?.type && !knownCwTypes.has(val.type)) skippedCw++;
     }
-    return n;
-  }
 
-  function getImportWarnings(parsed, apexFolders, apexSections) {
     const warnings = [];
+    if (unknownGids > 0) warnings.push(`${unknownGids} unknown widget${unknownGids !== 1 ? 's' : ''} will be skipped`);
+    if (skippedCw > 0)   warnings.push(`${skippedCw} custom widget type${skippedCw !== 1 ? 's' : ''} are no longer supported and will be skipped`);
 
-    // Folders with invalid structure dropped by sanitizer
-    const rawFolderCount = Array.isArray(parsed.apexFolders) ? parsed.apexFolders.length : 0;
-    const droppedFolders = rawFolderCount - apexFolders.length;
-    if (droppedFolders > 0)
-      warnings.push(`${droppedFolders} dashboard${droppedFolders !== 1 ? 's' : ''} had invalid data and will be removed`);
-
-    // GIDs stripped by sanitizer (unrecognized apex_ prefixes etc.)
-    const droppedGids = countSectionGids(parsed.apexSections) - countSectionGids(apexSections);
-    if (droppedGids > 0)
-      warnings.push(`${droppedGids} widget reference${droppedGids !== 1 ? 's' : ''} had unrecognized IDs and will be removed`);
-
-    // GIDs that don't exist on this system (only checkable if on dashboard)
-    const live = collectWidgets();
-    if (Object.keys(live).length) {
-      const unknown = new Set();
-      for (const cols of Object.values(apexSections)) {
-        for (const csv of cols) {
-          if (!csv) continue;
-          csv.split(',').forEach(gid => {
-            gid = gid.trim();
-            if (!gid || gid.startsWith('apex_')) return;
-            if (!live[gid]) unknown.add(gid);
-          });
-        }
-      }
-      if (unknown.size)
-        warnings.push(`${unknown.size} widget${unknown.size !== 1 ? 's' : ''} don't exist on this system and will be skipped`);
+    // Red: name collision with a different folder ID — requires explicit decision
+    if (existingByName && existingByName.id !== folder.id) {
+      const allNames = new Set(currentFolders.map(f => f.name.toLowerCase()));
+      const suggestedName = nextAvailableName(folder.name, allNames);
+      return {
+        folder, status: 'red',
+        message: `A dashboard named "${esc(folder.name)}" already exists`,
+        warnings,
+        options: [
+          { value: 'overwrite', label: 'Import & overwrite existing' },
+          { value: 'rename',    label: `Import as "${esc(suggestedName)}"` },
+          { value: 'skip',      label: 'Do not import' },
+        ],
+        selected: null,
+        suggestedName,
+      };
     }
 
-    return warnings;
+    // Green note for known same-ID cases
+    let greenNote = '';
+    if (existingById && existingById.name.toLowerCase() !== folder.name.toLowerCase()) {
+      greenNote = `Will rename existing dashboard from "${esc(existingById.name)}" to "${esc(folder.name)}"`;
+    }
+
+    const status = warnings.length ? 'yellow' : 'green';
+    const allMessages = [...warnings, ...(greenNote ? [greenNote] : [])];
+
+    return {
+      folder, status,
+      message: allMessages.join(' · '),
+      warnings,
+      options: [
+        { value: 'import', label: warnings.length ? 'Import & skip invalid' : 'Import' },
+        { value: 'skip',   label: 'Do not import' },
+      ],
+      selected: 'import',
+      suggestedName: null,
+    };
+  }
+
+  function showImportReview(modal, analyses, importedSections, importedDividers, currentFolders, currentSections) {
+    const ICON = { green: 'f058', yellow: 'f06a', red: 'f057' };
+    const COLOR = { green: '#28a745', yellow: '#d97706', red: '#dc3545' };
+
+    const body = modal.querySelector('.modal-body');
+    const footer = modal.querySelector('#apex-manage-folders-footer');
+    const hr     = modal.querySelector('#apex-manage-folders-hr');
+    const savedHTML = body.innerHTML;
+    const restore = () => {
+      body.innerHTML = savedHTML;
+      if (footer) footer.style.display = '';
+      if (hr)     hr.style.display = '';
+    };
+
+    if (footer) footer.style.display = 'none';
+    if (hr)     hr.style.display = 'none';
+
+    const ORDER = { red: 0, yellow: 1, green: 2 };
+    const sorted = [...analyses].sort((a, b) => ORDER[a.status] - ORDER[b.status]);
+
+    body.innerHTML =
+      `<p style="margin:0 0 10px;font-size:13px;color:#555">Review the dashboards found in your backup:</p>` +
+      sorted.map((a, i) =>
+        `<div style="border:1px solid #e0e0e0;border-radius:4px;padding:8px 10px;margin-bottom:6px;">` +
+          `<div style="display:flex;align-items:center;gap:8px;">` +
+            `<i class="af apex-gp-${ICON[a.status]}" style="color:${COLOR[a.status]};font-size:16px;flex-shrink:0"></i>` +
+            `<span style="font-weight:600;flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.folder.name)}</span>` +
+            `<select class="apex-import-action form-select form-select-sm" style="width:auto;min-width:190px" data-idx="${i}">` +
+              (a.selected === null ? `<option value="" selected disabled>Choose an action…</option>` : '') +
+              a.options.map(o => `<option value="${o.value}"${a.selected === o.value ? ' selected' : ''}>${o.label}</option>`).join('') +
+            `</select>` +
+          `</div>` +
+          (a.message ? `<div style="margin-top:4px;padding-left:24px;font-size:12px;color:#666">${a.message}</div>` : '') +
+        `</div>`
+      ).join('') +
+      `<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px;">` +
+        `<button class="btn btn-sm btn-secondary" id="apex-import-review-cancel">Cancel</button>` +
+        `<button class="btn btn-sm" id="apex-import-review-confirm" style="background:#e07820;border-color:#e07820;color:#fff"><i class="af apex-gp-f56d" style="margin-right:5px"></i>Confirm Import</button>` +
+      `</div>`;
+
+    const confirmBtn = body.querySelector('#apex-import-review-confirm');
+
+    const updateConfirm = () => {
+      confirmBtn.disabled = sorted.some(a => a.selected === null);
+    };
+    updateConfirm();
+
+    body.querySelectorAll('.apex-import-action').forEach(sel => {
+      sel.addEventListener('change', () => {
+        sorted[+sel.dataset.idx].selected = sel.value || null;
+        updateConfirm();
+      });
+    });
+
+    body.querySelector('#apex-import-review-cancel').addEventListener('click', () => {
+      restore();
+    });
+
+    confirmBtn.addEventListener('click', () => {
+      restore();
+
+      // Build final folder + section lists by merging decisions on top of current state
+      const finalFolders  = [...currentFolders];
+      const finalSections = { ...currentSections };
+
+      sorted.forEach(({ folder, selected, suggestedName }) => {
+        if (selected === 'skip') return;
+        const sections = importedSections[folder.id] || ['', '', '', ''];
+
+        if (selected === 'overwrite') {
+          const idx = finalFolders.findIndex(f => f.name.toLowerCase() === folder.name.toLowerCase());
+          if (idx !== -1) { delete finalSections[finalFolders[idx].id]; finalFolders[idx] = folder; }
+          else finalFolders.push(folder);
+          finalSections[folder.id] = sections;
+        } else if (selected === 'rename') {
+          const named = { ...folder, name: suggestedName };
+          const idx = finalFolders.findIndex(f => f.id === folder.id);
+          if (idx !== -1) finalFolders[idx] = named; else finalFolders.push(named);
+          finalSections[folder.id] = sections;
+        } else {
+          // 'import' — upsert by ID
+          const idx = finalFolders.findIndex(f => f.id === folder.id);
+          if (idx !== -1) finalFolders[idx] = folder; else finalFolders.push(folder);
+          finalSections[folder.id] = sections;
+        }
+      });
+
+      // Merge dividers for imported folders only
+      const importedGids = new Set(
+        sorted
+          .filter(a => a.selected !== 'skip')
+          .flatMap(a => (importedSections[a.folder.id] || []).flatMap(csv => csv ? csv.split(',').map(g => g.trim()).filter(Boolean) : []))
+      );
+      const finalDividers = { ...liveDividers };
+      for (const [id, val] of Object.entries(importedDividers)) {
+        if (importedGids.has(id)) finalDividers[id] = val;
+      }
+
+      chrome.storage.sync.set({ apexFolders: finalFolders, apexSections: finalSections, apexDividers: finalDividers }, () => {
+        liveDividers = finalDividers;
+        rebuildDropdownOrder(finalFolders);
+        renderManageList(finalFolders);
+      });
+    });
   }
 
   function sanitizeDividers(raw) {
@@ -3127,7 +3206,7 @@
             '<div class="modal-body">' +
               '<div id="apex-manage-folder-list"></div>' +
             '</div>' +
-            '<hr style="margin:0">' +
+            '<hr id="apex-manage-folders-hr" style="margin:0">' +
             '<div id="apex-manage-folders-footer">' +
               '<button type="button" id="apex-folders-export-link">Backup dashboard customizations</button>' +
               '<button type="button" id="apex-folders-import-btn-styled"><i class="af af-fw apex-gp-f150"></i> Import</button>' +
@@ -3171,60 +3250,47 @@
         reader.onload = e => {
           try {
             const parsed = JSON.parse(e.target.result);
-            const apexFolders  = sanitizeFolders(parsed.apexFolders);
-            const apexSections = sanitizeSections(parsed.apexSections);
-            if (!apexFolders.length && !Object.keys(apexSections).length) throw new Error('empty or unrecognized import');
+            const importedFolders  = sanitizeFolders(parsed.apexFolders);
+            const importedSections = sanitizeSections(parsed.apexSections);
+            if (!importedFolders.length) throw new Error('empty or unrecognized import');
 
-            const apexDividers = {};
-            let skippedCustomTypes = 0;
+            // Parse custom elements — dividers get restored, unknown types are quietly dropped
+            const importedDividers = {};
             for (const [id, val] of Object.entries(parsed.customElements || {})) {
-              if (val?.type === 'cw_divider') {
-                apexDividers[id] = { text: typeof val.text === 'string' && val.text ? val.text : 'Divider' };
-              } else if (val?.type) {
-                skippedCustomTypes++;
-              }
+              if (val?.type === 'cw_divider')
+                importedDividers[id] = { text: typeof val.text === 'string' && val.text ? val.text : 'Divider' };
             }
 
-            const saveImport = (finalFolders, finalSections) => {
-              chrome.storage.sync.set({ apexFolders: finalFolders, apexSections: finalSections, apexDividers }, () => {
-                rebuildDropdownOrder(finalFolders);
-                renderManageList(finalFolders);
-                if (skippedCustomTypes > 0) {
-                  alert('Import complete. Note: some custom widgets from this backup are no longer supported and won\'t appear.');
-                }
-              });
-            };
+            chrome.storage.sync.get({ apexFolders: [], apexSections: {}, apexDividers: {} }, (current) => {
+              const currentFolders  = sanitizeFolders(current.apexFolders);
+              const currentSections = sanitizeSections(current.apexSections);
 
-            const doImport = () => {
-              chrome.storage.sync.get({ apexFolders: [], apexSections: {} }, (current) => {
-                const currentFolders  = sanitizeFolders(current.apexFolders);
-                const currentSections = sanitizeSections(current.apexSections);
-                const collisions = getNameCollisions(apexFolders, currentFolders);
-                if (!collisions.length) { saveImport(apexFolders, apexSections); return; }
-                resolveCollisions(collisions, currentSections, [...apexFolders], { ...apexSections }, saveImport);
-              });
-            };
+              const analyses = importedFolders.map(f =>
+                analyzeImportFolder(f, importedSections, parsed.customElements, currentFolders)
+              );
 
-            const warnings = getImportWarnings(parsed, apexFolders, apexSections);
-            if (!warnings.length) { doImport(); return; }
+              const hasIssues = analyses.some(a => a.status !== 'green' || a.selected === null);
+              if (!hasIssues) {
+                // All clean — silent import, merge on top of current state
+                const finalFolders  = [...currentFolders];
+                const finalSections = { ...currentSections };
+                importedFolders.forEach(folder => {
+                  const idx = finalFolders.findIndex(f => f.id === folder.id);
+                  if (idx !== -1) finalFolders[idx] = folder; else finalFolders.push(folder);
+                  finalSections[folder.id] = importedSections[folder.id] || ['', '', '', ''];
+                });
+                const finalDividers = { ...liveDividers, ...importedDividers };
+                chrome.storage.sync.set({ apexFolders: finalFolders, apexSections: finalSections, apexDividers: finalDividers }, () => {
+                  liveDividers = finalDividers;
+                  rebuildDropdownOrder(finalFolders);
+                  renderManageList(finalFolders);
+                });
+                return;
+              }
 
-            const modal = document.getElementById('apex-manage-folders-modal');
-            modal.querySelector('.apex-import-warning')?.remove();
-
-            const warn = document.createElement('div');
-            warn.className = 'apex-import-warning';
-            warn.style.cssText = 'background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:10px 14px;margin:0 0 10px;font-size:13px;';
-            warn.innerHTML =
-              `<strong>This file has some issues:</strong>` +
-              `<ul style="margin:6px 0 8px;padding-left:18px">${warnings.map(w => `<li>${w}</li>`).join('')}</ul>` +
-              `<div style="display:flex;gap:8px;">` +
-                `<button class="btn btn-sm btn-warning" id="apex-import-proceed">Import anyway</button>` +
-                `<button class="btn btn-sm btn-secondary" id="apex-import-cancel">Cancel</button>` +
-              `</div>`;
-
-            modal.querySelector('.modal-body').prepend(warn);
-            warn.querySelector('#apex-import-proceed').addEventListener('click', () => { warn.remove(); doImport(); });
-            warn.querySelector('#apex-import-cancel').addEventListener('click', () => warn.remove());
+              const modal = document.getElementById('apex-manage-folders-modal');
+              showImportReview(modal, analyses, importedSections, importedDividers, currentFolders, currentSections);
+            });
           } catch (err) {
             console.error('[apex-debugger] import error:', err);
             alert('Invalid backup file.');
