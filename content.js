@@ -27,6 +27,7 @@
   let dividerTemplateObserver   = null;
   let dividerPointerUpHandler   = null;
   let dividerUnlockObserver     = null;
+  let liveDividers              = {};
 
   function syncDividerX() {
     const unlocked = document.getElementById('dash')?.classList.contains('unlocked') ?? false;
@@ -2506,10 +2507,8 @@
       const xBtn = el.querySelector('.sortable-remove');
       xBtn.style.visibility = document.getElementById('dash')?.classList.contains('unlocked') ? 'visible' : 'hidden';
       xBtn.addEventListener('click', () => {
-        chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
-          delete apexDividers[el.id];
-          chrome.storage.sync.set({ apexDividers });
-        });
+        delete liveDividers[el.id];
+        chrome.storage.sync.set({ apexDividers: liveDividers });
         el.remove();
       });
 
@@ -2523,15 +2522,13 @@
           h6.contentEditable = 'false';
           const val = h6.textContent.trim() || 'Divider';
           h6.textContent = val;
-          chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
-            apexDividers[el.id] = { text: val };
-            chrome.storage.sync.set({ apexDividers });
-          });
+          liveDividers[el.id] = { text: val };
+          chrome.storage.sync.set({ apexDividers: liveDividers });
         };
         h6.addEventListener('blur', commit, { once: true });
         h6.addEventListener('keydown', e => {
           if (e.key === 'Enter')  { e.preventDefault(); h6.blur(); }
-          if (e.key === 'Escape') { h6.textContent = prev; h6.style.cursor = 'default'; h6.blur(); }
+          if (e.key === 'Escape') { h6.textContent = prev; h6.blur(); }
         });
       });
     }
@@ -2567,10 +2564,8 @@
     xBtn.className = 'sortable-remove';
     xBtn.style.visibility = document.getElementById('dash')?.classList.contains('unlocked') ? 'visible' : 'hidden';
     xBtn.addEventListener('click', () => {
-      chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
-        delete apexDividers[placed.id];
-        chrome.storage.sync.set({ apexDividers });
-      });
+      delete liveDividers[placed.id];
+      chrome.storage.sync.set({ apexDividers: liveDividers });
       placed.remove();
     });
     placed.appendChild(xBtn);
@@ -2586,10 +2581,8 @@
         h6.style.cursor = 'default';
         const val = h6.textContent.trim() || 'Divider';
         h6.textContent = val;
-        chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
-          apexDividers[placed.id] = { text: val };
-          chrome.storage.sync.set({ apexDividers });
-        });
+        liveDividers[placed.id] = { text: val };
+        chrome.storage.sync.set({ apexDividers: liveDividers });
       };
       h6.addEventListener('blur', commit, { once: true });
       h6.addEventListener('keydown', e => {
@@ -2597,12 +2590,13 @@
         if (e.key === 'Escape') { h6.textContent = prev; h6.style.cursor = 'default'; h6.blur(); }
       });
     });
-    chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
-      apexDividers[newId] = { text };
-      chrome.storage.sync.set({ apexDividers });
-    });
+    liveDividers[newId] = { text };
+    chrome.storage.sync.set({ apexDividers: liveDividers });
     injectDividerTemplate(s0);
     syncDividerX();
+    // Save layout immediately — don't rely solely on the 400ms observer debounce
+    clearTimeout(layoutSaveTimer);
+    layoutSaveTimer = setTimeout(saveFolderLayoutNow, 0);
   }
 
   function watchDividerTemplate(s0) {
@@ -2610,10 +2604,8 @@
     dividerTemplateObserver = new MutationObserver(() => {
       // Placed instance landed back in s0 via X button — remove it
       s0.querySelectorAll('[data-apex-widget="divider"]:not(#apex_div_template)').forEach(el => {
-        chrome.storage.sync.get({ apexDividers: {} }, ({ apexDividers }) => {
-          delete apexDividers[el.id];
-          chrome.storage.sync.set({ apexDividers });
-        });
+        delete liveDividers[el.id];
+        chrome.storage.sync.set({ apexDividers: liveDividers });
         el.remove();
       });
     });
@@ -2677,7 +2669,7 @@
   function saveFolderLayoutNow() {
     if (activeFolder === 'default') return;
     const { s1, s2, s3 } = getFolderSections();
-    const toCSV = sec => [...(sec ? sec.querySelectorAll('.dash-widget') : [])].map(w => w.id).filter(Boolean).join(',');
+    const toCSV = sec => [...(sec ? sec.querySelectorAll('.dash-widget') : [])].map(w => w.id).filter(id => id && id !== 'apex_div_template').join(',');
     const sections = [toCSV(s1), toCSV(s2), toCSV(s3), ''];
     chrome.storage.sync.get({ apexSections: {} }, ({ apexSections }) => {
       apexSections[activeFolder] = sections;
@@ -2808,7 +2800,7 @@
         return csv.split(',')
           .map(g => g.trim())
           .filter(g => {
-            if (!g) return false;
+            if (!g || g === 'apex_div_template') return false;
             if (g.startsWith('apex_')) return KNOWN_APEX_PREFIXES.some(p => g.startsWith(p));
             return /^[\w:.]+$/.test(g); // native GID — reject garbage
           })
@@ -2827,7 +2819,10 @@
   function getNameCollisions(importedFolders, currentFolders) {
     const currentByName = new Map(currentFolders.map(f => [f.name.toLowerCase(), f]));
     return importedFolders
-      .filter(f => currentByName.has(f.name.toLowerCase()))
+      .filter(f => {
+        const existing = currentByName.get(f.name.toLowerCase());
+        return existing && existing.id !== f.id;
+      })
       .map(f => ({ imported: f, existing: currentByName.get(f.name.toLowerCase()) }));
   }
 
@@ -2937,6 +2932,7 @@
       const apexFolders  = sanitizeFolders(raw.apexFolders);
       const apexSections = sanitizeSections(raw.apexSections);
       const apexDividers = sanitizeDividers(raw.apexDividers);
+      liveDividers = { ...apexDividers };
       const folder = apexFolders.find(f => f.id === folderId);
       if (folder) applyFolderLayout(folder, apexSections[folderId] || ['', '', '', ''], apexDividers);
     });
@@ -3144,9 +3140,13 @@
 
       el.querySelector('#apex-folders-export-link').addEventListener('click', () => {
         chrome.storage.sync.get({ apexFolders: [], apexSections: {}, apexDividers: {} }, ({ apexFolders, apexSections, apexDividers }) => {
+          // Collect all GIDs referenced in sections so we only export dividers that are actually placed
+          const referencedGids = new Set(
+            Object.values(apexSections).flatMap(cols => cols.flatMap(csv => csv ? csv.split(',') : []))
+          );
           const customElements = {};
           for (const [id, val] of Object.entries(apexDividers || {})) {
-            if (typeof id === 'string' && id.startsWith('apex_div_'))
+            if (typeof id === 'string' && id.startsWith('apex_div_') && referencedGids.has(id))
               customElements[id] = { type: 'cw_divider', text: val?.text || 'Divider' };
           }
           const now = new Date();
@@ -3224,7 +3224,8 @@
             modal.querySelector('.modal-body').prepend(warn);
             warn.querySelector('#apex-import-proceed').addEventListener('click', () => { warn.remove(); doImport(); });
             warn.querySelector('#apex-import-cancel').addEventListener('click', () => warn.remove());
-          } catch (_) {
+          } catch (err) {
+            console.error('[apex-debugger] import error:', err);
             alert('Invalid backup file.');
           }
         };
