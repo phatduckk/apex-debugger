@@ -2668,11 +2668,12 @@
 
   function saveFolderLayoutNow() {
     if (activeFolder === 'default') return;
+    const folderId = activeFolder; // capture before async — folder may change by the time get() returns
     const { s1, s2, s3 } = getFolderSections();
     const toCSV = sec => [...(sec ? sec.querySelectorAll('.dash-widget') : [])].map(w => w.id).filter(id => id && id !== 'apex_div_template').join(',');
     const sections = [toCSV(s1), toCSV(s2), toCSV(s3), ''];
     chrome.storage.sync.get({ apexSections: {} }, ({ apexSections }) => {
-      apexSections[activeFolder] = sections;
+      apexSections[folderId] = sections;
       chrome.storage.sync.set({ apexSections });
     });
   }
