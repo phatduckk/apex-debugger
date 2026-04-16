@@ -1543,7 +1543,7 @@
       }
       #apex-probe-close:hover { color: #fff; }
       #apex-probe-body { overflow-y: auto; flex: 1; padding: 10px 16px 16px; background: #f5f5f5; }
-      #apex-explore-panel {
+#apex-explore-panel {
         position: fixed; bottom: 0; left: 0; right: 0;
         height: ${HELP_DEF_H}px;
         background: #fff; color: #333;
@@ -1938,6 +1938,8 @@
     injectExplorePanel();
     requestAnimationFrame(() => document.getElementById('apex-explore-panel').classList.add('open'));
     document.getElementById('apex-explore-btn')?.classList.add('active');
+    const openIcon = document.querySelector('#apex-explore-btn > i');
+    if (openIcon) openIcon.innerHTML = '&#xF010;';
     exploreOpen = true;
 
     // Wire left/right divider resizer
@@ -2150,6 +2152,8 @@
     const panel = document.getElementById('apex-explore-panel');
     if (panel) panel.classList.remove('open');
     document.getElementById('apex-explore-btn')?.classList.remove('active');
+    const closeIcon = document.querySelector('#apex-explore-btn > i');
+    if (closeIcon) closeIcon.innerHTML = '&#xF00E;';
     exploreOpen = false;
   }
 
