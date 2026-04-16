@@ -2810,7 +2810,7 @@
           .filter(g => {
             if (!g) return false;
             if (g.startsWith('apex_')) return KNOWN_APEX_PREFIXES.some(p => g.startsWith(p));
-            return true; // native GID
+            return /^[\w:.]+$/.test(g); // native GID — reject garbage
           })
           .join(',');
       });
