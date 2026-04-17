@@ -2268,7 +2268,10 @@
             const newGroup = document.createElement('div');
             newGroup.className = 'nav-group';
             updateBtn.replaceWith(newGroup);
+            const divider = document.createElement('div');
+            divider.style.cssText = 'width:1px;background:rgba(71,73,73,0.5);margin:4px 2px;align-self:stretch;';
             newGroup.appendChild(btn);
+            newGroup.appendChild(divider);
             newGroup.appendChild(updateBtn);
           } else {
             document.querySelector('.nav-items').appendChild(btn);
