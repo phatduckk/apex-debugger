@@ -2229,12 +2229,13 @@
       onNavigate();
     }
     if (!document.getElementById('apex-debug-toggle')) {
-      const isConfigPage = /\/apex\/config\/(inputs|outputs)\//.test(location.pathname);
-      const configNavGroup = isConfigPage ? document.querySelector('.nav-group.flex-row-reverse') : null;
-      const copyBtn = !isConfigPage ? document.querySelector('button[title="Copy"]') : null;
-      const navGroup = !isConfigPage && !copyBtn ? document.querySelector('.nav-items .nav-group') : null;
-      const anchor = configNavGroup || copyBtn || navGroup;
-      if (anchor && (configNavGroup || document.querySelector('.lead'))) {
+      const isOutputPage = /\/apex\/config\/outputs\//.test(location.pathname);
+      const isInputPage  = /\/apex\/config\/inputs\//.test(location.pathname);
+      const outputNavGroup = isOutputPage ? document.querySelector('.nav-group.flex-row-reverse') : null;
+      const copyBtn = !isOutputPage && !isInputPage ? document.querySelector('button[title="Copy"]') : null;
+      const navGroup = !isOutputPage && !isInputPage && !copyBtn ? document.querySelector('.nav-items .nav-group') : null;
+      const anchor = outputNavGroup || (isInputPage && document.querySelector('.nav-items')) || copyBtn || navGroup;
+      if (anchor && ((isOutputPage || isInputPage) ? document.querySelector('button[title="Dashboard"]') : document.querySelector('.lead'))) {
         const btn = document.createElement('button');
         btn.id        = 'apex-debug-toggle';
         btn.type      = 'button';
@@ -2251,22 +2252,41 @@
           const name = entry?.name;
           if (name) openProbePanel(name);
         });
-        const help = document.createElement('button');
-        help.id        = 'apex-debug-help';
-        help.type      = 'button';
-        help.title     = 'Debug Help';
-        help.className = 'btn btn-secondary';
-        help.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF0EB;</i>';
-        help.style.cssText = 'align-items:center; justify-content:center;';
-        help.addEventListener('click', toggleHelpPanel);
-        if (configNavGroup) {
+        if (outputNavGroup) {
+          const help = document.createElement('button');
+          help.id        = 'apex-debug-help';
+          help.type      = 'button';
+          help.title     = 'Debug Help';
+          help.className = 'btn btn-secondary';
+          help.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF0EB;</i>';
+          help.style.cssText = 'align-items:center; justify-content:center;';
+          help.addEventListener('click', toggleHelpPanel);
           const divider = document.createElement('div');
           divider.style.cssText = 'width:1px;background:rgba(71,73,73,0.5);margin:4px 2px;align-self:stretch;';
-          configNavGroup.append(divider);
-          configNavGroup.append(help);
-          configNavGroup.append(btn);
+          outputNavGroup.append(divider);
+          outputNavGroup.append(help);
+          outputNavGroup.append(btn);
+        } else if (isInputPage) {
+          const updateBtn = document.querySelector('.nav-items button[title="Update Apex"]');
+          if (updateBtn) {
+            const newGroup = document.createElement('div');
+            newGroup.className = 'nav-group';
+            updateBtn.replaceWith(newGroup);
+            newGroup.appendChild(btn);
+            newGroup.appendChild(updateBtn);
+          } else {
+            document.querySelector('.nav-items').appendChild(btn);
+          }
         } else if (copyBtn) {
           copyBtn.insertAdjacentElement('afterend', btn);
+          const help = document.createElement('button');
+          help.id        = 'apex-debug-help';
+          help.type      = 'button';
+          help.title     = 'Debug Help';
+          help.className = 'btn btn-secondary';
+          help.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF0EB;</i>';
+          help.style.cssText = 'align-items:center; justify-content:center;';
+          help.addEventListener('click', toggleHelpPanel);
           btn.insertAdjacentElement('beforebegin', help);
         } else {
           const updateBtn = document.querySelector('.nav-items button[title="Update Apex"]');
@@ -2457,6 +2477,9 @@
       exploreBtn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF00E;</i>';
       exploreBtn.addEventListener('click', () => exploreOpen ? closeExplorePanel() : openExplorePanel());
       folderGroup.insertAdjacentElement('beforebegin', exploreBtn);
+      const exploreDivider = document.createElement('div');
+      exploreDivider.style.cssText = 'width:1px;background:rgba(71,73,73,0.5);margin:4px 2px;align-self:stretch;';
+      exploreBtn.insertAdjacentElement('beforebegin', exploreDivider);
     }
 
     // Re-apply last active dashboard once widgets are in the DOM
