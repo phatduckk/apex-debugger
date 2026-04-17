@@ -2233,7 +2233,7 @@
       const navGroup = /\/apex\/config\/(inputs|outputs)\//.test(location.pathname) && !copyBtn
         ? document.querySelector('.nav-items .nav-group') : null;
       const anchor = copyBtn || navGroup;
-      if (anchor && document.querySelector('p.lead')) {
+      if (anchor && document.querySelector('.lead')) {
         const btn = document.createElement('button');
         btn.id        = 'apex-debug-toggle';
         btn.type      = 'button';
@@ -2241,8 +2241,13 @@
         btn.className = 'btn btn-secondary';
         btn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF121;</i>';
         btn.style.cssText = 'align-items:center; justify-content:center;';
-        btn.addEventListener('click', () => {
-          const name = (document.getElementById('output-name') || document.getElementById('input-name-value'))?.value?.trim();
+        btn.addEventListener('click', async () => {
+          const did = location.pathname.split('/').pop();
+          const istat = await fetchStatus();
+          if (!istat) return;
+          const all = [...(istat.inputs || []), ...(istat.outputs || [])];
+          const entry = all.find(x => String(x.did) === String(did));
+          const name = entry?.name;
           if (name) openProbePanel(name);
         });
         if (copyBtn) {
