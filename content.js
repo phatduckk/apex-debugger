@@ -1775,21 +1775,24 @@
     try {
       const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
       const json = await r.json();
+      const oconf = json.oconf || [];
+      const iconf = (json.iconf || []).filter(item => item.name);
+      const seen = new Set(oconf.map(i => i.name));
+      const allNames = [...oconf, ...iconf.filter(i => !seen.has(i.name))].map(i => i.name);
       const rows = [];
       const needleRe = new RegExp('(?<![\\w-])' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w-])', 'i');
-      for (const item of (json.oconf || [])) {
+      for (const item of oconf) {
         const lines = (item.prog || '').split('\n');
         lines.forEach((line, i) => {
           if (/^tdata\b/i.test(line.trim())) return;
-          const match = needleRe.test(line);
-          if (match) {
+          if (needleRe.test(line)) {
             rows.push({ output: item.name, did: item.did, lineNum: i + 1, line: line.trim(), prog: item.prog || '' });
           }
         });
       }
-      return rows;
+      return { rows, allNames };
     } catch (_) {
-      return [];
+      return { rows: [], allNames: [] };
     }
   }
 
@@ -1801,6 +1804,7 @@
     const escapedProbe = probeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const otherNames = knownNames
       .filter(n => n && n.toLowerCase() !== probeName.toLowerCase())
+      .sort((a, b) => b.length - a.length)
       .map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
     const parts = [
       `(?<probe>${escapedProbe})`,
@@ -1835,7 +1839,7 @@
     return out + esc(raw.slice(last));
   }
 
-  function renderProbePreview(prog, matchLineNum, name) {
+  function renderProbePreview(prog, matchLineNum, name, allNames = []) {
     const right = document.getElementById('apex-probe-right');
     if (!right) return;
     right.innerHTML = prog.split('\n')
@@ -1843,7 +1847,7 @@
       .filter(({ line }) => !/^tdata\b/i.test(line.trim()))
       .map(({ line, n }) => {
         const cls = 'apex-prog-line' + (n === matchLineNum ? ' match' : '');
-        return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name)}</span>`;
+        return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name, allNames)}</span>`;
       }).join('');
     right.querySelector('.match')?.scrollIntoView({ block: 'center' });
   }
@@ -1874,7 +1878,7 @@
     });
     requestAnimationFrame(() => document.getElementById('apex-probe-panel').classList.add('open'));
     probeOpen = true;
-    fetchProbeUsages(name).then(rows => {
+    fetchProbeUsages(name).then(({ rows, allNames }) => {
       const left = document.getElementById('apex-probe-left');
       if (!left) return;
       if (!rows.length) {
@@ -1889,7 +1893,7 @@
           `<tr class="apex-probe-row" data-i="${i}">` +
           `<td><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank">${esc(r.output)}</a></td>` +
           `<td style="color:#bbb;text-align:right;padding-right:12px">${r.lineNum}</td>` +
-          `<td><code>${highlightLine(r.line, name)}</code></td>` +
+          `<td><code>${highlightLine(r.line, name, allNames)}</code></td>` +
           `</tr>`
         ).join('') +
         '</tbody></table>';
@@ -1898,7 +1902,7 @@
           left.querySelectorAll('.apex-probe-row').forEach(r => r.classList.remove('active'));
           tr.classList.add('active');
           const r = rows[+tr.dataset.i];
-          renderProbePreview(r.prog, r.lineNum, name);
+          renderProbePreview(r.prog, r.lineNum, name, allNames);
         });
       });
     });
