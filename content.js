@@ -2229,7 +2229,7 @@
       const navGroup = /\/apex\/config\/(inputs|outputs)\//.test(location.pathname) && !copyBtn
         ? document.querySelector('.nav-items .nav-group') : null;
       const anchor = copyBtn || navGroup;
-      if (anchor) {
+      if (anchor && document.querySelector('p.lead')) {
         const btn = document.createElement('button');
         btn.id        = 'apex-debug-toggle';
         btn.type      = 'button';
