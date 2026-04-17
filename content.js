@@ -1922,7 +1922,7 @@
     panel.id = 'apex-explore-panel';
     panel.innerHTML =
       '<div id="apex-explore-handle"></div>' +
-      '<div id="apex-explore-header"><span>Explore</span><button id="apex-explore-close" title="Close">\u00d7</button></div>' +
+      '<div id="apex-explore-header"><span><i class="af af-fw" style="font-style:normal;margin-right:6px">&#xF121;</i>Explore</span><button id="apex-explore-close" title="Close">\u00d7</button></div>' +
       '<div id="apex-explore-body">' +
         '<div id="apex-explore-left">' +
           '<div id="apex-explore-search"><div id="apex-explore-search-wrap"><input type="text" id="apex-explore-search-input" placeholder="Search probes\u2026"><button id="apex-explore-search-clear">\u00d7</button></div></div>' +
@@ -1943,8 +1943,6 @@
     injectExplorePanel();
     requestAnimationFrame(() => document.getElementById('apex-explore-panel').classList.add('open'));
     document.getElementById('apex-explore-btn')?.classList.add('active');
-    const openIcon = document.querySelector('#apex-explore-btn > i');
-    if (openIcon) openIcon.innerHTML = '&#xF010;';
     exploreOpen = true;
 
     // Wire left/right divider resizer
@@ -2157,8 +2155,6 @@
     const panel = document.getElementById('apex-explore-panel');
     if (panel) panel.classList.remove('open');
     document.getElementById('apex-explore-btn')?.classList.remove('active');
-    const closeIcon = document.querySelector('#apex-explore-btn > i');
-    if (closeIcon) closeIcon.innerHTML = '&#xF00E;';
     exploreOpen = false;
   }
 
@@ -2474,7 +2470,7 @@
       exploreBtn.type      = 'button';
       exploreBtn.title     = 'Explore';
       exploreBtn.className = 'btn btn-secondary';
-      exploreBtn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF00E;</i>';
+      exploreBtn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF121;</i>';
       exploreBtn.addEventListener('click', () => exploreOpen ? closeExplorePanel() : openExplorePanel());
       folderGroup.insertAdjacentElement('beforebegin', exploreBtn);
       const exploreDivider = document.createElement('div');
