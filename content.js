@@ -79,7 +79,7 @@
     'F3F2','F46C','F46D','F477','F479','F481','F500','F54C','F552','F56C','F56D',
     'F56E','F56F','F572','F573','F574','F575','F576','F578','F5B7','F5C7','F5E8',
     'F5EB','F5F8','F601','F602','F603','F60B','F611','F643','F64D','F659','F65A',
-    'F65B','F65C','F65D','F65E','F65F','F672','F673','F681','F682','F689',
+    'F65B','F65C','F65D','F65E','F65F','F672','F673','F681','F682','F121',
     'F690','F6A4','F6A8','F6A9','F6AC','F6C3','F6C4','F6DD','F72E',
   ];
 
@@ -1854,7 +1854,7 @@
 
   function openProbePanel(name) {
     injectProbePanel();
-    document.getElementById('apex-probe-title').innerHTML = `<i class="af af-fw" style="font-style:normal;margin-right:6px">&#xF689;</i>References to: ${esc(name)}`;
+    document.getElementById('apex-probe-title').innerHTML = `<i class="af af-fw" style="font-style:normal;margin-right:6px">&#xF121;</i>References to: ${esc(name)}`;
     const body = document.getElementById('apex-probe-body');
     body.innerHTML = '<div id="apex-probe-left"><p style="color:#888;margin:0">Loading\u2026</p></div><div id="apex-probe-divider"></div><div id="apex-probe-right"><p>Click a row to preview</p></div>';
     document.getElementById('apex-probe-divider').addEventListener('mousedown', e => {
@@ -2239,7 +2239,7 @@
         btn.type      = 'button';
         btn.title     = 'Debug';
         btn.className = 'btn btn-secondary';
-        btn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF689;</i>';
+        btn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF121;</i>';
         btn.style.cssText = 'align-items:center; justify-content:center;';
         btn.addEventListener('click', () => {
           const name = (document.getElementById('output-name') || document.getElementById('input-name-value'))?.value?.trim();
@@ -2283,7 +2283,7 @@
     function makeIcon() {
       const icon = document.createElement('i');
       icon.className = 'af af-fw apex-dash-icon';
-      icon.textContent = '\uF689';
+      icon.textContent = '\uF121';
       icon.style.cssText = 'color:#999;margin-right:4px;cursor:default;vertical-align:text-bottom;line-height:21px;';
       return icon;
     }
