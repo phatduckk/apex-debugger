@@ -1609,8 +1609,8 @@
       .apex-explore-toggle button.active { background: #e07820; color: #fff; }
       .apex-explore-toggle button:hover:not(.active) { background: #f0f0f0; }
       #apex-debug-toggle, #apex-debug-help {
-        background-color: rgba(71,73,73,0.65) !important;
-        border-color: rgba(71,73,73,0.65) !important;
+        background-color: rgb(71,73,73) !important;
+        border-color: rgb(71,73,73) !important;
         color: #fff !important;
       }
       #apex-debug-toggle.active, #apex-debug-help.active {
@@ -2229,11 +2229,12 @@
       onNavigate();
     }
     if (!document.getElementById('apex-debug-toggle')) {
-      const copyBtn = document.querySelector('button[title="Copy"]');
-      const navGroup = /\/apex\/config\/(inputs|outputs)\//.test(location.pathname) && !copyBtn
-        ? document.querySelector('.nav-items .nav-group') : null;
-      const anchor = copyBtn || navGroup;
-      if (anchor && document.querySelector('.lead')) {
+      const isConfigPage = /\/apex\/config\/(inputs|outputs)\//.test(location.pathname);
+      const configNavGroup = isConfigPage ? document.querySelector('.nav-group.flex-row-reverse') : null;
+      const copyBtn = !isConfigPage ? document.querySelector('button[title="Copy"]') : null;
+      const navGroup = !isConfigPage && !copyBtn ? document.querySelector('.nav-items .nav-group') : null;
+      const anchor = configNavGroup || copyBtn || navGroup;
+      if (anchor && (configNavGroup || document.querySelector('.lead'))) {
         const btn = document.createElement('button');
         btn.id        = 'apex-debug-toggle';
         btn.type      = 'button';
@@ -2250,16 +2251,22 @@
           const name = entry?.name;
           if (name) openProbePanel(name);
         });
-        if (copyBtn) {
+        const help = document.createElement('button');
+        help.id        = 'apex-debug-help';
+        help.type      = 'button';
+        help.title     = 'Debug Help';
+        help.className = 'btn btn-secondary';
+        help.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF0EB;</i>';
+        help.style.cssText = 'align-items:center; justify-content:center;';
+        help.addEventListener('click', toggleHelpPanel);
+        if (configNavGroup) {
+          const divider = document.createElement('div');
+          divider.style.cssText = 'width:1px;background:rgba(71,73,73,0.5);margin:4px 2px;align-self:stretch;';
+          configNavGroup.append(divider);
+          configNavGroup.append(help);
+          configNavGroup.append(btn);
+        } else if (copyBtn) {
           copyBtn.insertAdjacentElement('afterend', btn);
-          const help = document.createElement('button');
-          help.id        = 'apex-debug-help';
-          help.type      = 'button';
-          help.title     = 'Debug Help';
-          help.className = 'btn btn-secondary';
-          help.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF0EB;</i>';
-          help.style.cssText = 'align-items:center; justify-content:center;';
-          help.addEventListener('click', toggleHelpPanel);
           btn.insertAdjacentElement('beforebegin', help);
         } else {
           const updateBtn = document.querySelector('.nav-items button[title="Update Apex"]');
