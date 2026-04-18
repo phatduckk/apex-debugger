@@ -1,8 +1,7 @@
 (function () {
   'use strict';
 
-  let STATUS_URL  = '';
-  let CONFIG_URL  = '';
+  let env = null;
   const POLL_MS   = 5000;
 
   let enabled        = false;
@@ -500,6 +499,78 @@
     },
   };
 
+  function buildEnv(hostname, apexFusionEnabled) {
+    const host    = window.location.hostname;
+    const isCloud = host === 'apexfusion.com';
+    const isLocal = host === hostname;
+    if (isCloud && !apexFusionEnabled) return null;
+    if (!isCloud && !isLocal) return null;
+
+    // On cloud, the apex ID lives at path position [2]: /apex/<ID>/...
+    const apexId = isCloud ? location.pathname.split('/')[2] : null;
+    if (isCloud && !apexId) return null; // on the picker page, no apex selected yet
+
+    return {
+      isCloud,
+
+      statusUrl: isCloud
+        ? `https://apexfusion.com/api/apex/${apexId}/status`
+        : `http://${hostname}/cgi-bin/status.json`,
+
+      configUrl: isCloud
+        ? `https://apexfusion.com/api/apex/${apexId}`
+        : `http://${hostname}/rest/config`,
+
+      // Normalize a raw config response to local shape { oconf, iconf, misc, season, ... }
+      normalizeConfig(raw) {
+        if (raw && raw.config && raw.config.outputs !== undefined) {
+          // Cloud format: everything nested under raw.config
+          return {
+            oconf:  raw.config.outputs || [],
+            iconf:  raw.config.inputs  || [],
+            misc:   raw.config.misc    || {},
+            season: raw.config.misc?.season || null, // TODO: verify cloud season path
+          };
+        }
+        return raw; // local format already matches
+      },
+
+      // Normalize a raw status response to { outputs, inputs, feed, date, ... }
+      // Local wraps in { istat: {...} } with date as Unix seconds
+      // Cloud returns the object directly with date inside feed as ISO string
+      normalizeStatus(raw) {
+        if (!isCloud) return raw.istat || null;
+        const dateUnix = raw.feed?.date ? Math.floor(new Date(raw.feed.date).getTime() / 1000) : 0;
+        return { ...raw, date: dateUnix };
+      },
+
+      // Page type helpers — read live pathname so they work after navigation
+      isDash()       {
+        return isCloud
+          ? location.pathname === `/apex/${apexId}`
+          : location.pathname === '/apex/dash';
+      },
+      isConfigPage() { return location.pathname.includes('/config/'); },
+      isOutputPage() { return location.pathname.includes('/config/outputs/'); },
+      isInputPage()  { return location.pathname.includes('/config/inputs/'); },
+
+      // DID is always the last path segment on both local and cloud
+      getDid() { return location.pathname.split('/').pop(); },
+
+      // Absolute paths for navigation and links
+      outputHref(did) {
+        return isCloud
+          ? `/apex/${apexId}/config/outputs/${did}`
+          : `/apex/config/outputs/${did}`;
+      },
+      inputHref(did) {
+        return isCloud
+          ? `/apex/${apexId}/config/inputs/${did}`
+          : `/apex/config/inputs/${did}`;
+      },
+    };
+  }
+
   function injectTheme(themeKey) {
     const theme = THEMES[themeKey] || THEMES.default;
 
@@ -821,8 +892,8 @@
   async function fetchStatus() {
     if (debugMode && debugIstat) return debugIstat;
     try {
-      const r = await fetch(STATUS_URL, { cache: 'no-store' });
-      return (await r.json()).istat;
+      const r = await fetch(env.statusUrl, { cache: 'no-store' });
+      return env.normalizeStatus(await r.json());
     } catch (_) {
       return null;
     }
@@ -834,11 +905,11 @@
       feedIntervals: debugConfig.misc?.feedInterval || [0, 0, 0, 0],
     };
     try {
-      const r    = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
-      const json = await r.json();
+      const r    = await fetch(`${env.configUrl}?_=${Date.now()}`, { cache: 'no-store' });
+      const norm = env.normalizeConfig(await r.json());
       return {
-        season:        json.season || null,
-        feedIntervals: json.misc?.feedInterval || [0, 0, 0, 0],
+        season:        norm.season || null,
+        feedIntervals: norm.misc?.feedInterval || [0, 0, 0, 0],
       };
     } catch (_) {
       return { season: null, feedIntervals: [0, 0, 0, 0] };
@@ -1251,8 +1322,8 @@
   function identifyAndStoreDebugFile(json, filename) {
     if (json.istat) {
       debugIstat = json.istat;
-    } else if (json.oconf || json.iconf) {
-      debugConfig = json;
+    } else if (json.oconf || json.iconf || json.config?.outputs) {
+      debugConfig = env.normalizeConfig(json);
     } else {
       alert(`Can't identify "${filename}" — expected istat, oconf, or iconf at the top level.`);
       return;
@@ -1790,10 +1861,10 @@
 
   async function fetchProbeUsages(name) {
     try {
-      const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
-      const json = await r.json();
-      const oconf = json.oconf || [];
-      const iconf = (json.iconf || []).filter(item => item.name);
+      const r = await fetch(`${env.configUrl}?_=${Date.now()}`, { cache: 'no-store' });
+      const norm = env.normalizeConfig(await r.json());
+      const oconf = norm.oconf || [];
+      const iconf = (norm.iconf || []).filter(item => item.name);
       const seen = new Set(oconf.map(i => i.name));
       const allNames = [...oconf, ...iconf.filter(i => !seen.has(i.name))].map(i => i.name);
       const rows = [];
@@ -1921,7 +1992,7 @@
       '<tbody>' +
       rows.map((r, i) =>
         `<tr class="apex-probe-row" data-i="${i}" style="cursor:pointer">` +
-        `<td><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank">${esc(r.name)}</a></td>` +
+        `<td><a href="${env.outputHref(String(r.did))}" target="_blank">${esc(r.name)}</a></td>` +
         `<td style="color:#bbb;text-align:center;padding-right:12px">${r.lineNum}</td>` +
         `<td><code>${highlightLine(r.line, name, allNames)}</code></td>` +
         `</tr>`
@@ -2060,10 +2131,10 @@
     let allOconf = [];
     let allProbes = [];
     try {
-      const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
-      const json = await r.json();
-      allOconf = (json.oconf || []).filter(item => item.name);
-      const iconf = (json.iconf || []).filter(item => item.name);
+      const r = await fetch(`${env.configUrl}?_=${Date.now()}`, { cache: 'no-store' });
+      const norm = env.normalizeConfig(await r.json());
+      allOconf = (norm.oconf || []).filter(item => item.name);
+      const iconf = (norm.iconf || []).filter(item => item.name);
       const seen = new Set(allOconf.map(i => i.name));
       allProbes = [...allOconf, ...iconf.filter(i => !seen.has(i.name))];
     } catch (_) {}
@@ -2137,7 +2208,7 @@
         if (titleEl) titleEl.textContent = notRefs.length ? `Not referenced in (${notRefs.length})` : 'Not referenced in';
         body.innerHTML = notRefs.length
           ? notRefs.map(item =>
-              `<div style="padding:4px 12px;font-weight:700"><a href="/apex/config/outputs/${esc(String(item.did))}" target="_blank" style="color:inherit;text-decoration:none">${esc(item.name)}</a></div>`
+              `<div style="padding:4px 12px;font-weight:700"><a href="${env.outputHref(String(item.did))}" target="_blank" style="color:inherit;text-decoration:none">${esc(item.name)}</a></div>`
             ).join('')
           : `<p style="color:#888;margin:8px 0 0">All other probes reference <strong>${esc(name)}</strong>.</p>`;
       }
@@ -2281,7 +2352,7 @@
     const btn  = document.getElementById('apex-debug-toggle');
     const help = document.getElementById('apex-debug-help');
     if (!btn) return;
-    if (/\/apex\/config\/(inputs|outputs)\//.test(location.pathname)) return;
+    if (env.isOutputPage() || env.isInputPage()) return;
     const visible = isEditorVisible();
     const display = visible ? 'inline-flex' : 'none';
     btn.style.display  = display;
@@ -2299,8 +2370,8 @@
       onNavigate();
     }
     if (!document.getElementById('apex-debug-toggle')) {
-      const isOutputPage = /\/apex\/config\/outputs\//.test(location.pathname);
-      const isInputPage  = /\/apex\/config\/inputs\//.test(location.pathname);
+      const isOutputPage = env.isOutputPage();
+      const isInputPage  = env.isInputPage();
       const outputNavGroup = isOutputPage ? document.querySelector('.nav-group.flex-row-reverse') : null;
       const copyBtn = !isOutputPage && !isInputPage ? document.querySelector('button[title="Copy"]') : null;
       const navGroup = !isOutputPage && !isInputPage && !copyBtn ? document.querySelector('.nav-items .nav-group') : null;
@@ -2314,7 +2385,7 @@
         btn.innerHTML = '<i class="af af-fw" style="font-style:normal">&#xF121;</i>';
         btn.style.cssText = 'align-items:center; justify-content:center;';
         btn.addEventListener('click', async () => {
-          const did = location.pathname.split('/').pop();
+          const did = env.getDid();
           const istat = await fetchStatus();
           if (!istat) return;
           const all = [...(istat.inputs || []), ...(istat.outputs || [])];
@@ -2384,7 +2455,7 @@
   const DASH_ICON_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="14" height="14" fill="currentColor"><path d="M29.83,20l.34-2L25,17.15V13c0-.08,0-.15,0-.23l5.06-1.36-.51-1.93-4.83,1.29A9,9,0,0,0,20,5V2H18V4.23a8.81,8.81,0,0,0-4,0V2H12V5a9,9,0,0,0-4.71,5.82L2.46,9.48,2,11.41,7,12.77c0,.08,0,.15,0,.23v4.15L1.84,18l.32,2L7,19.18a8.9,8.9,0,0,0,.82,3.57L3.29,27.29l1.42,1.42,4.19-4.2a9,9,0,0,0,14.2,0l4.19,4.2,1.42-1.42-4.54-4.54A8.9,8.9,0,0,0,25,19.18ZM15,25.92A7,7,0,0,1,9,19V13h6ZM9.29,11a7,7,0,0,1,13.42,0ZM23,19a7,7,0,0,1-6,6.92V13h6Z"/></svg>';
 
   function injectDashIcons() {
-    if (!location.pathname.startsWith('/apex/dash')) return;
+    if (!env.isDash()) return;
     function makeIcon() {
       const icon = document.createElement('i');
       icon.className = 'af af-fw apex-dash-icon';
@@ -2503,10 +2574,10 @@
       // Async: fetch config, stamp data-apex-type on each widget, populate dropdown
       (async () => {
         try {
-          const r = await fetch(`${CONFIG_URL}?_=${Date.now()}`, { cache: 'no-store' });
-          const json = await r.json();
+          const r = await fetch(`${env.configUrl}?_=${Date.now()}`, { cache: 'no-store' });
+          const norm = env.normalizeConfig(await r.json());
           const nameTypeMap = new Map();
-          for (const item of [...(json.oconf || []), ...(json.iconf || [])]) {
+          for (const item of [...(norm.oconf || []), ...(norm.iconf || [])]) {
             if (item.name && item.type) nameTypeMap.set(item.name, item.type);
           }
           const types = new Set();
@@ -2828,7 +2899,7 @@
     if (cog) {
       cog.innerHTML = '<i class="af af-cog dash-actionable"></i>';
       cog.querySelector('i').addEventListener('click', () => {
-        window.location.href = '/apex/config/inputs/' + did;
+        window.location.href = env.inputHref(did);
       });
     }
     const xBtn = el.querySelector('.sortable-remove');
@@ -3779,7 +3850,7 @@
     if (helpOpen)     closeHelpPanel();
     if (exploreOpen)  closeExplorePanel();
     if (probeOpen)    closeProbePanel();
-    const onDash = location.pathname === '/apex/dash';
+    const onDash = env.isDash();
     if (layoutSnapshot) switchToDefault({ domRestore: onDash });
     if (!onDash) lastFolderApplied = false;
     editorSnapshot = null;
@@ -3797,7 +3868,7 @@
   });
 
   document.addEventListener('apex:showCodeDebug', () => {
-    if (!/\/apex\/config\//.test(location.pathname)) {
+    if (!env?.isConfigPage()) {
       console.warn('[Apex Debugger] showCodeDebug: only works on /apex/config/ pages');
       return;
     }
@@ -3808,12 +3879,10 @@
 
   // ── Init ───────────────────────────────────────────────────────────────────
 
-  chrome.storage.sync.get({ hostname: 'apex.local', beefMode: false, theme: 'default' }, ({ hostname, beefMode: beef, theme }) => {
+  chrome.storage.sync.get({ hostname: 'apex.local', beefMode: false, theme: 'default', apexFusionEnabled: false }, ({ hostname, beefMode: beef, theme, apexFusionEnabled }) => {
     beefMode = beef;
-    if (window.location.hostname !== hostname) return;
-
-    STATUS_URL = `http://${hostname}/cgi-bin/status.json`;
-    CONFIG_URL = `http://${hostname}/rest/config`;
+    env = buildEnv(hostname, apexFusionEnabled);
+    if (!env) return;
 
     injectTheme(theme);
     injectStyles();

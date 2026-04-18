@@ -1,0 +1,5310 @@
+{
+    "_id": "6257aef29ad1b33a9511224f",
+    "type": "AC5",
+    "serial": "AC5:59653",
+    "hostname": "apex",
+    "software": "5.12_CA25",
+    "hardware": "1.0",
+    "timezone": "-7.00",
+    "extra": {
+        "sdver": "SS16G,3,5344,2,0",
+        "sddate": "180901",
+        "sdserial": 3359085936,
+        "sdextDate": "",
+        "sdhealth": 0,
+        "WWWVer": "PASS",
+        "TmpUart": "PASS",
+        "pH2Uart": "PASS",
+        "CondUart": "PASS",
+        "sdstat": {
+            "reads": 57821895,
+            "writes": 19799,
+            "readErr": 0,
+            "writeErr": 0
+        }
+    },
+    "status": {
+        "outputs": [
+            {
+                "did": "base_Var1",
+                "gid": "",
+                "name": "WE-0to10",
+                "type": "variable",
+                "ID": 0,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "base_Var2",
+                "gid": "",
+                "name": "VarSpd2_I2",
+                "type": "variable",
+                "ID": 1,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "base_Var3",
+                "gid": "",
+                "name": "VarSpd3_I3",
+                "type": "variable",
+                "ID": 2,
+                "status": [
+                    "CorStandard",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "base_Var4",
+                "gid": "",
+                "name": "SkimmerPump",
+                "type": "variable",
+                "ID": 3,
+                "status": [
+                    "TBL",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "base_Alarm",
+                "gid": "",
+                "name": "SndAlm_I6",
+                "type": "alert",
+                "ID": 4,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "base_Warn",
+                "gid": "",
+                "name": "SndWrn_I7",
+                "type": "alert",
+                "ID": 5,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "base_email",
+                "gid": "",
+                "name": "Main_Alarm",
+                "type": "alert",
+                "ID": 6,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_1",
+                "gid": "",
+                "name": "Inkbird",
+                "type": "outlet",
+                "ID": 8,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_2",
+                "gid": "",
+                "name": "Reactor",
+                "type": "outlet",
+                "ID": 9,
+                "status": [
+                    "Pump_60_60",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_3",
+                "gid": "",
+                "name": "Fan",
+                "type": "outlet",
+                "ID": 10,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_4",
+                "gid": "",
+                "name": "Tunze_ATO",
+                "type": "outlet",
+                "ID": 11,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_5",
+                "gid": "",
+                "name": "UV",
+                "type": "outlet",
+                "ID": 12,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_6",
+                "gid": "",
+                "name": "ReefMat",
+                "type": "outlet",
+                "ID": 13,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_7",
+                "gid": "",
+                "name": "Sump_Flow",
+                "type": "outlet",
+                "ID": 14,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_8",
+                "gid": "",
+                "name": "Stand_Light",
+                "type": "outlet",
+                "ID": 15,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_9",
+                "gid": "",
+                "name": "top_dc24",
+                "type": "24v",
+                "ID": 16,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "9_10",
+                "gid": "",
+                "name": "LinkB_9_10",
+                "type": "24v",
+                "ID": 17,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "3_1",
+                "gid": "doserqd_3",
+                "name": "AWC_ADD",
+                "type": "dqd",
+                "ID": 18,
+                "status": [
+                    "TBL",
+                    "",
+                    "OK",
+                    "2000",
+                    "0"
+                ]
+            },
+            {
+                "did": "11_1",
+                "gid": "",
+                "name": "Return_Etc",
+                "type": "cor|20",
+                "ID": 19,
+                "status": [
+                    "TBL",
+                    "45",
+                    "OK",
+                    "4810",
+                    "2405",
+                    "019",
+                    "49"
+                ]
+            },
+            {
+                "did": "4_1",
+                "gid": "",
+                "name": "WaveEngine",
+                "type": "outlet",
+                "ID": 20,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "4_2",
+                "gid": "",
+                "name": "Bottom2",
+                "type": "outlet",
+                "ID": 21,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "4_3",
+                "gid": "",
+                "name": "RetPump_4_3",
+                "type": "outlet",
+                "ID": 22,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "4_4",
+                "gid": "",
+                "name": "Heater_4_4",
+                "type": "outlet",
+                "ID": 23,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "4_5",
+                "gid": "",
+                "name": "Skimmer_4_5",
+                "type": "outlet",
+                "ID": 24,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "4_6",
+                "gid": "",
+                "name": "Pump_4_6",
+                "type": "outlet",
+                "ID": 25,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "4_7",
+                "gid": "",
+                "name": "Axis",
+                "type": "outlet",
+                "ID": 26,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "4_8",
+                "gid": "",
+                "name": "Skimmer",
+                "type": "outlet",
+                "ID": 27,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "4_9",
+                "gid": "",
+                "name": "LinkA_4_9",
+                "type": "24v",
+                "ID": 28,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "4_10",
+                "gid": "",
+                "name": "LinkB_4_10",
+                "type": "24v",
+                "ID": 29,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "5_1",
+                "gid": "",
+                "name": "Return_UV",
+                "type": "cor|20",
+                "ID": 30,
+                "status": [
+                    "TBL",
+                    "55",
+                    "OK",
+                    "4624",
+                    "2312",
+                    "104",
+                    "59"
+                ]
+            },
+            {
+                "did": "20_1",
+                "gid": "0",
+                "name": "Vortech3",
+                "type": "MXMPump|Ecotech|Vortech",
+                "ID": 31,
+                "status": [
+                    "TBL",
+                    "",
+                    "Asnc",
+                    "OK"
+                ]
+            },
+            {
+                "did": "20_2",
+                "gid": "0",
+                "name": "Vortech2",
+                "type": "MXMPump|Ecotech|Vortech",
+                "ID": 32,
+                "status": [
+                    "TBL",
+                    "",
+                    "TSM",
+                    "OK"
+                ]
+            },
+            {
+                "did": "20_3",
+                "gid": "0",
+                "name": "Vortech1",
+                "type": "MXMPump|Ecotech|Vortech",
+                "ID": 33,
+                "status": [
+                    "TBL",
+                    "",
+                    "TSM",
+                    "OK"
+                ]
+            },
+            {
+                "did": "20_4",
+                "gid": "0",
+                "name": "Vortech4",
+                "type": "MXMPump|Ecotech|Vortech",
+                "ID": 34,
+                "status": [
+                    "TBL",
+                    "",
+                    "Asnc",
+                    "OK"
+                ]
+            },
+            {
+                "did": "2_1",
+                "gid": "",
+                "name": "PowerStrip",
+                "type": "outlet",
+                "ID": 35,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "2_2",
+                "gid": "",
+                "name": "NSW_Heater",
+                "type": "outlet",
+                "ID": 36,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A1",
+                "gid": "",
+                "name": "RunSkimmer",
+                "type": "virtual",
+                "ID": 37,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A2",
+                "gid": "",
+                "name": "AllVortechs",
+                "type": "virtual",
+                "ID": 38,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "12_1",
+                "gid": "doser_12",
+                "name": "Alkalinity",
+                "type": "dos",
+                "ID": 40,
+                "status": [
+                    "TBL",
+                    "",
+                    "OK",
+                    "2000",
+                    "1872"
+                ]
+            },
+            {
+                "did": "12_2",
+                "gid": "doser_12",
+                "name": "Calcium",
+                "type": "dos",
+                "ID": 41,
+                "status": [
+                    "TBL",
+                    "",
+                    "OK",
+                    "2000",
+                    "1894"
+                ]
+            },
+            {
+                "did": "13_1",
+                "gid": "",
+                "name": "LinkA_13_1",
+                "type": "24v",
+                "ID": 42,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "13_2",
+                "gid": "",
+                "name": "LinkB_13_2",
+                "type": "24v",
+                "ID": 43,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "18_3",
+                "gid": "",
+                "name": "Trident_18_3",
+                "type": "selector",
+                "ID": 44,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "18_4",
+                "gid": "",
+                "name": "Alk_18_4",
+                "type": "selector",
+                "ID": 45,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A16",
+                "gid": "",
+                "name": "ATO_EMPTY",
+                "type": "virtual",
+                "ID": 46,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_B1",
+                "gid": "",
+                "name": "TMP_DELETE",
+                "type": "virtual",
+                "ID": 47,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "3_2",
+                "gid": "doserqd_3",
+                "name": "AWC_REM",
+                "type": "dqd",
+                "ID": 48,
+                "status": [
+                    "TBL",
+                    "",
+                    "OK",
+                    "2000",
+                    "0"
+                ]
+            },
+            {
+                "did": "21_1",
+                "gid": "",
+                "name": "LinkA_21_1",
+                "type": "24v",
+                "ID": 49,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A3",
+                "gid": "",
+                "name": "ATK_Lo_Alarm",
+                "type": "virtual",
+                "ID": 50,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "2_3",
+                "gid": "",
+                "name": "NSW_Pump",
+                "type": "outlet",
+                "ID": 51,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A4",
+                "gid": "",
+                "name": "RO_AUTOFILL",
+                "type": "virtual",
+                "ID": 52,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "23_1",
+                "gid": "doserqd_23",
+                "name": "QT_ADD",
+                "type": "dqd",
+                "ID": 53,
+                "status": [
+                    "TBL",
+                    "",
+                    "OK",
+                    "2000",
+                    "0"
+                ]
+            },
+            {
+                "did": "23_2",
+                "gid": "doserqd_23",
+                "name": "QT_Remove",
+                "type": "dqd",
+                "ID": 54,
+                "status": [
+                    "TBL",
+                    "",
+                    "OK",
+                    "2000",
+                    "0"
+                ]
+            },
+            {
+                "did": "21_2",
+                "gid": "",
+                "name": "Alarm_21_2",
+                "type": "alert",
+                "ID": 55,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_B2",
+                "gid": "",
+                "name": "RES_BAD",
+                "type": "virtual",
+                "ID": 56,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "2_4",
+                "gid": "",
+                "name": "RO_Booster",
+                "type": "outlet",
+                "ID": 57,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "2_5",
+                "gid": "",
+                "name": "Ozone",
+                "type": "outlet",
+                "ID": 58,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "2_6",
+                "gid": "",
+                "name": "OzoneAir",
+                "type": "outlet",
+                "ID": 59,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A5",
+                "gid": "",
+                "name": "Feeding",
+                "type": "virtual",
+                "ID": 60,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A6",
+                "gid": "",
+                "name": "SumpAlarm",
+                "type": "virtual",
+                "ID": 61,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A7",
+                "gid": "",
+                "name": "Pulser",
+                "type": "virtual",
+                "ID": 62,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A8",
+                "gid": "",
+                "name": "NSW_AutoFill",
+                "type": "virtual",
+                "ID": 63,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A9",
+                "gid": "",
+                "name": "NSW_Trigger",
+                "type": "virtual",
+                "ID": 64,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "2_7",
+                "gid": "",
+                "name": "RefLght_2_7",
+                "type": "outlet",
+                "ID": 65,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "2_8",
+                "gid": "",
+                "name": "GPower8",
+                "type": "outlet",
+                "ID": 66,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A10",
+                "gid": "",
+                "name": "DDR_Low",
+                "type": "virtual",
+                "ID": 67,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A11",
+                "gid": "",
+                "name": "Mix_NSW",
+                "type": "virtual",
+                "ID": 68,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A12",
+                "gid": "",
+                "name": "AWC_Enabled",
+                "type": "virtual",
+                "ID": 69,
+                "status": [
+                    "AON",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A13",
+                "gid": "",
+                "name": "Alt_Fill",
+                "type": "virtual",
+                "ID": 70,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "2_9",
+                "gid": "",
+                "name": "DT_ATO_PUMP",
+                "type": "24v",
+                "ID": 71,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "2_10",
+                "gid": "",
+                "name": "FRAG_ATO_PMP",
+                "type": "24v",
+                "ID": 72,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A14",
+                "gid": "",
+                "name": "TSM",
+                "type": "virtual",
+                "ID": 76,
+                "status": [
+                    "OFF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "22_1",
+                "gid": "",
+                "name": "LinkA_22_1",
+                "type": "24v",
+                "ID": 77,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "22_2",
+                "gid": "",
+                "name": "Alarm_22_2",
+                "type": "alert",
+                "ID": 78,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "6_3",
+                "gid": "",
+                "name": "Trident_6_3",
+                "type": "selector",
+                "ID": 79,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "Cntl_A15",
+                "gid": "",
+                "name": "Skimmer_full",
+                "type": "virtual",
+                "ID": 80,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "15_1",
+                "gid": "",
+                "name": "SOL_INPUT",
+                "type": "24v",
+                "ID": 81,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "15_2",
+                "gid": "",
+                "name": "SOL_OUT_NSW",
+                "type": "24v",
+                "ID": 82,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "14_1",
+                "gid": "",
+                "name": "LinkA_14_1",
+                "type": "24v",
+                "ID": 83,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "14_2",
+                "gid": "",
+                "name": "Alarm_14_2",
+                "type": "alert",
+                "ID": 84,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "10_1",
+                "gid": "",
+                "name": "SOL_OUT_ATO",
+                "type": "24v",
+                "ID": 85,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "10_2",
+                "gid": "",
+                "name": "Alarm_10_2",
+                "type": "alert",
+                "ID": 86,
+                "status": [
+                    "AOF",
+                    "",
+                    "OK",
+                    ""
+                ]
+            },
+            {
+                "did": "17_1",
+                "gid": "",
+                "name": "Wav_Bottom",
+                "type": "wav",
+                "ID": 87,
+                "status": [
+                    "AOF",
+                    "0",
+                    "OK",
+                    "   0",
+                    "0",
+                    "76.7",
+                    "0.04",
+                    "-189",
+                    "-239",
+                    "978",
+                    "1"
+                ]
+            },
+            {
+                "did": "16_1",
+                "gid": "",
+                "name": "WAV_Top",
+                "type": "wav",
+                "ID": 88,
+                "status": [
+                    "AOF",
+                    "0",
+                    "OK",
+                    "   0",
+                    "0",
+                    "84.9",
+                    "0.04",
+                    "371",
+                    "-568",
+                    "-780",
+                    "1"
+                ]
+            }
+        ],
+        "inputs": [
+            {
+                "did": "base_Temp",
+                "type": "Temp",
+                "name": "Temp",
+                "value": 78.4
+            },
+            {
+                "did": "base_pH",
+                "type": "pH",
+                "name": "pH",
+                "value": 8.41
+            },
+            {
+                "did": "base_ORP",
+                "type": "ORP",
+                "name": "ORP",
+                "value": 310
+            },
+            {
+                "did": "base_Cond",
+                "type": "Cond",
+                "name": "Salt",
+                "value": 31.9
+            },
+            {
+                "did": "2_P0",
+                "type": "Amps",
+                "name": "Alk",
+                "value": 0
+            },
+            {
+                "did": "2_P1",
+                "type": "Amps",
+                "name": "Ca",
+                "value": 0
+            },
+            {
+                "did": "2_P2",
+                "type": "Amps",
+                "name": "Mg",
+                "value": 0
+            },
+            {
+                "did": "2_P3",
+                "type": "Amps",
+                "name": "RO_BoosterA",
+                "value": 0
+            },
+            {
+                "did": "2_P4",
+                "type": "Amps",
+                "name": "OzoneA",
+                "value": 0
+            },
+            {
+                "did": "2_P5",
+                "type": "Amps",
+                "name": "OzoneAirA",
+                "value": 0
+            },
+            {
+                "did": "2_P6",
+                "type": "Amps",
+                "name": "RefLght_2_7A",
+                "value": 0
+            },
+            {
+                "did": "2_P7",
+                "type": "Amps",
+                "name": "GPower8A",
+                "value": 0
+            },
+            {
+                "did": "2_P8",
+                "type": "pwr",
+                "name": "PowerStripW",
+                "value": 10
+            },
+            {
+                "did": "2_P9",
+                "type": "pwr",
+                "name": "NSW_HeaterW",
+                "value": 0
+            },
+            {
+                "did": "2_P10",
+                "type": "pwr",
+                "name": "NSW_PumpW",
+                "value": 1
+            },
+            {
+                "did": "2_P11",
+                "type": "pwr",
+                "name": "RO_BoosterW",
+                "value": 0
+            },
+            {
+                "did": "2_P12",
+                "type": "pwr",
+                "name": "OzoneW",
+                "value": 6
+            },
+            {
+                "did": "2_P13",
+                "type": "pwr",
+                "name": "OzoneAirW",
+                "value": 2
+            },
+            {
+                "did": "2_P14",
+                "type": "pwr",
+                "name": "RefLght_2_7W",
+                "value": 0
+            },
+            {
+                "did": "2_P15",
+                "type": "pwr",
+                "name": "GPower8W",
+                "value": 0
+            },
+            {
+                "did": "2_P16",
+                "type": "volts",
+                "name": "Volt_2",
+                "value": 121
+            },
+            {
+                "did": "4_P0",
+                "type": "Amps",
+                "name": "WaveEngineA",
+                "value": 0
+            },
+            {
+                "did": "4_P1",
+                "type": "Amps",
+                "name": "Bottom2A",
+                "value": 0
+            },
+            {
+                "did": "4_P2",
+                "type": "Amps",
+                "name": "RetPump_4_3A",
+                "value": 0
+            },
+            {
+                "did": "4_P3",
+                "type": "Amps",
+                "name": "Heater_4_4A",
+                "value": 0
+            },
+            {
+                "did": "4_P4",
+                "type": "Amps",
+                "name": "Skimmer_4_5A",
+                "value": 0
+            },
+            {
+                "did": "4_P5",
+                "type": "Amps",
+                "name": "Pump_4_6A",
+                "value": 0
+            },
+            {
+                "did": "4_P6",
+                "type": "Amps",
+                "name": "AxisA",
+                "value": 0.2
+            },
+            {
+                "did": "4_P7",
+                "type": "Amps",
+                "name": "SkimmerA",
+                "value": 0.2
+            },
+            {
+                "did": "4_P8",
+                "type": "pwr",
+                "name": "WaveEngineW",
+                "value": 0
+            },
+            {
+                "did": "4_P9",
+                "type": "pwr",
+                "name": "Bottom2W",
+                "value": 1
+            },
+            {
+                "did": "4_P10",
+                "type": "pwr",
+                "name": "RetPump_4_3W",
+                "value": 1
+            },
+            {
+                "did": "4_P11",
+                "type": "pwr",
+                "name": "Heater_4_4W",
+                "value": 0
+            },
+            {
+                "did": "4_P12",
+                "type": "pwr",
+                "name": "Skimmer_4_5W",
+                "value": 0
+            },
+            {
+                "did": "4_P13",
+                "type": "pwr",
+                "name": "Pump_4_6W",
+                "value": 1
+            },
+            {
+                "did": "4_P14",
+                "type": "pwr",
+                "name": "AxisW",
+                "value": 17
+            },
+            {
+                "did": "4_P15",
+                "type": "pwr",
+                "name": "SkimmerW",
+                "value": 28
+            },
+            {
+                "did": "4_P16",
+                "type": "volts",
+                "name": "Volt_4",
+                "value": 122
+            },
+            {
+                "did": "6_0",
+                "type": "po4",
+                "name": "PO4",
+                "value": 0.02
+            },
+            {
+                "did": "6_1",
+                "type": "no3",
+                "name": "NO3",
+                "value": 12.7
+            },
+            {
+                "did": "9_P0",
+                "type": "Amps",
+                "name": "InkbirdA",
+                "value": 0.2
+            },
+            {
+                "did": "9_P1",
+                "type": "Amps",
+                "name": "ReactorA",
+                "value": 0
+            },
+            {
+                "did": "9_P2",
+                "type": "Amps",
+                "name": "FanA",
+                "value": 0
+            },
+            {
+                "did": "9_P3",
+                "type": "Amps",
+                "name": "Tunze_ATOA",
+                "value": 0
+            },
+            {
+                "did": "9_P4",
+                "type": "Amps",
+                "name": "UVA",
+                "value": 0.4
+            },
+            {
+                "did": "9_P5",
+                "type": "Amps",
+                "name": "ReefMatA",
+                "value": 0
+            },
+            {
+                "did": "9_P6",
+                "type": "Amps",
+                "name": "Sump_FlowA",
+                "value": 0.1
+            },
+            {
+                "did": "9_P7",
+                "type": "Amps",
+                "name": "Stand_LightA",
+                "value": 0
+            },
+            {
+                "did": "9_P8",
+                "type": "pwr",
+                "name": "InkbirdW",
+                "value": 3
+            },
+            {
+                "did": "9_P9",
+                "type": "pwr",
+                "name": "ReactorW",
+                "value": 2
+            },
+            {
+                "did": "9_P10",
+                "type": "pwr",
+                "name": "FanW",
+                "value": 0
+            },
+            {
+                "did": "9_P11",
+                "type": "pwr",
+                "name": "Tunze_ATOW",
+                "value": 1
+            },
+            {
+                "did": "9_P12",
+                "type": "pwr",
+                "name": "UVW",
+                "value": 46
+            },
+            {
+                "did": "9_P13",
+                "type": "pwr",
+                "name": "ReefMatW",
+                "value": 2
+            },
+            {
+                "did": "9_P14",
+                "type": "pwr",
+                "name": "Sump_FlowW",
+                "value": 11
+            },
+            {
+                "did": "9_P15",
+                "type": "pwr",
+                "name": "Stand_LightW",
+                "value": 1
+            },
+            {
+                "did": "9_P16",
+                "type": "volts",
+                "name": "Volt_9",
+                "value": 121
+            },
+            {
+                "did": "14_P1",
+                "type": "in",
+                "name": "RES_LV",
+                "value": 7.3
+            },
+            {
+                "did": "14_P2",
+                "type": "in",
+                "name": "ATO_LL",
+                "value": 9.5
+            },
+            {
+                "did": "16_0",
+                "type": "flo",
+                "name": "Flo_16",
+                "value": 0
+            },
+            {
+                "did": "17_0",
+                "type": "flo",
+                "name": "Flo_17",
+                "value": 0
+            },
+            {
+                "did": "18_0",
+                "type": "alk",
+                "name": "Alkx18",
+                "value": 8.22
+            },
+            {
+                "did": "18_1",
+                "type": "ca",
+                "name": "Cax18",
+                "value": 463
+            },
+            {
+                "did": "18_2",
+                "type": "mg",
+                "name": "Mgx18",
+                "value": 1338
+            },
+            {
+                "did": "19_1",
+                "type": "Cond",
+                "name": "Condx19",
+                "value": 1.3
+            },
+            {
+                "did": "21_P2",
+                "type": "in",
+                "name": "Rtn_lv",
+                "value": 8.2
+            },
+            {
+                "did": "22_P2",
+                "type": "in",
+                "name": "FRAG_R",
+                "value": 6.4
+            },
+            {
+                "did": "base_I1",
+                "type": "digital",
+                "name": "DoorSw",
+                "value": 60
+            },
+            {
+                "did": "base_I2",
+                "type": "digital",
+                "name": "Sw2",
+                "value": 0
+            },
+            {
+                "did": "base_I3",
+                "type": "digital",
+                "name": "Sw3",
+                "value": 0
+            },
+            {
+                "did": "base_I4",
+                "type": "digital",
+                "name": "Sw4",
+                "value": 0
+            },
+            {
+                "did": "base_I5",
+                "type": "digital",
+                "name": "Sw5",
+                "value": 0
+            },
+            {
+                "did": "base_I6",
+                "type": "digital",
+                "name": "SkimSW",
+                "value": 60
+            },
+            {
+                "did": "10_I1",
+                "type": "digital",
+                "name": "ATOLOW",
+                "value": 200
+            },
+            {
+                "did": "10_I2",
+                "type": "digital",
+                "name": "ATOMAX",
+                "value": 0
+            },
+            {
+                "did": "10_I3",
+                "type": "digital",
+                "name": "XLow",
+                "value": 200
+            },
+            {
+                "did": "10_I4",
+                "type": "digital",
+                "name": "Ext_Lo",
+                "value": 200
+            },
+            {
+                "did": "12_I1",
+                "type": "digital",
+                "name": "Alk_Lo",
+                "value": 200
+            },
+            {
+                "did": "12_I2",
+                "type": "digital",
+                "name": "CA_Low",
+                "value": 200
+            },
+            {
+                "did": "14_I1",
+                "type": "digital",
+                "name": "NSW_Hi",
+                "value": 200
+            },
+            {
+                "did": "14_I4",
+                "type": "digital",
+                "name": "NSW_Lo",
+                "value": 200
+            },
+            {
+                "did": "19_I1",
+                "type": "digital",
+                "name": "Master",
+                "value": 0
+            },
+            {
+                "did": "19_I2",
+                "type": "digital",
+                "name": "SWPump",
+                "value": 0
+            },
+            {
+                "did": "19_I3",
+                "type": "digital",
+                "name": "SWRODI",
+                "value": 0
+            },
+            {
+                "did": "19_I4",
+                "type": "digital",
+                "name": "Swx19_4",
+                "value": 0
+            },
+            {
+                "did": "19_I5",
+                "type": "digital",
+                "name": "Swx19_5",
+                "value": 0
+            },
+            {
+                "did": "19_I6",
+                "type": "digital",
+                "name": "Swx19_6",
+                "value": 0
+            },
+            {
+                "did": "21_I1",
+                "type": "digital",
+                "name": "Ret_Lo",
+                "value": 200
+            },
+            {
+                "did": "21_I2",
+                "type": "digital",
+                "name": "Ret_hi",
+                "value": 0
+            },
+            {
+                "did": "21_I4",
+                "type": "digital",
+                "name": "Swx21_4",
+                "value": 200
+            },
+            {
+                "did": "22_I1",
+                "type": "digital",
+                "name": "FRAG_L",
+                "value": 200
+            },
+            {
+                "did": "22_I2",
+                "type": "digital",
+                "name": "FRAG_H",
+                "value": 0
+            },
+            {
+                "did": "22_I4",
+                "type": "digital",
+                "name": "Swx22_4",
+                "value": 0
+            }
+        ],
+        "feed": {
+            "date": "2026-04-18T01:11:02.721Z",
+            "name": 0,
+            "active": 0
+        },
+        "power": {
+            "failed": "2026-04-13T16:46:59.000Z",
+            "restored": "1970-01-01T00:00:00.000Z"
+        },
+        "alarm": {
+            "date": "2026-04-18T14:01:02.000Z",
+            "smnt": "Alarm is off",
+            "status": "OFF"
+        },
+        "modules": [
+            {
+                "abaddr": 2,
+                "hwtype": "EB832",
+                "hwrev": 1,
+                "swrev": 8,
+                "swstat": "OK",
+                "pcount": 386726,
+                "pgood": 386726,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 3,
+                "hwtype": "DQD",
+                "hwrev": 1,
+                "swrev": 11,
+                "swstat": "OK",
+                "pcount": 386736,
+                "pgood": 386730,
+                "perror": 6,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {
+                    "status": [],
+                    "firmupStatus": "no update",
+                    "firmupPercent": 0
+                }
+            },
+            {
+                "abaddr": 4,
+                "hwtype": "EB832",
+                "hwrev": 1,
+                "swrev": 8,
+                "swstat": "OK",
+                "pcount": 386726,
+                "pgood": 386726,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 5,
+                "hwtype": "COR",
+                "hwrev": 1,
+                "swrev": 15,
+                "swstat": "OK",
+                "pcount": 386726,
+                "pgood": 386726,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 6,
+                "hwtype": "TNP",
+                "hwrev": 2,
+                "swrev": 54,
+                "swstat": "OK",
+                "pcount": 386726,
+                "pgood": 386725,
+                "perror": 1,
+                "reatt": 2,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {
+                    "temp": 1054,
+                    "errorCode": 0,
+                    "errorMask": 65535,
+                    "status": "idle",
+                    "lastCal": 1755837264,
+                    "resetTime": [
+                        1771266975,
+                        1723305435,
+                        1771266975,
+                        1771266975,
+                        1771266975
+                    ],
+                    "levels": [
+                        2345.8,
+                        1622.2,
+                        17.31,
+                        16.68,
+                        16.68
+                    ]
+                }
+            },
+            {
+                "abaddr": 9,
+                "hwtype": "EB832",
+                "hwrev": 1,
+                "swrev": 8,
+                "swstat": "OK",
+                "pcount": 386726,
+                "pgood": 386726,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 10,
+                "hwtype": "FMM",
+                "hwrev": 1,
+                "swrev": 24,
+                "swstat": "OK",
+                "pcount": 386736,
+                "pgood": 386736,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 11,
+                "hwtype": "COR",
+                "hwrev": 1,
+                "swrev": 15,
+                "swstat": "OK",
+                "pcount": 386726,
+                "pgood": 386726,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 12,
+                "hwtype": "DOS",
+                "hwrev": 1,
+                "swrev": 12,
+                "swstat": "OK",
+                "pcount": 386734,
+                "pgood": 386734,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {
+                    "status": []
+                }
+            },
+            {
+                "abaddr": 13,
+                "hwtype": "1LNK",
+                "hwrev": 2,
+                "swrev": 5,
+                "swstat": "OK",
+                "pcount": 386736,
+                "pgood": 386736,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 14,
+                "hwtype": "FMM",
+                "hwrev": 1,
+                "swrev": 24,
+                "swstat": "OK",
+                "pcount": 386736,
+                "pgood": 386736,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 15,
+                "hwtype": "1LNK",
+                "hwrev": 2,
+                "swrev": 5,
+                "swstat": "OK",
+                "pcount": 386736,
+                "pgood": 386736,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 16,
+                "hwtype": "WAV",
+                "hwrev": 3,
+                "swrev": 18,
+                "swstat": "OK",
+                "pcount": 388244,
+                "pgood": 388244,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 17,
+                "hwtype": "WAV",
+                "hwrev": 3,
+                "swrev": 18,
+                "swstat": "OK",
+                "pcount": 388243,
+                "pgood": 388243,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 18,
+                "hwtype": "TRI",
+                "hwrev": 2,
+                "swrev": 23,
+                "swstat": "OK",
+                "pcount": 386726,
+                "pgood": 386723,
+                "perror": 3,
+                "reatt": 2,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {
+                    "temp": 804,
+                    "errorCode": 0,
+                    "errorMask": 65535,
+                    "status": "idle",
+                    "lastCal": 1761329192,
+                    "resetTime": [
+                        1776530867,
+                        1727893517,
+                        1772073907,
+                        1772073907,
+                        1774937467
+                    ],
+                    "levels": [
+                        16.5,
+                        609.4,
+                        39.14,
+                        42.07,
+                        105.07
+                    ]
+                }
+            },
+            {
+                "abaddr": 19,
+                "hwtype": "PM2",
+                "hwrev": 1,
+                "swrev": 3,
+                "swstat": "OK",
+                "pcount": 386732,
+                "pgood": 386732,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 20,
+                "hwtype": "MXM",
+                "hwrev": 1,
+                "swrev": 1,
+                "swstat": "OK",
+                "pcount": 386524,
+                "pgood": 386524,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 21,
+                "hwtype": "FMM",
+                "hwrev": 1,
+                "swrev": 24,
+                "swstat": "OK",
+                "pcount": 386735,
+                "pgood": 386350,
+                "perror": 385,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 22,
+                "hwtype": "FMM",
+                "hwrev": 1,
+                "swrev": 24,
+                "swstat": "OK",
+                "pcount": 386735,
+                "pgood": 386735,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {}
+            },
+            {
+                "abaddr": 23,
+                "hwtype": "DQD",
+                "hwrev": 1,
+                "swrev": 11,
+                "swstat": "OK",
+                "pcount": 386735,
+                "pgood": 386735,
+                "perror": 0,
+                "reatt": 0,
+                "inact": 0,
+                "boot": false,
+                "present": true,
+                "extra": {
+                    "status": [],
+                    "firmupStatus": "no update",
+                    "firmupPercent": 0
+                }
+            }
+        ],
+        "clock": {
+            "skew": -1
+        },
+        "command": {
+            "errorCode": 0,
+            "errorMessage": ""
+        },
+        "network": {
+            "dhcp": true,
+            "hostname": "apex",
+            "ipaddr": "192.168.4.178",
+            "netmask": "255.255.252.0",
+            "gateway": "192.168.4.1",
+            "dns": [
+                "192.168.1.254",
+                "0.0.0.0"
+            ],
+            "httpPort": 80,
+            "ssid": "Buddy Dogg",
+            "link": true,
+            "quality": 96,
+            "strength": 94,
+            "wifiAP": false,
+            "wifiAPLock": false,
+            "updateFirmware": false,
+            "latestFirmware": "5.12_CA25"
+        },
+        "cal": {
+            "did": "base_Temp",
+            "value": 784,
+            "state": 0,
+            "date": "2026-04-18T20:39:46.000Z"
+        }
+    },
+    "config": {
+        "outputs": [
+            {
+                "ID": "0",
+                "did": "base_Var1",
+                "type": "variable",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "WE-0to10",
+                "icon": "Up/Down Arrows",
+                "prog": "Set 0\nIf FeedA 035 Then 0\nIf FeedA 025 Then 0\nIf FeedA 000 Then 30\nIf FeedC 000 Then 20\n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "1",
+                "did": "base_Var2",
+                "type": "variable",
+                "ctype": "Always",
+                "gid": "",
+                "gtype": "0",
+                "name": "VarSpd2_I2",
+                "icon": "Left/Right Arrows",
+                "prog": "Fallback OFF \nSet OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "2",
+                "did": "base_Var3",
+                "type": "variable",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "VarSpd3_I3",
+                "icon": "Up/Down Arrows",
+                "prog": "Set CorStandard\n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "3",
+                "did": "base_Var4",
+                "type": "variable",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "SkimmerPump",
+                "icon": "Spigot",
+                "prog": "Fallback OFF \ntdata 00:00:00,0,0,62,0,0,0,0,0,0,0,0,0,0\nIf FeedA 035 Then SkimmerVLow\n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "4",
+                "did": "base_Alarm",
+                "type": "alert",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "SndAlm_I6",
+                "icon": "Sound B",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "5",
+                "did": "base_Warn",
+                "type": "alert",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "SndWrn_I7",
+                "icon": "Sound A",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "6",
+                "did": "base_email",
+                "type": "alert",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Main_Alarm",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nIf Output Skimmer_full = ON Then ON \nIf Error NSW_Pump Then ON \nIf Output ATK_Lo_Alarm = ON Then ON \nIf Output DDR_Low = ON Then ON \nIf pH > 8.60 Then ON \nIf pH < 7.70 Then ON \nIf Temp > 81.9 Then ON \nIf Temp < 75.5 Then ON \nIf Salt > 36.6 Then ON \nIf Salt < 21.0 Then ON \nIf Ext_Lo OPEN Then ON \nIf Output ATO_EMPTY = ON Then ON \nIf ATOLOW OPEN Then ON \nIf Output SumpAlarm = ON Then ON \nIf Error Return_UV Then ON \nIf Error Return_Etc Then ON \nIf Error FRAG_ATO_PMP Then ON \nIf ATO_LL > 13.4 Then ON \nIf Output RES_BAD = ON Then ON \nIf Error Apex Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "8",
+                "did": "9_1",
+                "type": "outlet",
+                "ctype": "Heater",
+                "gid": "",
+                "gtype": "0",
+                "name": "Inkbird",
+                "icon": "Thermometer",
+                "prog": "Fallback ON \nIf Temp < 77.5 Then ON \nIf Temp > 80.0 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "9",
+                "did": "9_2",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Reactor",
+                "icon": "Spigot",
+                "prog": "Fallback ON \nSet ON \nIf PO4 < 0.07 Then Pump_60_30\nIf PO4 < 0.04 Then Pump_60_60\nIf PO4 < 0.02 Then Pump_05_55\nIf PO4 = 0.00 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "10",
+                "did": "9_3",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Fan",
+                "icon": "Fan",
+                "prog": "Fallback OFF \nSet OFF \nIf Temp > 78.5 Then ON \nIf pH > 8.50 Then OFF \nDefer 000:02 Then ON \nDefer 000:10 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "11",
+                "did": "9_4",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Tunze_ATO",
+                "icon": "Spigot",
+                "prog": "Fallback ON \nSet ON \nIf Ret_hi CLOSED Then OFF \nIf Rtn_lv > 8.6 Then OFF \nDefer 002:00 Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "12",
+                "did": "9_5",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "UV",
+                "icon": "Light B",
+                "prog": "Fallback OFF \nSet ON \nIf Output Return_UV = OFF Then OFF \nIf Output Return_UV Percent < 37 Then OFF \nIf Error Return_UV Then OFF \nDefer 010:00 Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "13",
+                "did": "9_6",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "ReefMat",
+                "icon": "Spigot",
+                "prog": "Fallback ON \nSet ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "14",
+                "did": "9_7",
+                "type": "outlet",
+                "ctype": "Always",
+                "gid": "",
+                "gtype": "0",
+                "name": "Sump_Flow",
+                "icon": "Fan",
+                "prog": "Fallback ON \nSet ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "15",
+                "did": "9_8",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Stand_Light",
+                "icon": "Light B",
+                "prog": "Fallback OFF \nSet OFF \nIf DoorSw OPEN Then ON \nDefer 000:05 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "16",
+                "did": "9_9",
+                "type": "24v",
+                "ctype": "Always",
+                "gid": "",
+                "gtype": "0",
+                "name": "top_dc24",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback ON \nSet ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "17",
+                "did": "9_10",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "LinkB_9_10",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "18",
+                "did": "3_1",
+                "type": "dqd",
+                "ctype": "Advanced",
+                "gid": "doserqd_3",
+                "gtype": "0",
+                "name": "AWC_ADD",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "19",
+                "did": "11_1",
+                "type": "cor|20",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Return_Etc",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,0,0,45,0,0,0,0,0,0,0,0,0,0\n",
+                "log": true,
+                "inuse": true,
+                "extra": {
+                    "max": 100,
+                    "min": 10,
+                    "calState": 0
+                }
+            },
+            {
+                "ID": "20",
+                "did": "4_1",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "WaveEngine",
+                "icon": "Fan",
+                "prog": "Fallback ON \nSet ON \nIf Output Return_UV Percent < 40 Then OFF \nIf Time 21:00 to 10:29 Then OFF \nIf pH > 8.60 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "21",
+                "did": "4_2",
+                "type": "outlet",
+                "ctype": "Always",
+                "gid": "",
+                "gtype": "0",
+                "name": "Bottom2",
+                "icon": "Fan",
+                "prog": "Fallback OFF \nSet OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "22",
+                "did": "4_3",
+                "type": "outlet",
+                "ctype": "Return Pump",
+                "gid": "",
+                "gtype": "0",
+                "name": "RetPump_4_3",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback ON \nSet ON \nIf FeedA 000 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "23",
+                "did": "4_4",
+                "type": "outlet",
+                "ctype": "Heater",
+                "gid": "",
+                "gtype": "0",
+                "name": "Heater_4_4",
+                "icon": "Thermometer",
+                "prog": "Fallback OFF \nIf Temp < 78.0 Then ON \nIf Temp > 79.0 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "24",
+                "did": "4_5",
+                "type": "outlet",
+                "ctype": "Skimmer",
+                "gid": "",
+                "gtype": "0",
+                "name": "Skimmer_4_5",
+                "icon": "Left/Right Arrows",
+                "prog": "Fallback OFF \nSet ON \nIf FeedA 000 Then OFF \nDefer 005:00 Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "25",
+                "did": "4_6",
+                "type": "outlet",
+                "ctype": "Always",
+                "gid": "",
+                "gtype": "0",
+                "name": "Pump_4_6",
+                "icon": "Spigot",
+                "prog": "Fallback ON \nSet ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "26",
+                "did": "4_7",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Axis",
+                "icon": "Left/Right Arrows",
+                "prog": "Fallback ON \nSet ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "27",
+                "did": "4_8",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Skimmer",
+                "icon": "Hourglass",
+                "prog": "Fallback ON \nSet ON \nIf Output RunSkimmer = OFF Then OFF \nIf SkimSW OPEN Then OFF \nDefer 000:01 Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "28",
+                "did": "4_9",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "LinkA_4_9",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "29",
+                "did": "4_10",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "LinkB_4_10",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "30",
+                "did": "5_1",
+                "type": "cor|20",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Return_UV",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 23:59:00,0,0,55,0,0,0,0,0,0,0,0,0,0\n",
+                "log": true,
+                "inuse": true,
+                "extra": {
+                    "max": 100,
+                    "min": 10,
+                    "calState": 0
+                }
+            },
+            {
+                "ID": "31",
+                "did": "20_1",
+                "type": "MXMPump|Ecotech|Vortech",
+                "ctype": "Advanced",
+                "gid": "0",
+                "gtype": "0",
+                "name": "Vortech3",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,0,0,100,11,2,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf FeedB 000 Then FeedSlow\nIf Output AllVortechs = OFF Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {
+                    "temperature": false,
+                    "gph": {
+                        "min": 0,
+                        "max": 100
+                    },
+                    "modes": [
+                        {
+                            "id": 1,
+                            "name": "Reef"
+                        },
+                        {
+                            "id": 0,
+                            "name": "Constant"
+                        },
+                        {
+                            "id": 2,
+                            "name": "Lagoon"
+                        },
+                        {
+                            "id": 3,
+                            "name": "Pulse"
+                        },
+                        {
+                            "id": 7,
+                            "name": "Tidal"
+                        },
+                        {
+                            "id": 8,
+                            "name": "Nutrient"
+                        },
+                        {
+                            "id": 10,
+                            "name": "Sync"
+                        },
+                        {
+                            "id": 11,
+                            "name": "AntiSync"
+                        }
+                    ]
+                }
+            },
+            {
+                "ID": "32",
+                "did": "20_2",
+                "type": "MXMPump|Ecotech|Vortech",
+                "ctype": "Advanced",
+                "gid": "0",
+                "gtype": "0",
+                "name": "Vortech2",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,0,0,38,8,0,0,0,0,0,0,0,0,0\ntdata 08:00:00,0,0,53,1,0,0,0,0,0,0,0,0,0\ntdata 12:30:00,0,0,50,7,0,0,0,0,0,0,0,0,0\ntdata 16:45:00,0,0,60,1,0,0,0,0,0,0,0,0,0\ntdata 21:00:00,0,0,50,1,0,0,0,0,0,0,0,0,0\ntdata 22:00:00,0,0,40,8,0,0,0,0,0,0,0,0,0\ntdata 23:55:00,0,0,40,8,0,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedOff\nIf FeedB 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf Output AllVortechs = OFF Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {
+                    "temperature": false,
+                    "gph": {
+                        "min": 0,
+                        "max": 100
+                    },
+                    "modes": [
+                        {
+                            "id": 1,
+                            "name": "Reef"
+                        },
+                        {
+                            "id": 0,
+                            "name": "Constant"
+                        },
+                        {
+                            "id": 2,
+                            "name": "Lagoon"
+                        },
+                        {
+                            "id": 3,
+                            "name": "Pulse"
+                        },
+                        {
+                            "id": 7,
+                            "name": "Tidal"
+                        },
+                        {
+                            "id": 8,
+                            "name": "Nutrient"
+                        },
+                        {
+                            "id": 10,
+                            "name": "Sync"
+                        },
+                        {
+                            "id": 11,
+                            "name": "AntiSync"
+                        }
+                    ]
+                }
+            },
+            {
+                "ID": "33",
+                "did": "20_3",
+                "type": "MXMPump|Ecotech|Vortech",
+                "ctype": "Advanced",
+                "gid": "0",
+                "gtype": "0",
+                "name": "Vortech1",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,0,0,38,8,0,0,0,0,0,0,0,0,0\ntdata 08:00:00,0,0,53,1,0,0,0,0,0,0,0,0,0\ntdata 12:30:00,0,0,50,7,0,0,0,0,0,0,0,0,0\ntdata 16:45:00,0,0,60,1,0,0,0,0,0,0,0,0,0\ntdata 21:00:00,0,0,50,1,0,0,0,0,0,0,0,0,0\ntdata 22:00:00,0,0,40,8,0,0,0,0,0,0,0,0,0\ntdata 23:55:00,0,0,40,8,0,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedOff\nIf FeedB 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf Output AllVortechs = OFF Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {
+                    "temperature": false,
+                    "gph": {
+                        "min": 0,
+                        "max": 100
+                    },
+                    "modes": [
+                        {
+                            "id": 1,
+                            "name": "Reef"
+                        },
+                        {
+                            "id": 0,
+                            "name": "Constant"
+                        },
+                        {
+                            "id": 2,
+                            "name": "Lagoon"
+                        },
+                        {
+                            "id": 3,
+                            "name": "Pulse"
+                        },
+                        {
+                            "id": 7,
+                            "name": "Tidal"
+                        },
+                        {
+                            "id": 8,
+                            "name": "Nutrient"
+                        },
+                        {
+                            "id": 10,
+                            "name": "Sync"
+                        },
+                        {
+                            "id": 11,
+                            "name": "AntiSync"
+                        }
+                    ]
+                }
+            },
+            {
+                "ID": "34",
+                "did": "20_4",
+                "type": "MXMPump|Ecotech|Vortech",
+                "ctype": "Advanced",
+                "gid": "0",
+                "gtype": "0",
+                "name": "Vortech4",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,0,0,100,11,3,0,0,0,0,0,0,0,0\nIf FeedA 035 Then AfterFeed\nIf FeedA 000 Then FeedSlow\nIf FeedC 000 Then AfterFeed\nIf FeedB 000 Then FeedSlow\nIf Output AllVortechs = OFF Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {
+                    "temperature": false,
+                    "gph": {
+                        "min": 0,
+                        "max": 100
+                    },
+                    "modes": [
+                        {
+                            "id": 1,
+                            "name": "Reef"
+                        },
+                        {
+                            "id": 0,
+                            "name": "Constant"
+                        },
+                        {
+                            "id": 2,
+                            "name": "Lagoon"
+                        },
+                        {
+                            "id": 3,
+                            "name": "Pulse"
+                        },
+                        {
+                            "id": 7,
+                            "name": "Tidal"
+                        },
+                        {
+                            "id": 8,
+                            "name": "Nutrient"
+                        },
+                        {
+                            "id": 10,
+                            "name": "Sync"
+                        },
+                        {
+                            "id": 11,
+                            "name": "AntiSync"
+                        }
+                    ]
+                }
+            },
+            {
+                "ID": "35",
+                "did": "2_1",
+                "type": "outlet",
+                "ctype": "Always",
+                "gid": "",
+                "gtype": "0",
+                "name": "PowerStrip",
+                "icon": "Light A",
+                "prog": "Fallback ON \nSet ON \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "36",
+                "did": "2_2",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "NSW_Heater",
+                "icon": "Thermometer",
+                "prog": "Fallback OFF \nSet OFF \nIf NSW_Hi OPEN Then OFF \nIf Output Mix_NSW = ON Then ON \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "37",
+                "did": "Cntl_A1",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "RunSkimmer",
+                "icon": "Up/Down Arrows",
+                "prog": "Set ON \nIf Output Return_Etc = OFF Then OFF \nIf Output Return_UV = OFF Then OFF \nIf Error Return_Etc Then OFF \nIf Error Return_UV Then OFF \nIf Output Return_Etc Percent < 40 Then OFF \nIf Output Return_UV Percent < 40 Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "38",
+                "did": "Cntl_A2",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "AllVortechs",
+                "icon": "Up/Down Arrows",
+                "prog": "Set ON \nFallback ON \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "40",
+                "did": "12_1",
+                "type": "dos",
+                "ctype": "Advanced",
+                "gid": "doser_12",
+                "gtype": "0",
+                "name": "Alkalinity",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,2,21,1,114,18,0,5,159,3,72,0,100,50\nIf Alkx18 > 8.60 Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "41",
+                "did": "12_2",
+                "type": "dos",
+                "ctype": "Advanced",
+                "gid": "doser_12",
+                "gtype": "0",
+                "name": "Calcium",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,2,21,1,74,18,1,5,159,1,194,0,80,10\nIf Cax18 > 480 Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "42",
+                "did": "13_1",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "LinkA_13_1",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "43",
+                "did": "13_2",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "LinkB_13_2",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "44",
+                "did": "18_3",
+                "type": "selector",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Trident_18_3",
+                "icon": "Up/Down Arrows",
+                "prog": "OSC 000:00/001:00/719:00 Then ON \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "45",
+                "did": "18_4",
+                "type": "selector",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Alk_18_4",
+                "icon": "Up/Down Arrows",
+                "prog": "OSC 360:00/001:00/359:00 Then ON \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "46",
+                "did": "Cntl_A16",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "ATO_EMPTY",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nFallback OFF \nIf ATOLOW OPEN Then ON \nIf ATO_LL < 1.0 Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "47",
+                "did": "Cntl_B1",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "TMP_DELETE",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nIf Output Return_UV Amps > 5.0 Then OFF \nIf Output Skimmer Watts > 0 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "48",
+                "did": "3_2",
+                "type": "dqd",
+                "ctype": "Advanced",
+                "gid": "doserqd_3",
+                "gtype": "0",
+                "name": "AWC_REM",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "49",
+                "did": "21_1",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "LinkA_21_1",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "50",
+                "did": "Cntl_A3",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "ATK_Lo_Alarm",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nIf Ret_Lo OPEN Then ON \nIf Ret_Lo CLOSED Then OFF \nIf Error LinkA_14_1 Then ON \nDefer 060:00 Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "51",
+                "did": "2_3",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "NSW_Pump",
+                "icon": "Spigot",
+                "prog": "Fallback OFF \nSet OFF \nIf SWPump CLOSED Then ON \nIf Master OPEN Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "52",
+                "did": "Cntl_A4",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "RO_AUTOFILL",
+                "icon": "Bell",
+                "prog": "Fallback OFF \nIf Output ATO_EMPTY = ON Then ON \nWhen On > 095:00 Then OFF \nIf ATOMAX CLOSED Then OFF \nIf ATO_LL > 13.0 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "53",
+                "did": "23_1",
+                "type": "dqd",
+                "ctype": "Advanced",
+                "gid": "doserqd_23",
+                "gtype": "0",
+                "name": "QT_ADD",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "54",
+                "did": "23_2",
+                "type": "dqd",
+                "ctype": "Advanced",
+                "gid": "doserqd_23",
+                "gtype": "0",
+                "name": "QT_Remove",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,1,20,3,26,2,88,143,3,46,2,28,10,0\nIf Output AWC_Enabled = OFF Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "55",
+                "did": "21_2",
+                "type": "alert",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Alarm_21_2",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "56",
+                "did": "Cntl_B2",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "RES_BAD",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nSet OFF \nIf RES_LV < 7.3 Then ON \nIf RES_LV > 7.9 Then ON \nIf Time 00:00 to 06:59 Then OFF \nIf Time 07:01 to 23:59 Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "57",
+                "did": "2_4",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "RO_Booster",
+                "icon": "Thermometer",
+                "prog": "Set OFF \nFallback OFF \nIf Output SOL_OUT_NSW = ON Then ON \nIf Output SOL_OUT_ATO = ON Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "58",
+                "did": "2_5",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Ozone",
+                "icon": "Left/Right Arrows",
+                "prog": "Fallback OFF \nSet ON \nIf ORP > 380 Then OFF \nIf Output Skimmer = OFF Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "59",
+                "did": "2_6",
+                "type": "outlet",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "OzoneAir",
+                "icon": "Fan",
+                "prog": "Fallback ON \nSet ON \nIf Output Ozone = OFF Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "60",
+                "did": "Cntl_A5",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Feeding",
+                "icon": "Clock",
+                "prog": "Set OFF \nIf FeedA 000 Then ON \nIf FeedB 000 Then ON \nIf FeedC 000 Then ON \nIf FeedD 000 Then ON \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "61",
+                "did": "Cntl_A6",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "SumpAlarm",
+                "icon": "Bell",
+                "prog": "Set OFF \nFallback OFF \nIf Rtn_lv < 8.0 Then ON \nIf Rtn_lv > 9.0 Then ON \nIf FeedA 010 Then OFF \nIf FeedB 035 Then OFF \nIf Output Return_UV Percent > 56 Then ON \nIf Output Return_UV Percent < 40 Then ON \nIf Output Return_Etc Percent > 56 Then ON \nIf Output Return_Etc Percent < 40 Then ON \nDefer 010:00 Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "62",
+                "did": "Cntl_A7",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Pulser",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nFallback OFF \nOSC 000:30/007:00/053:00 Then ON \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "63",
+                "did": "Cntl_A8",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "NSW_AutoFill",
+                "icon": "Up/Down Arrows",
+                "prog": "If Output NSW_Trigger = ON Then ON \nIf Output RO_AUTOFILL = ON Then OFF \nDefer 001:00 Then OFF \nWhen On > 500:00 Then OFF \nIf Output NSW_Trigger = OFF Then OFF \nIf NSW_Hi CLOSED Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "64",
+                "did": "Cntl_A9",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "NSW_Trigger",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nFallback OFF \nWhen On > 432:00 Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "65",
+                "did": "2_7",
+                "type": "outlet",
+                "ctype": "Light",
+                "gid": "",
+                "gtype": "0",
+                "name": "RefLght_2_7",
+                "icon": "Left/Right Arrows",
+                "prog": "Fallback ON \nSet OFF \nIf Time 21:00 to 09:00 Then ON \nIf Temp > 81.0 Then OFF \nMin Time 001:00 Then OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "66",
+                "did": "2_8",
+                "type": "outlet",
+                "ctype": "Always",
+                "gid": "",
+                "gtype": "0",
+                "name": "GPower8",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \nSet OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "67",
+                "did": "Cntl_A10",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "DDR_Low",
+                "icon": "Sound A",
+                "prog": "Set OFF \nIf Alk_Lo OPEN Then ON \nIf CA_Low OPEN Then ON \nIf Time 00:00 to 06:59 Then OFF \nIf Time 07:01 to 23:59 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "68",
+                "did": "Cntl_A11",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Mix_NSW",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nFallback OFF \nIf NSW_Hi CLOSED Then ON \nIf NSW_Lo CLOSED Then ON \nIf Output AWC_Enabled = ON Then OFF \nIf NSW_Lo OPEN Then OFF \nIf NSW_Hi OPEN Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "69",
+                "did": "Cntl_A12",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "AWC_Enabled",
+                "icon": "Up/Down Arrows",
+                "prog": "Set ON \nFallback OFF \nIf Output Mix_NSW = ON Then OFF \nIf Output NSW_AutoFill = ON Then OFF \nIf Output SOL_OUT_NSW = ON Then OFF \nIf FRAG_R > 8.5 Then OFF \nIf Salt < 25.5 Then OFF \nIf Salt > 35.5 Then OFF \nIf Temp < 77.0 Then OFF \nIf NSW_Lo OPEN Then OFF \nIf Rtn_lv < 7.1 Then OFF \nIf Rtn_lv > 8.5 Then OFF \nIf RES_LV < 6.8 Then OFF \nIf RES_LV > 8.0 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "70",
+                "did": "Cntl_A13",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Alt_Fill",
+                "icon": "Up/Down Arrows",
+                "prog": "Set ON \nFallback OFF \nIf ATO_LK CLOSED Then OFF \nIf NSW_LK CLOSED Then OFF \nWhen On > 100:00 Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "71",
+                "did": "2_9",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "DT_ATO_PUMP",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \nSet OFF \nIf Ret_Lo OPEN Then ON \nIf Ret_hi CLOSED Then OFF \nIf Rtn_lv > 8.8 Then OFF \nWhen On > 012:00 Then OFF \nDefer 000:20 Then ON \nDefer 000:20 Then OFF \nMin Time 010:00 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "72",
+                "did": "2_10",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "FRAG_ATO_PMP",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \nSet OFF \nIf FRAG_L OPEN Then ON \nIf FRAG_H CLOSED Then OFF \nIf FRAG_R > 8.0 Then OFF \nWhen On > 001:00 Then OFF \nDefer 000:10 Then ON \nDefer 000:04 Then OFF \nMin Time 015:00 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "76",
+                "did": "Cntl_A14",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "TSM",
+                "icon": "Fan",
+                "prog": "Fallback OFF \nSet OFF \nOSC 000:00/007:00/053:00 Then ON \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "77",
+                "did": "22_1",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "LinkA_22_1",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "78",
+                "did": "22_2",
+                "type": "alert",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Alarm_22_2",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "79",
+                "did": "6_3",
+                "type": "selector",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Trident_6_3",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \nSet OFF \nIf Time 05:00 to 05:01 Then ON \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "80",
+                "did": "Cntl_A15",
+                "type": "virtual",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Skimmer_full",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nIf SkimSW OPEN Then ON \nIf Time 00:00 to 06:59 Then OFF \nIf Time 07:01 to 23:59 Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "81",
+                "did": "15_1",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "SOL_INPUT",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nFallback OFF \nIf Output RO_AUTOFILL = ON Then ON \nIf Output NSW_AutoFill = ON Then ON \nIf Output Alt_Fill = ON Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "82",
+                "did": "15_2",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "SOL_OUT_NSW",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nIf Output NSW_AutoFill = ON Then ON \nIf Output Alt_Fill = ON Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "83",
+                "did": "14_1",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "LinkA_14_1",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "84",
+                "did": "14_2",
+                "type": "alert",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Alarm_14_2",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "85",
+                "did": "10_1",
+                "type": "24v",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "SOL_OUT_ATO",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \nFallback OFF \nIf Output RO_AUTOFILL = ON Then ON \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "86",
+                "did": "10_2",
+                "type": "alert",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Alarm_10_2",
+                "icon": "Up/Down Arrows",
+                "prog": "Set OFF \n",
+                "log": false,
+                "inuse": false,
+                "extra": {}
+            },
+            {
+                "ID": "87",
+                "did": "17_1",
+                "type": "wav",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "Wav_Bottom",
+                "icon": "Fan",
+                "prog": "Fallback OFF \ntdata 00:00:00,0,0,50,4,150,0,0,0,0,0,0,0,0\nIf Output Mix_NSW = OFF Then OFF \nIf NSW_Lo OPEN Then OFF \n",
+                "log": false,
+                "inuse": true,
+                "extra": {}
+            },
+            {
+                "ID": "88",
+                "did": "16_1",
+                "type": "wav",
+                "ctype": "Advanced",
+                "gid": "",
+                "gtype": "0",
+                "name": "WAV_Top",
+                "icon": "Up/Down Arrows",
+                "prog": "Fallback OFF \ntdata 00:00:00,0,0,50,1,0,0,0,0,0,0,0,0,0\nIf Output Mix_NSW = OFF Then OFF \nIf NSW_Lo OPEN Then OFF \n",
+                "log": true,
+                "inuse": true,
+                "extra": {}
+            }
+        ],
+        "profiles": [
+            {
+                "name": "VortechPuls",
+                "type": "vortech",
+                "ID": 1,
+                "data": {
+                    "subType": "Pulse",
+                    "onTime": 12,
+                    "max": 55
+                }
+            },
+            {
+                "name": "AfterFeed",
+                "type": "vortech",
+                "ID": 2,
+                "data": {
+                    "subType": "Nutrient",
+                    "max": 62
+                }
+            },
+            {
+                "name": "CorStandard",
+                "type": "ramp",
+                "ID": 3,
+                "data": {
+                    "rampTime": 1,
+                    "min": 20,
+                    "max": 60
+                }
+            },
+            {
+                "name": "FeedSlow",
+                "type": "vortech",
+                "ID": 4,
+                "data": {
+                    "subType": "Nutrient",
+                    "max": 35
+                }
+            },
+            {
+                "name": "Feed_Mix",
+                "type": "vortech",
+                "ID": 5,
+                "data": {
+                    "subType": "Nutrient",
+                    "max": 40
+                }
+            },
+            {
+                "name": "SlowFlow",
+                "type": "vortech",
+                "ID": 6,
+                "data": {
+                    "subType": "Lagoon",
+                    "max": 5
+                }
+            },
+            {
+                "name": "BottomMix",
+                "type": "wav",
+                "ID": 7,
+                "data": {
+                    "subType": "Pulse",
+                    "onTime": 25,
+                    "max": 75
+                }
+            },
+            {
+                "name": "Pump_60_60",
+                "type": "pump",
+                "ID": 8,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 0,
+                    "onTime": 60,
+                    "offTime1": 60
+                }
+            },
+            {
+                "name": "Pump_60_30",
+                "type": "pump",
+                "ID": 9,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 0,
+                    "onTime": 60,
+                    "offTime1": 30
+                }
+            },
+            {
+                "name": "Pump_05_55",
+                "type": "pump",
+                "ID": 10,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 0,
+                    "onTime": 59,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "FeedOff",
+                "type": "vortech",
+                "ID": 11,
+                "data": {
+                    "subType": "Nutrient",
+                    "max": 40
+                }
+            },
+            {
+                "name": "SkimmerLow",
+                "type": "pump",
+                "ID": 12,
+                "data": {
+                    "min": 30,
+                    "max": 30,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 0,
+                    "onTime": 0,
+                    "offTime1": 0
+                }
+            },
+            {
+                "name": "SkimmerVLow",
+                "type": "pump",
+                "ID": 13,
+                "data": {
+                    "min": 10,
+                    "max": 10,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 0,
+                    "onTime": 0,
+                    "offTime1": 0
+                }
+            },
+            {
+                "name": "Ramp20",
+                "type": "ramp",
+                "ID": 14,
+                "data": {
+                    "rampTime": 0,
+                    "min": 20,
+                    "max": 20
+                }
+            },
+            {
+                "name": "PF15",
+                "type": "pump",
+                "ID": 15,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF16",
+                "type": "pump",
+                "ID": 16,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF17",
+                "type": "pump",
+                "ID": 17,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF18",
+                "type": "pump",
+                "ID": 18,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF19",
+                "type": "pump",
+                "ID": 19,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF20",
+                "type": "pump",
+                "ID": 20,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF21",
+                "type": "pump",
+                "ID": 21,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF22",
+                "type": "pump",
+                "ID": 22,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF23",
+                "type": "pump",
+                "ID": 23,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF24",
+                "type": "pump",
+                "ID": 24,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF25",
+                "type": "pump",
+                "ID": 25,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF26",
+                "type": "pump",
+                "ID": 26,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF27",
+                "type": "pump",
+                "ID": 27,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF28",
+                "type": "pump",
+                "ID": 28,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF29",
+                "type": "pump",
+                "ID": 29,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF30",
+                "type": "pump",
+                "ID": 30,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "PF31",
+                "type": "pump",
+                "ID": 31,
+                "data": {
+                    "min": 0,
+                    "max": 100,
+                    "sync": "Disable",
+                    "div10": "Disable",
+                    "offTime0": 1,
+                    "onTime": 1,
+                    "offTime1": 1
+                }
+            },
+            {
+                "name": "SandBlast",
+                "type": "vortech",
+                "ID": 32,
+                "data": {
+                    "subType": "Tidal",
+                    "max": 60
+                }
+            }
+        ],
+        "clock": {
+            "dst": true,
+            "auto": true,
+            "date": [
+                "2026-04-18T20:37:26.000Z",
+                "2026-04-18T20:37:27.700Z"
+            ],
+            "timezone": [
+                "-8.00",
+                "-7.00"
+            ]
+        },
+        "misc": {
+            "almSound": "Solveigs",
+            "wrnSound": "Positive Beep",
+            "logInterval": 10,
+            "feedInterval": [
+                500,
+                900,
+                1200,
+                300
+            ],
+            "pwrMon": true
+        },
+        "network": {
+            "dhcp": true,
+            "hostname": "apex",
+            "ipaddr": "192.168.4.178",
+            "netmask": "255.255.252.0",
+            "gateway": "192.168.4.1",
+            "dns": [
+                "192.168.1.254",
+                "0.0.0.0"
+            ],
+            "httpPort": 80,
+            "ssid": "Buddy Dogg",
+            "wifiAP": false,
+            "wifiAPLock": false,
+            "wifiEnable": true,
+            "emailAuth": false,
+            "emailEnable": false,
+            "emailFrom": "name@example.com",
+            "emailTo": "recipient@example.com",
+            "emailUser": "name@example.com",
+            "reEmail": 60,
+            "smtpPort": 587,
+            "smtpServer": "mail.example.com",
+            "updateFirmware": false
+        },
+        "inputs": [
+            {
+                "enable": true,
+                "did": "base_Temp",
+                "name": "Temp",
+                "type": "Temp",
+                "extra": {
+                    "scale": "5e9",
+                    "offset": "-10",
+                    "range": "Faren"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "base_pH",
+                "name": "pH",
+                "type": "pH",
+                "extra": {
+                    "scale": "10d7",
+                    "offset": "-38",
+                    "comp": false
+                },
+                "alarm": {}
+            },
+            {
+                "enable": false,
+                "did": "base_pH2",
+                "name": "pH2",
+                "type": "pH",
+                "extra": {
+                    "scale": "13ea",
+                    "offset": "-175",
+                    "comp": false
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "base_ORP",
+                "name": "ORP",
+                "type": "ORP",
+                "extra": {
+                    "scale": "1071",
+                    "offset": "97"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "base_Cond",
+                "name": "Salt",
+                "type": "Cond",
+                "extra": {
+                    "scale": "d40",
+                    "offset": "-224",
+                    "comp": 0,
+                    "range": "Salinity"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P0",
+                "name": "Alk",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P1",
+                "name": "Ca",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P2",
+                "name": "Mg",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P3",
+                "name": "RO_BoosterA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P4",
+                "name": "OzoneA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P5",
+                "name": "OzoneAirA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P6",
+                "name": "RefLght_2_7A",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P7",
+                "name": "GPower8A",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P8",
+                "name": "PowerStripW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P9",
+                "name": "NSW_HeaterW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P10",
+                "name": "NSW_PumpW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P11",
+                "name": "RO_BoosterW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P12",
+                "name": "OzoneW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P13",
+                "name": "OzoneAirW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P14",
+                "name": "RefLght_2_7W",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P15",
+                "name": "GPower8W",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "2_P16",
+                "name": "Volt_2",
+                "type": "volts",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P0",
+                "name": "WaveEngineA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P1",
+                "name": "Bottom2A",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P2",
+                "name": "RetPump_4_3A",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P3",
+                "name": "Heater_4_4A",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P4",
+                "name": "Skimmer_4_5A",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P5",
+                "name": "Pump_4_6A",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P6",
+                "name": "AxisA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P7",
+                "name": "SkimmerA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P8",
+                "name": "WaveEngineW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P9",
+                "name": "Bottom2W",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P10",
+                "name": "RetPump_4_3W",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P11",
+                "name": "Heater_4_4W",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P12",
+                "name": "Skimmer_4_5W",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P13",
+                "name": "Pump_4_6W",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P14",
+                "name": "AxisW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P15",
+                "name": "SkimmerW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "4_P16",
+                "name": "Volt_4",
+                "type": "volts",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "6_0",
+                "name": "PO4",
+                "type": "po4",
+                "extra": {
+                    "scale": "0",
+                    "offset": "0"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "6_1",
+                "name": "NO3",
+                "type": "no3",
+                "extra": {
+                    "scale": "0",
+                    "offset": "0"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P0",
+                "name": "InkbirdA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P1",
+                "name": "ReactorA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P2",
+                "name": "FanA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P3",
+                "name": "Tunze_ATOA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P4",
+                "name": "UVA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P5",
+                "name": "ReefMatA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P6",
+                "name": "Sump_FlowA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P7",
+                "name": "Stand_LightA",
+                "type": "Amps",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P8",
+                "name": "InkbirdW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P9",
+                "name": "ReactorW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P10",
+                "name": "FanW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P11",
+                "name": "Tunze_ATOW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P12",
+                "name": "UVW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P13",
+                "name": "ReefMatW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P14",
+                "name": "Sump_FlowW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P15",
+                "name": "Stand_LightW",
+                "type": "pwr",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "9_P16",
+                "name": "Volt_9",
+                "type": "volts",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "14_P1",
+                "name": "RES_LV",
+                "type": "in",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "14_P2",
+                "name": "ATO_LL",
+                "type": "in",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "18_0",
+                "name": "Alkx18",
+                "type": "alk",
+                "extra": {
+                    "scale": "0",
+                    "offset": "0"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "18_1",
+                "name": "Cax18",
+                "type": "ca",
+                "extra": {
+                    "scale": "0",
+                    "offset": "0"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "18_2",
+                "name": "Mgx18",
+                "type": "mg",
+                "extra": {
+                    "scale": "0",
+                    "offset": "0"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": false,
+                "did": "19_0",
+                "name": "TmpJnk",
+                "type": "Temp",
+                "extra": {
+                    "scale": "1000",
+                    "offset": "-20",
+                    "range": "Faren"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "19_1",
+                "name": "Condx19",
+                "type": "Cond",
+                "extra": {
+                    "scale": "1133",
+                    "offset": "91",
+                    "comp": 0,
+                    "range": "Salinity"
+                },
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "21_P2",
+                "name": "Rtn_lv",
+                "type": "in",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "22_P2",
+                "name": "FRAG_R",
+                "type": "in",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "base_I1",
+                "name": "DoorSw",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "base_I2",
+                "name": "Sw2",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "base_I3",
+                "name": "Sw3",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "base_I4",
+                "name": "Sw4",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "base_I5",
+                "name": "Sw5",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "base_I6",
+                "name": "SkimSW",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "10_I1",
+                "name": "ATOLOW",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "10_I2",
+                "name": "ATOMAX",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "10_I3",
+                "name": "XLow",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "10_I4",
+                "name": "Ext_Lo",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "12_I1",
+                "name": "Alk_Lo",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "12_I2",
+                "name": "CA_Low",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "14_I1",
+                "name": "NSW_Hi",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "14_I4",
+                "name": "NSW_Lo",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "19_I1",
+                "name": "Master",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "19_I2",
+                "name": "SWPump",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "19_I3",
+                "name": "SWRODI",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "19_I4",
+                "name": "Swx19_4",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "19_I5",
+                "name": "Swx19_5",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "19_I6",
+                "name": "Swx19_6",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "21_I1",
+                "name": "Ret_Lo",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "21_I2",
+                "name": "Ret_hi",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "21_I4",
+                "name": "Swx21_4",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "22_I1",
+                "name": "FRAG_L",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "22_I2",
+                "name": "FRAG_H",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            },
+            {
+                "enable": true,
+                "did": "22_I4",
+                "name": "Swx22_4",
+                "type": "digital",
+                "extra": {},
+                "alarm": {}
+            }
+        ],
+        "display": [
+            {
+                "page": 0,
+                "lineEnables": [
+                    true,
+                    true,
+                    true,
+                    false,
+                    false
+                ],
+                "probes": [
+                    "base_Temp",
+                    "base_pH",
+                    "base_Cond",
+                    "base_ORP"
+                ],
+                "outputs": [
+                    "base_Var1",
+                    "base_Var2",
+                    "base_Var3",
+                    "base_Var4",
+                    "base_Alarm",
+                    "base_Warn",
+                    "base_email",
+                    "0_0",
+                    "3_1",
+                    "3_2",
+                    "3_3",
+                    "3_4",
+                    "3_5",
+                    "3_6",
+                    "3_7",
+                    "3_8"
+                ]
+            },
+            {
+                "page": 1,
+                "lineEnables": [
+                    true,
+                    true,
+                    false,
+                    true,
+                    false
+                ],
+                "probes": [
+                    "base_Temp",
+                    "base_pH",
+                    "base_pH2",
+                    "base_Temp"
+                ],
+                "outputs": [
+                    "base_Var1",
+                    "base_Var2",
+                    "base_Var3",
+                    "base_Var4",
+                    "base_Alarm",
+                    "base_Warn",
+                    "base_email",
+                    "0_0",
+                    "3_1",
+                    "3_2",
+                    "3_3",
+                    "3_4",
+                    "3_5",
+                    "3_6",
+                    "3_7",
+                    "3_8"
+                ]
+            },
+            {
+                "page": 2,
+                "lineEnables": [
+                    false,
+                    true,
+                    true,
+                    false,
+                    false
+                ],
+                "probes": [
+                    "base_Temp",
+                    "base_pH",
+                    "base_Cond",
+                    "base_pH2"
+                ],
+                "outputs": [
+                    "base_Var1",
+                    "base_Var2",
+                    "base_Var3",
+                    "base_Var4",
+                    "base_Alarm",
+                    "base_Warn",
+                    "base_email",
+                    "base_Var1",
+                    "3_1",
+                    "3_2",
+                    "3_3",
+                    "3_4",
+                    "3_5",
+                    "3_6",
+                    "3_7",
+                    "3_8"
+                ]
+            },
+            {
+                "page": 3,
+                "lineEnables": [
+                    true,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                "probes": [
+                    "base_Temp",
+                    "base_pH",
+                    "base_pH2",
+                    "3_0"
+                ],
+                "outputs": [
+                    "base_Var1",
+                    "base_Var2",
+                    "base_Var3",
+                    "base_Var4",
+                    "base_Alarm",
+                    "base_Warn",
+                    "base_email",
+                    "base_Var1",
+                    "3_1",
+                    "3_2",
+                    "3_3",
+                    "3_4",
+                    "3_5",
+                    "3_6",
+                    "3_7",
+                    "3_8"
+                ]
+            }
+        ],
+        "modules": [
+            {
+                "abaddr": 2,
+                "name": "GPower",
+                "hwtype": "EB832",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 220659,
+                    "auth": 1280904014
+                }
+            },
+            {
+                "abaddr": 3,
+                "name": "DQD_DT",
+                "hwtype": "DQD",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": "BE7NCF3FDFRX42",
+                    "auth": 2285835226,
+                    "volume": [
+                        2000,
+                        2000
+                    ],
+                    "volumeLeft": [
+                        0,
+                        0
+                    ]
+                }
+            },
+            {
+                "abaddr": 4,
+                "name": "PWR_Bottom",
+                "hwtype": "EB832",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 99079,
+                    "auth": 1331547546
+                }
+            },
+            {
+                "abaddr": 5,
+                "name": "COR_5",
+                "hwtype": "COR",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 26554,
+                    "auth": 620793985,
+                    "errorMask": 103,
+                    "max": 100,
+                    "min": 10,
+                    "calState": 0
+                }
+            },
+            {
+                "abaddr": 6,
+                "name": "TNP",
+                "hwtype": "TNP",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 6091,
+                    "auth": 3501765658,
+                    "errorMask": 65535,
+                    "wasteSize": 3218,
+                    "cal": false,
+                    "targetPO4": 0,
+                    "targetNO3": 50,
+                    "sampleChange": false,
+                    "resetDefaults": false,
+                    "primeBlank": false,
+                    "prime": [
+                        false,
+                        false,
+                        false,
+                        false
+                    ],
+                    "clean": 0,
+                    "reset": [
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                    ],
+                    "newReagent": [
+                        false,
+                        false,
+                        false
+                    ],
+                    "calConst": [
+                        0,
+                        0,
+                        0
+                    ]
+                }
+            },
+            {
+                "abaddr": 9,
+                "name": "PWR_Top",
+                "hwtype": "EB832",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 99979,
+                    "auth": 861292435
+                }
+            },
+            {
+                "abaddr": 10,
+                "name": "FMM_G2",
+                "hwtype": "FMM",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 4294967295,
+                    "auth": 3680826279,
+                    "auto": [
+                        false,
+                        false,
+                        false,
+                        false
+                    ],
+                    "mode": [
+                        "optical",
+                        "optical",
+                        "optical",
+                        "optical"
+                    ],
+                    "flowMode": "gph",
+                    "levelMode": "in"
+                }
+            },
+            {
+                "abaddr": 11,
+                "name": "COR_11",
+                "hwtype": "COR",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 25153,
+                    "auth": 2936076239,
+                    "errorMask": 103,
+                    "max": 100,
+                    "min": 10,
+                    "calState": 0
+                }
+            },
+            {
+                "abaddr": 12,
+                "name": "DOS_2Part",
+                "hwtype": "DOS",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "volume": [
+                        2000,
+                        2000
+                    ],
+                    "volumeLeft": [
+                        1872,
+                        1894
+                    ]
+                }
+            },
+            {
+                "abaddr": 13,
+                "name": "1LNK_13",
+                "hwtype": "1LNK",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 24783,
+                    "auth": 1891162599
+                }
+            },
+            {
+                "abaddr": 14,
+                "name": "FMM_G1",
+                "hwtype": "FMM",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 50483,
+                    "auth": 2385076898,
+                    "auto": [
+                        false,
+                        false,
+                        false,
+                        false
+                    ],
+                    "mode": [
+                        "optical",
+                        "LLS-15",
+                        "LLS-15",
+                        "optical"
+                    ],
+                    "flowMode": "gph",
+                    "levelMode": "in"
+                }
+            },
+            {
+                "abaddr": 15,
+                "name": "1LNK_15",
+                "hwtype": "1LNK",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 23058,
+                    "auth": 3224550925
+                }
+            },
+            {
+                "abaddr": 16,
+                "name": "WAV_16",
+                "hwtype": "WAV",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 161970,
+                    "auth": 3827044377,
+                    "homeSet": false,
+                    "errorMask": 10
+                }
+            },
+            {
+                "abaddr": 17,
+                "name": "WAV_17",
+                "hwtype": "WAV",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 152416,
+                    "auth": 1679560730,
+                    "homeSet": false,
+                    "errorMask": 0
+                }
+            },
+            {
+                "abaddr": 18,
+                "name": "Trident",
+                "hwtype": "TRI",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 75039,
+                    "auth": 2189267586,
+                    "errorMask": 65535,
+                    "wasteSize": 3585,
+                    "cal": false,
+                    "targetAlk": 8.5,
+                    "targetCa": 400,
+                    "targetMg": 1300,
+                    "sampleChange": false,
+                    "resetDefaults": false,
+                    "primeBlank": false,
+                    "prime": [
+                        false,
+                        false,
+                        false,
+                        false
+                    ],
+                    "clean": 0,
+                    "reset": [
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                    ],
+                    "newReagent": [
+                        false,
+                        false,
+                        false
+                    ],
+                    "calConst": [
+                        62.61,
+                        72.89,
+                        8.37
+                    ]
+                }
+            },
+            {
+                "abaddr": 19,
+                "name": "PM2",
+                "hwtype": "PM2",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0
+                }
+            },
+            {
+                "abaddr": 20,
+                "name": "MXM",
+                "hwtype": "MXM",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "status": "\n    (0,15,15)\n   Vortech3(42) - Rev 1.4 Ser #: 4G160033FBRBC4 - OK-1\n   Vortech2(42) - Rev 1.4 Ser #: 76701964875114 - OK-2\n   Vortech1(42) - Rev 1.4 Ser #: 4G160033F9RBBB - OK-3\n   Vortech4(42) - Rev 1.4 Ser #: 76701964881080 - OK-4\n"
+                }
+            },
+            {
+                "abaddr": 21,
+                "name": "FMM_Cab",
+                "hwtype": "FMM",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 75020,
+                    "auth": 3667382236,
+                    "auto": [
+                        false,
+                        false,
+                        false,
+                        false
+                    ],
+                    "mode": [
+                        "optical",
+                        "optical",
+                        "LLS-15",
+                        "optical"
+                    ],
+                    "flowMode": "gph",
+                    "levelMode": "in"
+                }
+            },
+            {
+                "abaddr": 22,
+                "name": "FMM_FRAG",
+                "hwtype": "FMM",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": 51224,
+                    "auth": 940565050,
+                    "auto": [
+                        true,
+                        true,
+                        false,
+                        true
+                    ],
+                    "mode": [
+                        "optical",
+                        "optical",
+                        "LLS-15",
+                        "wof"
+                    ],
+                    "flowMode": "gph",
+                    "levelMode": "in"
+                }
+            },
+            {
+                "abaddr": 23,
+                "name": "DQD_QT",
+                "hwtype": "DQD",
+                "update": false,
+                "extra": {
+                    "swapAddr": 0,
+                    "serial": "AD7N64C1E4RX0B",
+                    "auth": 737653518,
+                    "volume": [
+                        2000,
+                        2000
+                    ],
+                    "volumeLeft": [
+                        0,
+                        0
+                    ]
+                }
+            }
+        ],
+        "flo": {
+            "dids": []
+        },
+        "heartbeat": {
+            "enable": true
+        }
+    },
+    "limit": {
+        "size": 4.840791666666666,
+        "last": "2026-04-18T14:01:03.363Z"
+    },
+    "things": {
+        "modules": []
+    },
+    "layout": {
+        "sections": [
+            "14_P1,14_P2,19_1,21_P2,22_P2,10_I1,10_I2,10_I3,10_I4,12_I1,12_I2,14_I1,14_I4,21_I1,21_I2,21_I4,22_I1,22_I2,22_I4,Cntl_B2,21_1,21_2,13_1,13_2,flo,10_2,14_2,2_1,2_7,2_8,ebg:2,Cntl_A15,base_I3,base_I4,base_I5,reminder,clock,note,4_2,4_3,4_4,4_5,4_6,mlog,Cntl_A1,9_10,9_9,Cntl_A5,video,Cntl_A10,Cntl_A14,19_I4,19_I6,19_I5,19_I3,19_I1,Cntl_A7,19_I2,base_I1,22_2,22_1,base_Var2,base_Var3,4_9,14_1,4_10,wav:17_1,wav:16_1,ebg:9,ebg:4,Cntl_A16,base_I2",
+            "feed,tri:18,dos:doser_12,12_1,12_2,dos:doserqd_3,Cntl_A12,3_1,3_2,dos:doserqd_23,tri:6,base_Cond,base_pH,base_Temp,base_ORP,2_3,23_1,23_2,ddr:doser_12",
+            "Cntl_A13,2_6,9_3,9_8,2_5,4_1,Cntl_A2,20_3,20_2,20_1,20_4,4_8,base_Var4,9_2,5_1,11_1,9_1,9_5,9_7,9_6,Cntl_A6,2_10,9_4,2_9,2_4,Cntl_A3,base_email",
+            "Cntl_B1,cor:11_1,cor:5_1,4_7,10_1,15_2,15_1,16_1,17_1,Cntl_A11,2_2,Cntl_A9,Cntl_A8,Cntl_A4,base_I6,base_Var1"
+        ]
+    },
+    "media": [
+        {
+            "index": 0,
+            "name": "Copperband",
+            "auth": 3,
+            "type": "img",
+            "url": "https://i.imgur.com/uwIxcCQ.jpg",
+            "_id": "6258e0ad3e24888f16adc773"
+        },
+        {
+            "index": 1,
+            "name": "Clownfish",
+            "auth": 3,
+            "type": "img",
+            "url": "https://i.imgur.com/SqdiWsm.jpg",
+            "_id": "6258e1d0e658c5d64b5528cb"
+        }
+    ],
+    "voice": {
+        "alias": [
+            {
+                "type": "output",
+                "id": "9_8",
+                "text": "Cabinet Lights",
+                "root": "Cabinet Lights",
+                "_id": "6258e3b411660179566dd202"
+            },
+            {
+                "type": "feed",
+                "id": "A",
+                "text": "Feed A",
+                "root": "Feed A",
+                "_id": "629b76923e24888f163d87b3"
+            },
+            {
+                "type": "feed",
+                "id": "B",
+                "text": "Feed B",
+                "root": "Feed B",
+                "_id": "629b7699743715a71189c3ae"
+            }
+        ],
+        "brief": [
+            {
+                "index": 0,
+                "type": "input",
+                "id": "base_pH",
+                "_id": "6258e43211660179566ee032"
+            },
+            {
+                "index": 1,
+                "type": "input",
+                "id": "base_Temp",
+                "_id": "6258e43be658c5d64b5a9df8"
+            },
+            {
+                "index": 2,
+                "type": "input",
+                "id": "base_Cond",
+                "_id": "6258e44311660179566f026e"
+            }
+        ]
+    },
+    "metadata": [],
+    "__v": 329,
+    "auth": 4,
+    "link": {
+        "live": {
+            "_id": "69dd1e3260dd65b4be1c40c9",
+            "uid": 1225814956,
+            "sid": 725697197,
+            "date": "2026-04-18T20:39:26.541Z",
+            "client": "108.94.29.58:63396",
+            "server": "172.31.9.254:2199"
+        },
+        "date": "2026-04-18T20:39:26.541Z",
+        "when": "2026-04-13T16:47:46.000Z"
+    },
+    "reminder": 0
+}

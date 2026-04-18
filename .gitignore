@@ -2,3 +2,4 @@ ref/*.pdf
 .DS_STORE
 img/*.mov
 debug/
+.claude/
