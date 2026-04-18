@@ -1579,8 +1579,9 @@
       #apex-explore-close:hover { color: #fff; }
       #apex-explore-body { display: flex; flex: 1; overflow: hidden; background: #f5f5f5; }
       #apex-explore-left { display: flex; flex-direction: column; width: 280px; flex-shrink: 0; border-right: 1px solid #ddd; background: #fff; }
-      #apex-explore-search { padding: 8px; border-bottom: 1px solid #eee; flex-shrink: 0; }
-      #apex-explore-search-wrap { display: flex; align-items: center; border: 1px solid #ccc; border-radius: 4px; background: #fff; }
+      #apex-explore-search { padding: 8px; border-bottom: 1px solid #eee; flex-shrink: 0; display: flex; gap: 6px; }
+      #apex-explore-search-wrap { display: flex; align-items: center; border: 1px solid #ccc; border-radius: 4px; background: #fff; flex: 1; min-width: 0; }
+      #apex-explore-type-filter { border: 1px solid #ccc; border-radius: 4px; font-size: 12px; padding: 4px 6px; color: #555; background: #fff; cursor: pointer; flex: 1; min-width: 0; }
       #apex-explore-search-wrap:focus-within { border-color: #e07820; }
       #apex-explore-search input { flex: 1; min-width: 0; padding: 5px 8px; border: none; border-radius: 4px; font-size: 12px; outline: none; background: transparent; }
       #apex-explore-search-clear { border: none; background: none; cursor: pointer; padding: 0 6px; font-size: 14px; color: #aaa; line-height: 1; flex-shrink: 0; }
@@ -1970,7 +1971,7 @@
       `<div id="apex-explore-header"><span>${panelTitle()}</span><button id="apex-explore-close" title="Close">\u00d7</button></div>` +
       '<div id="apex-explore-body">' +
         '<div id="apex-explore-left">' +
-          '<div id="apex-explore-search"><div id="apex-explore-search-wrap"><input type="text" id="apex-explore-search-input" placeholder="Search"><button id="apex-explore-search-clear">\u00d7</button></div></div>' +
+          '<div id="apex-explore-search"><div id="apex-explore-search-wrap"><input type="text" id="apex-explore-search-input" placeholder="Search"><button id="apex-explore-search-clear">\u00d7</button></div><select id="apex-explore-type-filter"><option value="">All</option></select></div>' +
           '<div id="apex-explore-list"><p style="color:#888;padding:10px;margin:0">Loading\u2026</p></div>' +
         '</div>' +
         '<div id="apex-explore-divider"></div>' +
@@ -2052,6 +2053,7 @@
 
     let exploreMode = 'referenced';
     let selectedProbe = null;
+    let selectedType = '';
 
     function renderRefs(name) {
       const right = document.getElementById('apex-explore-right');
@@ -2137,9 +2139,12 @@
 
     function renderList(filter) {
       const q = filter.toLowerCase();
-      const filtered = (q ? allProbes.filter(item => item.name.toLowerCase().includes(q)) : allProbes)
+      const filtered = allProbes
+        .filter(item => !q || item.name.toLowerCase().includes(q))
+        .filter(item => !selectedType || item.type === selectedType)
         .slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
-      if (!filtered.length) {
+      const keywords = !selectedType ? ['Fallback', 'Set'].filter(kw => !q || kw.toLowerCase().includes(q)) : [];
+      if (!filtered.length && !keywords.length) {
         list.innerHTML = '<p style="color:#888;padding:10px;margin:0">No probes found.</p>';
         return;
       }
@@ -2157,7 +2162,6 @@
       const probeHTML = items => items.map(item =>
         `<div class="apex-explore-probe" data-name="${esc(item.name)}">${probeIcon(item.type)}${esc(item.name)}</div>`
       ).join('');
-      const keywords = ['Fallback', 'Set'].filter(kw => !q || kw.toLowerCase().includes(q));
       const used   = filtered.filter(p => referencedNames.has(p.name));
       const unused = filtered.filter(p => !referencedNames.has(p.name));
       list.innerHTML =
@@ -2166,6 +2170,21 @@
         (unused.length ? sectionLabel('Unreferenced') + probeHTML(unused) : '');
       list.querySelectorAll('.apex-explore-probe').forEach(el => {
         el.addEventListener('click', () => selectProbe(el.dataset.name));
+      });
+    }
+
+    const typeFilter = document.getElementById('apex-explore-type-filter');
+    if (typeFilter) {
+      const types = [...new Set(allProbes.map(p => p.type).filter(Boolean))].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+      types.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t.split('|')[0];
+        typeFilter.appendChild(opt);
+      });
+      typeFilter.addEventListener('change', () => {
+        selectedType = typeFilter.value;
+        renderList(input?.value || '');
       });
     }
 
