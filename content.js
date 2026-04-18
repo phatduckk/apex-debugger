@@ -28,6 +28,11 @@
   let dividerPointerUpHandler   = null;
   let dividerUnlockObserver     = null;
   let liveDividers              = {};
+  let liveWetDry                = {};
+  let wetDryTemplateObserver    = null;
+  let wetDryPointerUpHandler    = null;
+  let wetDryUnlockObserver      = null;
+  const wetDryStateObservers    = new Map();
 
   function syncDividerX() {
     const unlocked = document.getElementById('dash')?.classList.contains('unlocked') ?? false;
@@ -1615,6 +1620,20 @@
         border-color: rgb(71,73,73) !important;
         color: #fff !important;
       }
+      [data-apex-widget="wetdry"] .dash-switch-bar-label:first-child::before { content: "DRY" !important; }
+      [data-apex-widget="wetdry"] .dash-switch-bar-label:last-child::before  { content: "WET" !important; }
+      [data-apex-widget="wetdry"] .dash-switch-slide.closed {
+        --bs-btn-bg: #70c6c7 !important; --bs-btn-border-color: #5ebfc0 !important; --bs-btn-color: #fff !important;
+      }
+      [data-apex-widget="wetdry"] .dash-switch-slide.closed::before { content: "\uF043" !important; font-family: 'ApexFusion', var(--bs-body-font-family), sans-serif !important; display: inline-block !important; margin-right: 5px !important; }
+      [data-apex-widget="wetdry"] .dash-switch-slide.closed::after  { content: "WET" !important; }
+      [data-apex-widget="wetdry"] .dash-switch-slide.open {
+        --bs-btn-bg: #8b8b8f !important; --bs-btn-border-color: #7e7e82 !important;
+      }
+      [data-apex-widget="wetdry"] .dash-switch-slide.open::before   { content: "DRY" !important; }
+      .apex-wd-config { display: flex; align-items: center; gap: 4px; }
+      .apex-wd-config select { flex: 1; font-size: 11px; height: 22px; padding: 0 4px; min-width: 0; }
+      .apex-wd-config button { font-size: 11px; padding: 0 8px; height: 22px; white-space: nowrap; flex-shrink: 0; }
     `;
     document.head.appendChild(s);
   }
@@ -2450,7 +2469,7 @@
         'Power':                   ['Amps', 'pwr', 'volts', 'variable', 'ebg'],
         'Solenoids & Other 24v':   ['24v'],
         'Trident':                 ['selector', 'tri'],
-        'Custom':                  ['cw_divider', 'divider'],
+        'Custom':                  ['cw_divider', 'divider', 'wetdry'],
       };
       const typeToGroups = new Map();
       for (const [group, types] of Object.entries(WIDGET_GROUPS))
@@ -2498,14 +2517,6 @@
             else if (type) { widget.dataset.apexType = type; types.add(type); }
             else if (widget.dataset.apexType) types.add(widget.dataset.apexType);
             else types.add('__uncategorized__');
-            if (widget.id.includes(':')) console.log('[apex-dbg widget]', {
-              id: widget.id,
-              classes: [...widget.classList].join(' '),
-              name,
-              configType: type,
-              stampedType: widget.dataset.apexType,
-              firstChildClasses: widget.firstElementChild ? [...widget.firstElementChild.classList].join(' ') : null,
-            });
           });
           const presentGroups = new Set([...types].flatMap(t => t === '__uncategorized__' ? ['Uncategorized'] : t?.startsWith('cw_') ? ['Custom'] : (typeToGroups.get(t) || ['Uncategorized'])));
           typeSelect.innerHTML = '<option value="">All</option>';
@@ -2662,7 +2673,17 @@
     return el;
   }
 
-  function ensureDividerInTypeSelect() {}
+  function ensureDividerInTypeSelect() {
+    const sel = document.getElementById('apex-unused-type');
+    if (!sel || sel.disabled || [...sel.options].some(o => o.value === 'Custom')) return;
+    const opt = document.createElement('option');
+    opt.value = 'Custom';
+    opt.textContent = 'Custom';
+    // Insert alphabetically
+    const after = [...sel.options].find(o => o.value && o.value.localeCompare('Custom') > 0);
+    if (after) sel.insertBefore(opt, after);
+    else sel.appendChild(opt);
+  }
 
   function injectDividerTemplate(s0) {
     if (!s0 || s0.querySelector('#apex_div_template')) return;
@@ -2673,7 +2694,6 @@
 
   function promoteDividerTemplate(s0) {
     const placed = document.querySelector('[data-apex-widget="divider"][id="apex_div_template"]');
-    console.log('[apex-ext] promoteDividerTemplate — placed:', placed, 'parent:', placed?.parentElement?.id);
     if (!placed || placed.parentElement === s0) return; // still in s0, nothing to do
     const newId = 'apex_div_' + Date.now();
     const text  = placed.querySelector('h6')?.textContent?.trim() || 'Divider';
@@ -2750,6 +2770,181 @@
     document.querySelectorAll('[data-apex-widget="divider"]').forEach(el => el.remove());
   }
 
+  // ── Wet/Dry sensor widget ───────────────────────────────────────────────────
+
+  function getWetDryState(did) {
+    const slide = document.getElementById(did)?.querySelector('.dash-switch-slide');
+    if (!slide) return '';
+    return slide.classList.contains('closed') ? 'closed' : slide.classList.contains('open') ? 'open' : '';
+  }
+
+  function buildWetDryInner(name, slideClass) {
+    return '<span class="dash-widget-name" style="display:none">' + name + '</span>' +
+      '<div class="dash-switch">' +
+        '<div class="dash-switch-header">' +
+          '<div class="dash-switch-name">' + name + '</div>' +
+          '<div class="dash-switch-config"></div>' +
+        '</div>' +
+        '<div class="dash-switch-track">' +
+          '<div class="dash-switch-bar">' +
+            '<div class="dash-switch-bar-label"></div>' +
+            '<div class="dash-switch-bar-label"></div>' +
+          '</div>' +
+          '<div class="btn btn-dash-switch dash-switch-slide ' + slideClass + '"></div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function attachWetDryObserver(widgetEl, did) {
+    const prev = wetDryStateObservers.get(widgetEl.id);
+    if (prev) { prev.disconnect(); wetDryStateObservers.delete(widgetEl.id); }
+    const srcSlide = document.getElementById(did)?.querySelector('.dash-switch-slide');
+    if (!srcSlide) return;
+    const dstSlide = widgetEl.querySelector('.dash-switch-slide');
+    if (!dstSlide) return;
+    const sync = () => {
+      ['closed', 'open', 'auto'].forEach(c => dstSlide.classList.toggle(c, srcSlide.classList.contains(c)));
+    };
+    sync();
+    const obs = new MutationObserver(sync);
+    obs.observe(srcSlide, { attributes: true, attributeFilter: ['class'] });
+    wetDryStateObservers.set(widgetEl.id, obs);
+  }
+
+  function setupWetDryActive(el, config) {
+    const { did, name } = config;
+    el.innerHTML = buildWetDryInner(name, getWetDryState(did)) + '<div class="sortable-remove"></div>';
+    attachWetDryObserver(el, did);
+    const cog = el.querySelector('.dash-switch-config');
+    if (cog) {
+      cog.innerHTML = '<i class="af af-cog dash-actionable"></i>';
+      cog.querySelector('i').addEventListener('click', () => {
+        window.location.href = '/apex/config/inputs/' + did;
+      });
+    }
+    const xBtn = el.querySelector('.sortable-remove');
+    xBtn.style.visibility = document.getElementById('dash')?.classList.contains('unlocked') ? 'visible' : 'hidden';
+    xBtn.addEventListener('click', () => {
+      wetDryStateObservers.get(el.id)?.disconnect();
+      wetDryStateObservers.delete(el.id);
+      delete liveWetDry[el.id];
+      chrome.storage.sync.set({ apexWetDry: liveWetDry });
+      el.remove();
+    });
+  }
+
+  function createWetDryElement(id, config) {
+    const el = document.createElement('div');
+    el.className = 'dash-widget';
+    el.id = id;
+    el.dataset.apexWidget = 'wetdry';
+    el.dataset.apexType   = 'wetdry';
+    if (config) {
+      setupWetDryActive(el, config);
+    } else {
+      el.innerHTML = buildWetDryInner('Wet/Dry', '');
+    }
+    return el;
+  }
+
+  function showWetDryConfig(el, s0) {
+    const digitalWidgets = [...document.querySelectorAll('.dash-widget:not([data-apex-widget])')].filter(w => w.querySelector('.dash-switch-slide'));
+    if (!digitalWidgets.length) { el.remove(); injectWetDryTemplate(s0); return; }
+    const options = digitalWidgets
+      .map(w => ({ id: w.id, name: w.querySelector('.dash-switch-name')?.textContent?.trim() || w.id }))
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
+      .map(({ id, name }) => `<option value="${id}">${name}</option>`)
+      .join('');
+    el.innerHTML =
+      '<div class="dash-switch">' +
+        '<div class="dash-switch-header">' +
+          '<div class="dash-switch-name">Wet/Dry</div>' +
+        '</div>' +
+        '<div class="apex-wd-config">' +
+          '<select class="form-select">' + options + '</select>' +
+          '<button class="btn btn-sm btn-primary">Add</button>' +
+        '</div>' +
+      '</div>';
+    el.querySelector('button').addEventListener('click', () => {
+      const sel  = el.querySelector('select');
+      const did  = sel.value;
+      const name = sel.options[sel.selectedIndex]?.text || did;
+      liveWetDry[el.id] = { did, name };
+      chrome.storage.sync.set({ apexWetDry: liveWetDry });
+      setupWetDryActive(el, { did, name });
+      syncWetDryX();
+      injectWetDryTemplate(s0);
+      clearTimeout(layoutSaveTimer);
+      layoutSaveTimer = setTimeout(saveFolderLayoutNow, 0);
+    });
+  }
+
+  function syncWetDryX() {
+    const unlocked = document.getElementById('dash')?.classList.contains('unlocked') ?? false;
+    document.querySelectorAll('[data-apex-widget="wetdry"] .sortable-remove').forEach(el => {
+      el.style.visibility = unlocked ? 'visible' : 'hidden';
+    });
+  }
+
+  function injectWetDryTemplate(s0) {
+    if (!s0 || s0.querySelector('#apex_wd_template')) return;
+    s0.appendChild(createWetDryElement('apex_wd_template', null));
+    watchWetDryTemplate(s0);
+  }
+
+  function promoteWetDryTemplate(s0) {
+    const placed = document.querySelector('[data-apex-widget="wetdry"]#apex_wd_template');
+    if (!placed || placed.parentElement === s0) return;
+    placed.id = 'apex_wd_' + Date.now();
+    showWetDryConfig(placed, s0);
+  }
+
+  function watchWetDryTemplate(s0) {
+    if (wetDryTemplateObserver) wetDryTemplateObserver.disconnect();
+    wetDryTemplateObserver = new MutationObserver(() => {
+      s0.querySelectorAll('[data-apex-widget="wetdry"]:not(#apex_wd_template)').forEach(el => {
+        if (el.parentElement === s0) {
+          wetDryStateObservers.get(el.id)?.disconnect();
+          wetDryStateObservers.delete(el.id);
+          const wasTracked = Object.prototype.hasOwnProperty.call(liveWetDry, el.id);
+          delete liveWetDry[el.id];
+          if (wasTracked) chrome.storage.sync.set({ apexWetDry: liveWetDry });
+          el.remove();
+        }
+      });
+    });
+    const dash = document.getElementById('dash');
+    if (dash) {
+      wetDryTemplateObserver.observe(dash, { childList: true, subtree: true });
+      if (wetDryUnlockObserver) wetDryUnlockObserver.disconnect();
+      wetDryUnlockObserver = new MutationObserver(syncWetDryX);
+      wetDryUnlockObserver.observe(dash, { attributes: true, attributeFilter: ['class'] });
+    }
+    if (wetDryPointerUpHandler) document.removeEventListener('pointerup', wetDryPointerUpHandler, false);
+    wetDryPointerUpHandler = () => setTimeout(() => promoteWetDryTemplate(s0), 50);
+    document.addEventListener('pointerup', wetDryPointerUpHandler, false);
+  }
+
+  function cleanupWetDry() {
+    if (wetDryTemplateObserver) { wetDryTemplateObserver.disconnect(); wetDryTemplateObserver = null; }
+    if (wetDryUnlockObserver)   { wetDryUnlockObserver.disconnect();   wetDryUnlockObserver   = null; }
+    if (wetDryPointerUpHandler) { document.removeEventListener('pointerup', wetDryPointerUpHandler, false); wetDryPointerUpHandler = null; }
+    wetDryStateObservers.forEach(obs => obs.disconnect());
+    wetDryStateObservers.clear();
+    document.querySelectorAll('[data-apex-widget="wetdry"]').forEach(el => el.remove());
+  }
+
+  function sanitizeWetDry(raw) {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+    const out = {};
+    for (const [id, val] of Object.entries(raw)) {
+      if (typeof id !== 'string' || !id.startsWith('apex_wd_')) continue;
+      if (typeof val?.did !== 'string' || !val.did) continue;
+      out[id] = { did: val.did, name: typeof val.name === 'string' && val.name ? val.name : val.did };
+    }
+    return out;
+  }
+
   function getFolderSections() {
     return {
       s0: document.getElementById('dash-section-0'),
@@ -2789,7 +2984,7 @@
     if (activeFolder === 'default') return;
     const folderId = activeFolder; // capture before async — folder may change by the time get() returns
     const { s1, s2, s3 } = getFolderSections();
-    const toCSV = sec => [...(sec ? sec.querySelectorAll('.dash-widget') : [])].map(w => w.id).filter(id => id && id !== 'apex_div_template').join(',');
+    const toCSV = sec => [...(sec ? sec.querySelectorAll('.dash-widget') : [])].map(w => w.id).filter(id => id && id !== 'apex_div_template' && id !== 'apex_wd_template').join(',');
     const sections = [toCSV(s1), toCSV(s2), toCSV(s3), ''];
     chrome.storage.sync.get({ apexSections: {} }, ({ apexSections }) => {
       apexSections[folderId] = sections;
@@ -2814,7 +3009,7 @@
     if (layoutObserver) { layoutObserver.disconnect(); layoutObserver = null; }
   }
 
-  function applyFolderLayout(folder, sections, dividers = {}) {
+  function applyFolderLayout(folder, sections, dividers = {}, wetDry = {}) {
     const { s0, s1, s2, s3 } = getFolderSections();
     if (!s1 || !s2 || !s3) return;
 
@@ -2828,6 +3023,20 @@
     const savedIds = sections.flatMap(csv => (csv || '').split(',').filter(Boolean));
     savedIds.filter(id => id.startsWith('apex_div_') && !document.getElementById(id))
       .forEach(id => s0?.appendChild(createDividerElement(id, dividers[id]?.text || 'Divider')));
+    Object.entries(wetDry).forEach(([id, config]) => {
+      if (!document.getElementById(id)) s0?.appendChild(createWetDryElement(id, config));
+    });
+    // Orphaned wet/dry IDs in sections whose config was lost — show config form so user can re-link
+    savedIds.filter(id => id.startsWith('apex_wd_') && !wetDry[id] && !document.getElementById(id))
+      .forEach(id => {
+        const el = document.createElement('div');
+        el.className = 'dash-widget';
+        el.id = id;
+        el.dataset.apexWidget = 'wetdry';
+        el.dataset.apexType   = 'wetdry';
+        s0?.appendChild(el);
+        showWetDryConfig(el, s0);
+      });
 
     const all = collectWidgets();
     const frag = detachAllWidgets(all);
@@ -2851,6 +3060,8 @@
     startWatchingLayout();
     injectDividerTemplate(s0);
     syncDividerX();
+    injectWetDryTemplate(s0);
+    syncWetDryX();
 
     // If all columns are empty, open the unused drawer as a hint
     if (!col1.length && !col2.length && !col3.length) {
@@ -2880,6 +3091,7 @@
     }
 
     cleanupDividers();
+    cleanupWetDry();
 
     if (domRestore) {
       const { s0, s1, s2, s3 } = getFolderSections();
@@ -2907,7 +3119,7 @@
 
   // Known custom widget prefixes. Anything starting with apex_ that isn't in
   // this list is stripped — handles future versions that drop a widget type.
-  const KNOWN_APEX_PREFIXES = ['apex_div_'];
+  const KNOWN_APEX_PREFIXES = ['apex_div_', 'apex_wd_'];
 
   function sanitizeSections(raw) {
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
@@ -2920,7 +3132,7 @@
         return csv.split(',')
           .map(g => g.trim())
           .filter(g => {
-            if (!g || g === 'apex_div_template') return false;
+            if (!g || g === 'apex_div_template' || g === 'apex_wd_template') return false;
             if (g.startsWith('apex_')) return KNOWN_APEX_PREFIXES.some(p => g.startsWith(p));
             return /^[\w:.]+$/.test(g); // native GID — reject garbage
           })
@@ -2958,7 +3170,7 @@
     }
 
     // Unsupported custom widget types referenced by this folder
-    const knownCwTypes = new Set(['cw_divider']);
+    const knownCwTypes = new Set(['cw_divider', 'cw_wetdry']);
     const folderGids = new Set(sections.flatMap(csv => csv ? csv.split(',').map(g => g.trim()).filter(Boolean) : []));
     let skippedCw = 0;
     for (const [id, val] of Object.entries(parsedCustomElements || {})) {
@@ -3130,13 +3342,15 @@
 
   function switchToFolder(folderId) {
     if (folderId === 'default') { switchToDefault(); return; }
-    chrome.storage.sync.get({ apexFolders: [], apexSections: {}, apexDividers: {} }, (raw) => {
+    chrome.storage.sync.get({ apexFolders: [], apexSections: {}, apexDividers: {}, apexWetDry: {} }, (raw) => {
       const apexFolders  = sanitizeFolders(raw.apexFolders);
       const apexSections = sanitizeSections(raw.apexSections);
       const apexDividers = sanitizeDividers(raw.apexDividers);
+      const apexWetDry   = sanitizeWetDry(raw.apexWetDry);
       liveDividers = { ...apexDividers };
+      liveWetDry   = { ...apexWetDry };
       const folder = apexFolders.find(f => f.id === folderId);
-      if (folder) applyFolderLayout(folder, apexSections[folderId] || ['', '', '', ''], apexDividers);
+      if (folder) applyFolderLayout(folder, apexSections[folderId] || ['', '', '', ''], apexDividers, apexWetDry);
     });
   }
 
