@@ -1407,12 +1407,12 @@
       #apex-probe-left { overflow-y: auto; padding: 10px 16px 16px; width: 40%; flex-shrink: 0; }
       #apex-probe-divider { width: 5px; cursor: col-resize; background: #ddd; flex-shrink: 0; transition: background 0.15s; }
       #apex-probe-divider:hover, #apex-probe-divider.dragging { background: #aaa; }
-      #apex-probe-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #fff; font-family: "Source Code Pro", monospace; font-size: 16px; font-weight: 400; line-height: 22.4px; }
+      #apex-probe-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #fff; font-family: "Source Code Pro", monospace; font-size: 14px; font-weight: 400; line-height: 19.6px; }
       #apex-probe-right p { color: #bbb; margin: 0; font-family: system-ui, sans-serif; }
       .apex-probe-row { cursor: pointer; }
       .apex-probe-row:hover td { background: rgba(0,119,204,0.06) !important; }
       .apex-probe-row.active td { background: rgba(0,119,204,0.13) !important; }
-      #apex-probe-left th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: #999; font-weight: 700; padding: 0 10px 6px 0; border-bottom: 1px solid #ddd; }
+      #apex-probe-left th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: #999; font-weight: 700; padding: 0 10px 6px 4px; border-bottom: 1px solid #ddd; }
       .apex-prog-line { display: block; padding: 1px 4px; border-radius: 2px; white-space: pre; }
       .apex-prog-line.match { background: rgba(224,120,32,0.15); }
       .af-debug:before { content: "\\f188"; }
@@ -1470,11 +1470,14 @@
         border-bottom: 1px solid #ddd; padding-bottom: 3px;
       }
       #apex-help-body h3:first-child, #apex-probe-body h3:first-child { margin-top: 0; }
-      #apex-help-body table, #apex-probe-body table { border-collapse: collapse; width: 100%; margin-bottom: 4px; }
-      #apex-help-body td, #apex-probe-body td { padding: 3px 10px 3px 0; vertical-align: top; line-height: 1.45; color: #333; }
+      #apex-help-body table, #apex-probe-body table, #apex-explore-right table { border-collapse: collapse; width: 100%; margin-bottom: 4px; }
+      #apex-help-body td, #apex-probe-body td, #apex-explore-right td { padding: 4px 10px 4px 4px; vertical-align: top; line-height: 1.45; color: #333; }
       #apex-help-body td:first-child, #apex-probe-body td:first-child { white-space: nowrap; font-family: monospace; font-size: 12px; color: #2a6496; padding-right: 16px; }
-      #apex-help-body tr:nth-child(even) td, #apex-probe-body tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
-      #apex-help-body td code, #apex-probe-body td code { font-family: monospace; color: #c0392b; }
+      #apex-help-body tr:nth-child(even) td, #apex-probe-body tr:nth-child(even) td, #apex-explore-right tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+      #apex-help-body td code, #apex-probe-body td code, #apex-explore-right td code { font-family: monospace; color: #c0392b; }
+      #apex-explore-right th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: #999; font-weight: 700; padding: 0 10px 6px 4px; border-bottom: 1px solid #ddd; }
+      #apex-explore-right .apex-explore-ref:hover td { background: rgba(0,119,204,0.06) !important; }
+      #apex-explore-right .apex-explore-ref.active td { background: rgba(0,119,204,0.13) !important; }
       #apex-gutter-tip {
         position: fixed; z-index: 999998; pointer-events: none; display: none;
         background: #222; color: #eee;
@@ -1583,9 +1586,6 @@
       #apex-explore-search-wrap:focus-within { border-color: #e07820; }
       #apex-explore-search input { flex: 1; min-width: 0; padding: 5px 8px; border: none; border-radius: 4px; font-size: 12px; outline: none; background: transparent; }
       #apex-explore-search-clear { border: none; background: none; cursor: pointer; padding: 0 6px; font-size: 14px; color: #aaa; line-height: 1; flex-shrink: 0; }
-      #apex-explore-specials { border-bottom: 2px solid #eee; flex-shrink: 0; }
-      .apex-explore-keyword { display: block; width: 100%; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; color: #e07820; border: none; background: none; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .apex-explore-keyword:hover { background: #fff8f3; }
       .apex-explore-keyword.active { background: #e07820; color: #fff; }
       #apex-explore-list { overflow-y: auto; flex: 1; }
       .apex-explore-probe { padding: 6px 12px; cursor: pointer; font-size: 12px; border-bottom: 1px solid #f0f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1597,11 +1597,11 @@
       #apex-explore-divider2:hover, #apex-explore-divider2.dragging { background: #bbb; }
       #apex-explore-panel.preview-open #apex-explore-divider2 { width: 5px; }
       #apex-explore-right { flex: 1; overflow-y: auto; padding: 10px 16px 16px; background: #f5f5f5; }
-      #apex-explore-preview { width: 0; flex-shrink: 0; overflow: hidden; background: #fff; font-size: 12px; white-space: pre; font-family: "Source Code Pro", monospace; border-left: 1px solid #e0e0e0; transition: width 0.2s ease, padding 0.2s ease; padding: 0; }
-      #apex-explore-panel.preview-open #apex-explore-preview { width: 340px; padding: 10px 16px 16px; overflow-y: auto; }
+      #apex-explore-preview { width: 0; flex-shrink: 0; overflow: hidden; background: #fff; font-size: 14px; white-space: pre; font-family: "Source Code Pro", monospace; border-left: 1px solid #e0e0e0; transition: width 0.2s ease, padding 0.2s ease; padding: 0; }
+      #apex-explore-panel.preview-open #apex-explore-preview { width: 544px; padding: 10px 16px 16px; overflow-y: auto; }
       #apex-explore-preview p { white-space: normal; font-family: inherit; color: #888; margin: 0; }
       .apex-explore-ref.active { background: #fff3e8; }
-      #apex-explore-right h3 { color: #e07820; margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; }
+      #apex-explore-right h3 { color: #e07820; margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; padding-left: 4px; }
       .apex-explore-right-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 8px; }
       .apex-explore-ref { padding: 5px 8px; font-size: 12px; border-bottom: 1px solid #eee; background: #fff; border-radius: 2px; margin-bottom: 3px; }
       .apex-explore-toggle { display: inline-flex; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; }
@@ -1893,12 +1893,12 @@
       }
       left.innerHTML =
         '<table>' +
-        '<thead><tr><th>Output</th><th>#</th><th>Code</th></tr></thead>' +
+        '<thead><tr><th>Output</th><th style="text-align:center">#</th><th>Code</th></tr></thead>' +
         '<tbody>' +
         rows.map((r, i) =>
           `<tr class="apex-probe-row" data-i="${i}">` +
           `<td><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank">${esc(r.output)}</a></td>` +
-          `<td style="color:#bbb;text-align:right;padding-right:12px">${r.lineNum}</td>` +
+          `<td style="color:#bbb;text-align:center;padding-right:12px">${r.lineNum}</td>` +
           `<td><code>${highlightLine(r.line, name, allNames)}</code></td>` +
           `</tr>`
         ).join('') +
@@ -1932,7 +1932,6 @@
       '<div id="apex-explore-body">' +
         '<div id="apex-explore-left">' +
           '<div id="apex-explore-search"><div id="apex-explore-search-wrap"><input type="text" id="apex-explore-search-input" placeholder="Search probes\u2026"><button id="apex-explore-search-clear">\u00d7</button></div></div>' +
-          '<div id="apex-explore-specials"></div>' +
           '<div id="apex-explore-list"><p style="color:#888;padding:10px;margin:0">Loading\u2026</p></div>' +
         '</div>' +
         '<div id="apex-explore-divider"></div>' +
@@ -2026,17 +2025,23 @@
         const refs = allOconf
           .filter(item => item.name !== name)
           .flatMap(item => {
-            const lines = (item.prog || '').split('\n')
-              .filter(line => !/^tdata\b/i.test(line.trim()) && needleRe.test(line));
-            return lines.map(line => ({ name: item.name, did: item.did, line: line.trim() }));
+            const allLines = (item.prog || '').split('\n');
+            return allLines
+              .map((line, i) => ({ lineNum: i + 1, line }))
+              .filter(({ line }) => !/^tdata\b/i.test(line.trim()) && needleRe.test(line))
+              .map(({ lineNum, line }) => ({ name: item.name, did: item.did, lineNum, line: line.trim() }));
           })
           .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
         content = refs.length
-          ? `<h3>Referenced in (${refs.length})</h3>` + refs.map(r =>
-              `<div class="apex-explore-ref" data-did="${esc(String(r.did))}" style="cursor:pointer">` +
-                `<div style="font-weight:700;margin-bottom:2px"><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank" style="color:inherit;text-decoration:none">${esc(r.name)}</a></div>` +
-                `<code style="font-size:11px">${highlightLine(r.line, name, allProbes.map(p => p.name))}</code>` +
-              `</div>`).join('')
+          ? `<h3>Referenced in (${refs.length})</h3>` +
+            `<table><thead><tr><th>Output</th><th style="text-align:center">#</th><th>Code</th></tr></thead><tbody>` +
+            refs.map(r =>
+              `<tr class="apex-explore-ref" data-did="${esc(String(r.did))}" data-line-num="${r.lineNum}" style="cursor:pointer">` +
+                `<td><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank">${esc(r.name)}</a></td>` +
+                `<td style="color:#bbb;text-align:center;padding-right:12px">${r.lineNum}</td>` +
+                `<td><code style="font-size:14px">${highlightLine(r.line, name, allProbes.map(p => p.name))}</code></td>` +
+              `</tr>`).join('') +
+            `</tbody></table>`
           : `<h3>Referenced in</h3><p style="color:#888;margin:8px 0 0">No other probes reference <strong>${esc(name)}</strong>.</p>`;
       } else {
         const notRefs = allOconf
@@ -2084,9 +2089,8 @@
             const item = allOconf.find(o => String(o.did) === el.dataset.did);
             const preview = document.getElementById('apex-explore-preview');
             if (!preview || !item) return;
-            const matchLine = el.querySelector('code')?.textContent.trim();
+            const matchNum = +el.dataset.lineNum;
             const lines = (item.prog || '').split('\n').filter(l => !/^tdata\b/i.test(l.trim()));
-            const matchNum = lines.findIndex(l => l.trim() === matchLine) + 1;
             preview.innerHTML = lines.map((line, i) => {
               const n = i + 1;
               const cls = 'apex-prog-line' + (n === matchNum ? ' match' : '');
@@ -2106,10 +2110,10 @@
       list.querySelectorAll('.apex-explore-probe').forEach(el =>
         el.classList.toggle('active', el.dataset.name === name)
       );
-      document.querySelectorAll('.apex-explore-keyword').forEach(el =>
-        el.classList.toggle('active', el.dataset.name === name)
-      );
+
       document.getElementById('apex-explore-panel')?.classList.remove('preview-open');
+      const preview = document.getElementById('apex-explore-preview');
+      if (preview) preview.innerHTML = '';
       renderRefs(name);
     }
 
@@ -2121,29 +2125,33 @@
         list.innerHTML = '<p style="color:#888;padding:10px;margin:0">No probes found.</p>';
         return;
       }
-      list.innerHTML = filtered.map(item =>
+      const referencedNames = new Set();
+      for (const item of allOconf) {
+        const prog = item.prog || '';
+        for (const probe of filtered) {
+          if (probe.name === item.name) continue;
+          const re = new RegExp('(?<![\\w-])' + probe.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w-])', 'i');
+          if (re.test(prog)) referencedNames.add(probe.name);
+        }
+      }
+      const sectionLabel = text =>
+        `<div style="padding:4px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#aaa;border-top:1px solid #e0e0e0;margin-top:2px;position:sticky;top:0;background:#fff;z-index:1">${text}</div>`;
+      const probeHTML = items => items.map(item =>
         `<div class="apex-explore-probe" data-name="${esc(item.name)}">${esc(item.name)}</div>`
       ).join('');
+      const keywords = ['Fallback', 'Set'].filter(kw => !q || kw.toLowerCase().includes(q));
+      const used   = filtered.filter(p => referencedNames.has(p.name));
+      const unused = filtered.filter(p => !referencedNames.has(p.name));
+      list.innerHTML =
+        (keywords.length ? sectionLabel('Apex keywords') + probeHTML(keywords.map(k => ({ name: k }))) : '') +
+        (used.length ? sectionLabel('Inputs, outputs & probes') + probeHTML(used) : '') +
+        (unused.length ? sectionLabel('Unreferenced') + probeHTML(unused) : '');
       list.querySelectorAll('.apex-explore-probe').forEach(el => {
         el.addEventListener('click', () => selectProbe(el.dataset.name));
       });
     }
 
     renderList('');
-
-    // Populate keyword specials
-    const specials = document.getElementById('apex-explore-specials');
-    if (specials && !specials._wired) {
-      specials._wired = true;
-      ['Fallback', 'Set'].forEach(kw => {
-        const btn = document.createElement('button');
-        btn.className = 'apex-explore-keyword';
-        btn.textContent = kw;
-        btn.dataset.name = kw;
-        btn.addEventListener('click', () => selectProbe(kw));
-        specials.appendChild(btn);
-      });
-    }
 
     const input = document.getElementById('apex-explore-search-input');
     if (input) {
