@@ -1476,8 +1476,6 @@
       #apex-help-body tr:nth-child(even) td, #apex-probe-body tr:nth-child(even) td, #apex-explore-right tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
       #apex-help-body td code, #apex-probe-body td code, #apex-explore-right td code { font-family: monospace; color: #c0392b; }
       #apex-explore-right th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: #999; font-weight: 700; padding: 0 10px 6px 4px; border-bottom: 1px solid #ddd; }
-      #apex-explore-right .apex-explore-ref:hover td { background: rgba(0,119,204,0.06) !important; }
-      #apex-explore-right .apex-explore-ref.active td { background: rgba(0,119,204,0.13) !important; }
       #apex-gutter-tip {
         position: fixed; z-index: 999998; pointer-events: none; display: none;
         background: #222; color: #eee;
@@ -1600,10 +1598,8 @@
       #apex-explore-preview { width: 0; flex-shrink: 0; overflow: hidden; background: #fff; font-size: 14px; white-space: pre; font-family: "Source Code Pro", monospace; border-left: 1px solid #e0e0e0; transition: width 0.2s ease, padding 0.2s ease; padding: 0; }
       #apex-explore-panel.preview-open #apex-explore-preview { width: 544px; padding: 10px 16px 16px; overflow-y: auto; }
       #apex-explore-preview p { white-space: normal; font-family: inherit; color: #888; margin: 0; }
-      .apex-explore-ref.active { background: #fff3e8; }
       #apex-explore-right h3 { color: #e07820; margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; padding-left: 4px; }
       .apex-explore-right-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 8px; }
-      .apex-explore-ref { padding: 5px 8px; font-size: 12px; border-bottom: 1px solid #eee; background: #fff; border-radius: 2px; margin-bottom: 3px; }
       .apex-explore-toggle { display: inline-flex; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; }
       .apex-explore-toggle button { background: #fff; border: none; padding: 2px 8px; font-size: 11px; cursor: pointer; color: #555; line-height: 1.6; }
       .apex-explore-toggle button.active { background: #e07820; color: #fff; }
@@ -1786,7 +1782,7 @@
         lines.forEach((line, i) => {
           if (/^tdata\b/i.test(line.trim())) return;
           if (needleRe.test(line)) {
-            rows.push({ output: item.name, did: item.did, lineNum: i + 1, line: line.trim(), prog: item.prog || '' });
+            rows.push({ name: item.name, did: item.did, lineNum: i + 1, line: line.trim(), prog: item.prog || '' });
           }
         });
       }
@@ -1844,17 +1840,42 @@
     return out + esc(raw.slice(last));
   }
 
-  function renderProbePreview(prog, matchLineNum, name, allNames = []) {
-    const right = document.getElementById('apex-probe-right');
-    if (!right) return;
-    right.innerHTML = prog.split('\n')
+  function renderCodePreview(container, prog, matchLineNum, name, allNames = []) {
+    container.innerHTML = prog.split('\n')
       .map((line, i) => ({ line, n: i + 1 }))
       .filter(({ line }) => !/^tdata\b/i.test(line.trim()))
       .map(({ line, n }) => {
         const cls = 'apex-prog-line' + (n === matchLineNum ? ' match' : '');
         return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name, allNames)}</span>`;
       }).join('');
-    right.querySelector('.match')?.scrollIntoView({ block: 'center' });
+    requestAnimationFrame(() => container.querySelector('.match')?.scrollIntoView({ block: 'center' }));
+  }
+
+  function renderRefsTable(container, rows, name, allNames, onRowClick) {
+    if (!rows.length) {
+      container.innerHTML = '<p style="color:#888;margin:0">No references found.</p>';
+      return;
+    }
+    container.innerHTML =
+      '<table>' +
+      '<thead><tr><th>Output</th><th style="text-align:center">#</th><th>Code</th></tr></thead>' +
+      '<tbody>' +
+      rows.map((r, i) =>
+        `<tr class="apex-probe-row" data-i="${i}" style="cursor:pointer">` +
+        `<td><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank">${esc(r.name)}</a></td>` +
+        `<td style="color:#bbb;text-align:center;padding-right:12px">${r.lineNum}</td>` +
+        `<td><code>${highlightLine(r.line, name, allNames)}</code></td>` +
+        `</tr>`
+      ).join('') +
+      '</tbody></table>';
+    container.querySelectorAll('.apex-probe-row').forEach(tr => {
+      tr.addEventListener('click', e => {
+        if (e.target.tagName === 'A') return;
+        container.querySelectorAll('.apex-probe-row').forEach(r => r.classList.remove('active'));
+        tr.classList.add('active');
+        onRowClick(rows[+tr.dataset.i]);
+      });
+    });
   }
 
   function openProbePanel(name) {
@@ -1887,29 +1908,9 @@
     fetchProbeUsages(name).then(({ rows, allNames }) => {
       const left = document.getElementById('apex-probe-left');
       if (!left) return;
-      if (!rows.length) {
-        left.innerHTML = '<p style="color:#888;margin:0">No references found.</p>';
-        return;
-      }
-      left.innerHTML =
-        '<table>' +
-        '<thead><tr><th>Output</th><th style="text-align:center">#</th><th>Code</th></tr></thead>' +
-        '<tbody>' +
-        rows.map((r, i) =>
-          `<tr class="apex-probe-row" data-i="${i}">` +
-          `<td><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank">${esc(r.output)}</a></td>` +
-          `<td style="color:#bbb;text-align:center;padding-right:12px">${r.lineNum}</td>` +
-          `<td><code>${highlightLine(r.line, name, allNames)}</code></td>` +
-          `</tr>`
-        ).join('') +
-        '</tbody></table>';
-      left.querySelectorAll('.apex-probe-row').forEach(tr => {
-        tr.addEventListener('click', () => {
-          left.querySelectorAll('.apex-probe-row').forEach(r => r.classList.remove('active'));
-          tr.classList.add('active');
-          const r = rows[+tr.dataset.i];
-          renderProbePreview(r.prog, r.lineNum, name, allNames);
-        });
+      renderRefsTable(left, rows, name, allNames, r => {
+        const right = document.getElementById('apex-probe-right');
+        if (right) renderCodePreview(right, r.prog, r.lineNum, name, allNames);
       });
     });
   }
@@ -2019,58 +2020,17 @@
       if (!right) return;
       const needleRe = new RegExp('(?<![\\w-])' + name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w-])', 'i');
       const loc = { sensitivity: 'base' };
-
-      let content;
-      if (exploreMode === 'referenced') {
-        const refs = allOconf
-          .filter(item => item.name !== name)
-          .flatMap(item => {
-            const allLines = (item.prog || '').split('\n');
-            return allLines
-              .map((line, i) => ({ lineNum: i + 1, line }))
-              .filter(({ line }) => !/^tdata\b/i.test(line.trim()) && needleRe.test(line))
-              .map(({ lineNum, line }) => ({ name: item.name, did: item.did, lineNum, line: line.trim() }));
-          })
-          .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
-        content = refs.length
-          ? `<h3>Referenced in (${refs.length})</h3>` +
-            `<table><thead><tr><th>Output</th><th style="text-align:center">#</th><th>Code</th></tr></thead><tbody>` +
-            refs.map(r =>
-              `<tr class="apex-explore-ref" data-did="${esc(String(r.did))}" data-line-num="${r.lineNum}" style="cursor:pointer">` +
-                `<td><a href="/apex/config/outputs/${esc(String(r.did))}" target="_blank">${esc(r.name)}</a></td>` +
-                `<td style="color:#bbb;text-align:center;padding-right:12px">${r.lineNum}</td>` +
-                `<td><code style="font-size:14px">${highlightLine(r.line, name, allProbes.map(p => p.name))}</code></td>` +
-              `</tr>`).join('') +
-            `</tbody></table>`
-          : `<h3>Referenced in</h3><p style="color:#888;margin:8px 0 0">No other probes reference <strong>${esc(name)}</strong>.</p>`;
-      } else {
-        const notRefs = allOconf
-          .filter(item =>
-            item.name !== name &&
-            !(item.prog || '').split('\n').some(line =>
-              !/^tdata\b/i.test(line.trim()) && needleRe.test(line)
-            )
-          )
-          .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
-        content = notRefs.length
-          ? `<h3>Not referenced in (${notRefs.length})</h3>` + notRefs.map(item =>
-              `<div class="apex-explore-ref" style="font-weight:700"><a href="/apex/config/outputs/${esc(String(item.did))}" target="_blank" style="color:inherit;text-decoration:none">${esc(item.name)}</a></div>`).join('')
-          : `<h3>Not referenced in</h3><p style="color:#888;margin:8px 0 0">All other probes reference <strong>${esc(name)}</strong>.</p>`;
-      }
-
-      // Extract h3 text and build header with toggle
-      const h3Match = content.match(/^<h3>(.*?)<\/h3>/);
-      const h3Text = h3Match ? h3Match[1] : '';
-      const rest = h3Match ? content.slice(h3Match[0].length) : content;
+      const allNames = allProbes.map(p => p.name);
 
       right.innerHTML =
         `<div class="apex-explore-right-header">` +
-          `<h3>${h3Text}</h3>` +
+          `<h3 id="apex-explore-refs-title"></h3>` +
           `<div class="apex-explore-toggle">` +
             `<button data-mode="referenced" class="${exploreMode === 'referenced' ? 'active' : ''}">Referenced in</button>` +
             `<button data-mode="not-referenced" class="${exploreMode === 'not-referenced' ? 'active' : ''}">Not referenced in</button>` +
           `</div>` +
-        `</div>` + rest;
+        `</div>` +
+        `<div id="apex-explore-refs-body"></div>`;
 
       right.querySelectorAll('.apex-explore-toggle button').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -2080,26 +2040,46 @@
         });
       });
 
+      const titleEl = document.getElementById('apex-explore-refs-title');
+      const body = document.getElementById('apex-explore-refs-body');
+
       if (exploreMode === 'referenced') {
-        right.querySelectorAll('.apex-explore-ref[data-did]').forEach(el => {
-          el.addEventListener('click', e => {
-            if (e.target.tagName === 'A') return;
-            right.querySelectorAll('.apex-explore-ref').forEach(r => r.classList.remove('active'));
-            el.classList.add('active');
-            const item = allOconf.find(o => String(o.did) === el.dataset.did);
+        const refs = allOconf
+          .filter(item => item.name !== name)
+          .flatMap(item => {
+            const allLines = (item.prog || '').split('\n');
+            return allLines
+              .map((line, i) => ({ lineNum: i + 1, line }))
+              .filter(({ line }) => !/^tdata\b/i.test(line.trim()) && needleRe.test(line))
+              .map(({ lineNum, line }) => ({ name: item.name, did: item.did, lineNum, line: line.trim(), prog: item.prog || '' }));
+          })
+          .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
+        if (titleEl) titleEl.textContent = refs.length ? `Referenced in (${refs.length})` : 'Referenced in';
+        if (refs.length) {
+          renderRefsTable(body, refs, name, allNames, r => {
             const preview = document.getElementById('apex-explore-preview');
-            if (!preview || !item) return;
-            const matchNum = +el.dataset.lineNum;
-            const lines = (item.prog || '').split('\n').filter(l => !/^tdata\b/i.test(l.trim()));
-            preview.innerHTML = lines.map((line, i) => {
-              const n = i + 1;
-              const cls = 'apex-prog-line' + (n === matchNum ? ' match' : '');
-              return `<span class="${cls}"><span style="color:#bbb;display:inline-block;width:2em;text-align:right;margin-right:10px;user-select:none">${n}</span>${highlightLine(line, name, allProbes.map(p => p.name))}</span>`;
-            }).join('');
+            if (!preview) return;
+            renderCodePreview(preview, r.prog, r.lineNum, name, allNames);
             document.getElementById('apex-explore-panel')?.classList.add('preview-open');
-            requestAnimationFrame(() => preview.querySelector('.match')?.scrollIntoView({ block: 'center' }));
           });
-        });
+        } else {
+          body.innerHTML = `<p style="color:#888;margin:8px 0 0">No other probes reference <strong>${esc(name)}</strong>.</p>`;
+        }
+      } else {
+        const notRefs = allOconf
+          .filter(item =>
+            item.name !== name &&
+            !(item.prog || '').split('\n').some(line =>
+              !/^tdata\b/i.test(line.trim()) && needleRe.test(line)
+            )
+          )
+          .sort((a, b) => a.name.localeCompare(b.name, undefined, loc));
+        if (titleEl) titleEl.textContent = notRefs.length ? `Not referenced in (${notRefs.length})` : 'Not referenced in';
+        body.innerHTML = notRefs.length
+          ? notRefs.map(item =>
+              `<div style="padding:4px 12px;font-weight:700"><a href="/apex/config/outputs/${esc(String(item.did))}" target="_blank" style="color:inherit;text-decoration:none">${esc(item.name)}</a></div>`
+            ).join('')
+          : `<p style="color:#888;margin:8px 0 0">All other probes reference <strong>${esc(name)}</strong>.</p>`;
       }
     }
 
