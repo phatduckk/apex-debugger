@@ -1796,6 +1796,44 @@
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  const PROBE_ICONS = {
+    'Temp':                       'F2C9',
+    'pH':                         'F0C3',
+    'ORP':                        'F0C3',
+    'Cond':                       'F0C3',
+    'Amps':                       'F0E7',
+    'pwr':                        'F0E7',
+    'watts':                      'F0E7',
+    'volts':                      'F0E7',
+    'po4':                        'F1FB',
+    'no3':                        'F1FB',
+    'digital':                    'F1EC',
+    'in':                         'F5B7',
+    'alk':                        'F1FB',
+    'ca':                         'F1FB',
+    'mg':                         'F1FB',
+    'outlet':                     'E001',
+    'virtual':                    'F0C2',
+    'alert':                      'F34E',
+    'dos':                        'F0A0',
+    'dqd':                        'F0A0',
+    'variable':                   '',
+    '24v':                        'F0E7',
+    'selector':                   'F0A0',
+    'wav':                        'E004',
+    'cor|20':                     'E004',
+    'cor|15':                     'E004',
+    'MXMPump|Ecotech|Vortech':    'F0A0',
+    'keyword':                    'F111',
+  };
+  const PROBE_ICON_UNKNOWN = 'F129';
+
+  function probeIcon(type) {
+    if (type === undefined) return '';
+    const code = Object.prototype.hasOwnProperty.call(PROBE_ICONS, type) ? PROBE_ICONS[type] : PROBE_ICON_UNKNOWN;
+    return code ? `<i class="af af-fw" style="font-style:normal;margin-right:4px;color:#aaa">&#x${code};</i>` : '';
+  }
+
   function panelTitle(name) {
     const icon = '<i class="af af-fw" style="font-style:normal;margin-right:6px">&#xF121;</i>';
     return name ? `${icon}Explore references to: ${esc(name)}` : `${icon}Explore references`;
@@ -1932,7 +1970,7 @@
       `<div id="apex-explore-header"><span>${panelTitle()}</span><button id="apex-explore-close" title="Close">\u00d7</button></div>` +
       '<div id="apex-explore-body">' +
         '<div id="apex-explore-left">' +
-          '<div id="apex-explore-search"><div id="apex-explore-search-wrap"><input type="text" id="apex-explore-search-input" placeholder="Search probes\u2026"><button id="apex-explore-search-clear">\u00d7</button></div></div>' +
+          '<div id="apex-explore-search"><div id="apex-explore-search-wrap"><input type="text" id="apex-explore-search-input" placeholder="Search"><button id="apex-explore-search-clear">\u00d7</button></div></div>' +
           '<div id="apex-explore-list"><p style="color:#888;padding:10px;margin:0">Loading\u2026</p></div>' +
         '</div>' +
         '<div id="apex-explore-divider"></div>' +
@@ -2117,13 +2155,13 @@
       const sectionLabel = text =>
         `<div style="padding:4px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#aaa;border-top:1px solid #e0e0e0;margin-top:2px;position:sticky;top:0;background:#fff;z-index:1">${text}</div>`;
       const probeHTML = items => items.map(item =>
-        `<div class="apex-explore-probe" data-name="${esc(item.name)}">${esc(item.name)}</div>`
+        `<div class="apex-explore-probe" data-name="${esc(item.name)}">${probeIcon(item.type)}${esc(item.name)}</div>`
       ).join('');
       const keywords = ['Fallback', 'Set'].filter(kw => !q || kw.toLowerCase().includes(q));
       const used   = filtered.filter(p => referencedNames.has(p.name));
       const unused = filtered.filter(p => !referencedNames.has(p.name));
       list.innerHTML =
-        (keywords.length ? sectionLabel('Apex keywords') + probeHTML(keywords.map(k => ({ name: k }))) : '') +
+        (keywords.length ? sectionLabel('Apex keywords') + probeHTML(keywords.map(k => ({ name: k, type: 'keyword' }))) : '') +
         (used.length ? sectionLabel('Inputs, outputs & probes') + probeHTML(used) : '') +
         (unused.length ? sectionLabel('Unreferenced') + probeHTML(unused) : '');
       list.querySelectorAll('.apex-explore-probe').forEach(el => {
