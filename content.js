@@ -1800,6 +1800,11 @@
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  function panelTitle(name) {
+    const icon = '<i class="af af-fw" style="font-style:normal;margin-right:6px">&#xF121;</i>';
+    return name ? `${icon}Explore references to: ${esc(name)}` : `${icon}Explore references`;
+  }
+
   function highlightLine(raw, probeName, knownNames = []) {
     const escapedProbe = probeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const otherNames = knownNames
@@ -1853,8 +1858,9 @@
   }
 
   function openProbePanel(name) {
+    closeExplorePanel();
     injectProbePanel();
-    document.getElementById('apex-probe-title').innerHTML = `<i class="af af-fw" style="font-style:normal;margin-right:6px">&#xF121;</i>References to: ${esc(name)}`;
+    document.getElementById('apex-probe-title').innerHTML = panelTitle(name);
     const body = document.getElementById('apex-probe-body');
     body.innerHTML = '<div id="apex-probe-left"><p style="color:#888;margin:0">Loading\u2026</p></div><div id="apex-probe-divider"></div><div id="apex-probe-right"><p>Click a row to preview</p></div>';
     document.getElementById('apex-probe-divider').addEventListener('mousedown', e => {
@@ -1922,7 +1928,7 @@
     panel.id = 'apex-explore-panel';
     panel.innerHTML =
       '<div id="apex-explore-handle"></div>' +
-      '<div id="apex-explore-header"><span><i class="af af-fw" style="font-style:normal;margin-right:6px">&#xF121;</i>Explore</span><button id="apex-explore-close" title="Close">\u00d7</button></div>' +
+      `<div id="apex-explore-header"><span>${panelTitle()}</span><button id="apex-explore-close" title="Close">\u00d7</button></div>` +
       '<div id="apex-explore-body">' +
         '<div id="apex-explore-left">' +
           '<div id="apex-explore-search"><div id="apex-explore-search-wrap"><input type="text" id="apex-explore-search-input" placeholder="Search probes\u2026"><button id="apex-explore-search-clear">\u00d7</button></div></div>' +
@@ -1940,6 +1946,7 @@
   }
 
   async function openExplorePanel() {
+    closeProbePanel();
     injectExplorePanel();
     requestAnimationFrame(() => document.getElementById('apex-explore-panel').classList.add('open'));
     document.getElementById('apex-explore-btn')?.classList.add('active');
@@ -2094,6 +2101,8 @@
 
     function selectProbe(name) {
       selectedProbe = name;
+      const header = document.querySelector('#apex-explore-header span');
+      if (header) header.innerHTML = panelTitle(name);
       list.querySelectorAll('.apex-explore-probe').forEach(el =>
         el.classList.toggle('active', el.dataset.name === name)
       );
