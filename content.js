@@ -1632,7 +1632,7 @@
       }
       [data-apex-widget="wetdry"] .dash-switch-slide.open::before { content: "\uF54C" !important; font-family: 'ApexFusion', var(--bs-body-font-family), sans-serif !important; display: inline-block !important; margin-right: 5px !important; }
       [data-apex-widget="wetdry"] .dash-switch-slide.open::after  { content: "DRY" !important; }
-      .apex-wd-config { display: flex; align-items: center; gap: 4px; }
+.apex-wd-config { display: flex; align-items: center; gap: 4px; }
       .apex-wd-config select { flex: 1; font-size: 11px; height: 22px; padding: 0 4px; min-width: 0; }
       .apex-wd-config button { font-size: 11px; padding: 0 8px; height: 22px; white-space: nowrap; flex-shrink: 0; }
     `;
@@ -2814,6 +2814,14 @@
 
   function setupWetDryActive(el, config) {
     const { did, name } = config;
+    const srcExists = !!document.getElementById(did)?.querySelector('.dash-switch-slide');
+    if (!srcExists) {
+      // Source DID gone — drop back to config picker so user can re-link
+      delete liveWetDry[el.id];
+      chrome.storage.sync.set({ apexWetDry: liveWetDry });
+      showWetDryConfig(el, document.getElementById('dash-section-0'));
+      return;
+    }
     el.innerHTML = buildWetDryInner(name, getWetDryState(did)) + '<div class="sortable-remove"></div>';
     attachWetDryObserver(el, did);
     const cog = el.querySelector('.dash-switch-config');
