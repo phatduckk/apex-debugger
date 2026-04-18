@@ -2439,19 +2439,41 @@
 
       unusedSection?.querySelectorAll(':scope > :not(.dash-widget)').forEach(el => { el.style.display = 'none'; });
 
+      const WIDGET_GROUPS = {
+        'Probes':                  ['Temp', 'pH', 'ORP', 'Cond'],
+        'Pumps':                   ['wav', 'cor|20', 'cor|15', 'cor', 'MXMPump|Ecotech|Vortech', 'variable'],
+        'Sensors, switches & LLS':  ['digital', 'in'],
+        'Virtual Outlets':         ['virtual'],
+        'Alarms':                  ['alert'],
+        'Outlets':                 ['outlet'],
+        'Dos & Dos QD':            ['dos', 'dqd', 'ddr'],
+        'Power':                   ['Amps', 'pwr', 'volts', 'variable', 'ebg'],
+        'Solenoids & Other 24v':   ['24v'],
+        'Trident':                 ['selector', 'tri'],
+        'Custom':                  ['cw_divider', 'divider'],
+      };
+      const typeToGroups = new Map();
+      for (const [group, types] of Object.entries(WIDGET_GROUPS))
+        types.forEach(t => typeToGroups.set(t, [...(typeToGroups.get(t) || []), group]));
+
       const filterWidgets = () => {
         const q = searchInput.value.toLowerCase();
-        const t = typeSelect.value;
+        const g = typeSelect.value;
         unusedSection?.querySelectorAll('.dash-widget').forEach(widget => {
           const nameEl = widget.querySelector('[class*="-name"]');
           const nameMatch = !q || (nameEl?.textContent || '').toLowerCase().includes(q);
-          const typeMatch = !t || widget.dataset.apexType === t;
-          widget.style.display = (nameMatch && typeMatch) ? '' : 'none';
+          let groupMatch = true;
+          if (g) {
+            const wt = widget.dataset.apexType;
+            const wgs = wt?.startsWith('cw_') ? ['Custom'] : typeToGroups.get(wt);
+            groupMatch = g === 'Uncategorized' ? (!wt || !wgs) : (wgs || []).includes(g);
+          }
+          widget.style.display = (nameMatch && groupMatch) ? '' : 'none';
         });
       };
 
       searchInput.addEventListener('input', filterWidgets);
-      typeSelect.addEventListener('change', filterWidgets);
+      typeSelect.addEventListener('change', () => { filterWidgets(); unusedSection.scrollLeft = 0; });
       clearBtn.addEventListener('click', () => {
         searchInput.value = '';
         filterWidgets();
@@ -2471,18 +2493,30 @@
           unusedSection?.querySelectorAll('.dash-widget').forEach(widget => {
             const name = widget.querySelector('[class*="-name"]')?.textContent?.trim();
             const type = name ? nameTypeMap.get(name) : undefined;
-            if (type) { widget.dataset.apexType = type; types.add(type); }
-            // Preserve pre-stamped types (e.g. custom divider widgets)
+            const idPrefix = widget.id.includes(':') ? widget.id.split(':')[0] : null;
+            if (idPrefix) { widget.dataset.apexType = idPrefix; types.add(idPrefix); }
+            else if (type) { widget.dataset.apexType = type; types.add(type); }
             else if (widget.dataset.apexType) types.add(widget.dataset.apexType);
+            else types.add('__uncategorized__');
+            if (widget.id.includes(':')) console.log('[apex-dbg widget]', {
+              id: widget.id,
+              classes: [...widget.classList].join(' '),
+              name,
+              configType: type,
+              stampedType: widget.dataset.apexType,
+              firstChildClasses: widget.firstElementChild ? [...widget.firstElementChild.classList].join(' ') : null,
+            });
           });
-          const fmtType = t => t.length === 3 ? t.toUpperCase() : t.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
-          typeSelect.innerHTML = '<option value="">All Types</option>';
-          [...types].sort().forEach(type => {
-            const opt = document.createElement('option');
-            opt.value = type;
-            opt.textContent = fmtType(type);
-            typeSelect.appendChild(opt);
-          });
+          const presentGroups = new Set([...types].flatMap(t => t === '__uncategorized__' ? ['Uncategorized'] : t?.startsWith('cw_') ? ['Custom'] : (typeToGroups.get(t) || ['Uncategorized'])));
+          typeSelect.innerHTML = '<option value="">All</option>';
+          [...Object.keys(WIDGET_GROUPS).sort((a, b) => a.localeCompare(b)), 'Uncategorized']
+            .filter(g => presentGroups.has(g))
+            .forEach(g => {
+              const opt = document.createElement('option');
+              opt.value = g;
+              opt.textContent = g;
+              typeSelect.appendChild(opt);
+            });
           typeSelect.disabled = false;
           if (activeFolder !== 'default') ensureDividerInTypeSelect();
         } catch (_) {}
@@ -2627,15 +2661,7 @@
     return el;
   }
 
-  function ensureDividerInTypeSelect() {
-    const sel = document.getElementById('apex-unused-type');
-    if (!sel || sel.querySelector('[value="divider"]')) return;
-    const opt = document.createElement('option');
-    opt.value       = 'divider';
-    opt.textContent = 'Divider';
-    sel.appendChild(opt);
-    sel.disabled = false;
-  }
+  function ensureDividerInTypeSelect() {}
 
   function injectDividerTemplate(s0) {
     if (!s0 || s0.querySelector('#apex_div_template')) return;
