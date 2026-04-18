@@ -2620,12 +2620,13 @@
   function createDividerElement(id, text) {
     const el = document.createElement('div');
     el.className = 'dash-widget';
+    el.style.marginBottom = '4px';
     el.id = id;
     el.dataset.apexWidget = 'divider';
     el.dataset.apexType   = 'divider';
     el.innerHTML =
       '<span class="dash-widget-name" style="display:none">Divider</span>' +
-      '<div class="card"><h6 class="card-header text-center" style="cursor:default">' +
+      '<div class="card" style="margin:0 12px 0 4px"><h6 class="card-header text-center" style="cursor:default;border-bottom:none">' +
         (text || 'Divider') +
       '</h6></div>' +
       (id !== 'apex_div_template' ? '<div class="sortable-remove"></div>' : '');
