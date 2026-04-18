@@ -3222,7 +3222,7 @@
     };
   }
 
-  function showImportReview(modal, analyses, importedSections, importedDividers, currentFolders, currentSections) {
+  function showImportReview(modal, analyses, importedSections, importedDividers, importedWetDry, currentFolders, currentSections) {
     const ICON = { green: 'f058', yellow: 'f06a', red: 'f057' };
     const COLOR = { green: '#28a745', yellow: '#d97706', red: '#dc3545' };
 
@@ -3322,9 +3322,14 @@
       for (const [id, val] of Object.entries(importedDividers)) {
         if (importedGids.has(id)) finalDividers[id] = val;
       }
+      const finalWetDry = { ...liveWetDry };
+      for (const [id, val] of Object.entries(importedWetDry)) {
+        if (importedGids.has(id)) finalWetDry[id] = val;
+      }
 
-      chrome.storage.sync.set({ apexFolders: finalFolders, apexSections: finalSections, apexDividers: finalDividers }, () => {
+      chrome.storage.sync.set({ apexFolders: finalFolders, apexSections: finalSections, apexDividers: finalDividers, apexWetDry: finalWetDry }, () => {
         liveDividers = finalDividers;
+        liveWetDry   = finalWetDry;
         rebuildDropdownOrder(finalFolders);
         renderManageList(finalFolders);
       });
@@ -3556,8 +3561,8 @@
       el.querySelector('#apex-manage-close-btn').addEventListener('click', closeManage);
 
       el.querySelector('#apex-folders-export-link').addEventListener('click', () => {
-        chrome.storage.sync.get({ apexFolders: [], apexSections: {}, apexDividers: {} }, ({ apexFolders, apexSections, apexDividers }) => {
-          // Collect all GIDs referenced in sections so we only export dividers that are actually placed
+        chrome.storage.sync.get({ apexFolders: [], apexSections: {}, apexDividers: {}, apexWetDry: {} }, ({ apexFolders, apexSections, apexDividers, apexWetDry }) => {
+          // Collect all GIDs referenced in sections so we only export custom elements that are actually placed
           const referencedGids = new Set(
             Object.values(apexSections).flatMap(cols => cols.flatMap(csv => csv ? csv.split(',') : []))
           );
@@ -3565,6 +3570,10 @@
           for (const [id, val] of Object.entries(apexDividers || {})) {
             if (typeof id === 'string' && id.startsWith('apex_div_') && referencedGids.has(id))
               customElements[id] = { type: 'cw_divider', text: val?.text || 'Divider' };
+          }
+          for (const [id, val] of Object.entries(apexWetDry || {})) {
+            if (typeof id === 'string' && id.startsWith('apex_wd_') && referencedGids.has(id))
+              customElements[id] = { type: 'cw_wetdry', did: val.did, name: val.name };
           }
           const now = new Date();
           const pad = n => String(n).padStart(2, '0');
@@ -3591,14 +3600,17 @@
             const importedSections = sanitizeSections(parsed.apexSections);
             if (!importedFolders.length) throw new Error('empty or unrecognized import');
 
-            // Parse custom elements — dividers get restored, unknown types are quietly dropped
+            // Parse custom elements — dividers and wet/dry get restored, unknown types are quietly dropped
             const importedDividers = {};
+            const importedWetDry   = {};
             for (const [id, val] of Object.entries(parsed.customElements || {})) {
               if (val?.type === 'cw_divider')
                 importedDividers[id] = { text: typeof val.text === 'string' && val.text ? val.text : 'Divider' };
+              else if (val?.type === 'cw_wetdry' && typeof val.did === 'string' && val.did)
+                importedWetDry[id]   = { did: val.did, name: typeof val.name === 'string' && val.name ? val.name : val.did };
             }
 
-            chrome.storage.sync.get({ apexFolders: [], apexSections: {}, apexDividers: {} }, (current) => {
+            chrome.storage.sync.get({ apexFolders: [], apexSections: {}, apexDividers: {}, apexWetDry: {} }, (current) => {
               const currentFolders  = sanitizeFolders(current.apexFolders);
               const currentSections = sanitizeSections(current.apexSections);
 
@@ -3617,8 +3629,10 @@
                   finalSections[folder.id] = importedSections[folder.id] || ['', '', '', ''];
                 });
                 const finalDividers = { ...liveDividers, ...importedDividers };
-                chrome.storage.sync.set({ apexFolders: finalFolders, apexSections: finalSections, apexDividers: finalDividers }, () => {
+                const finalWetDry   = { ...liveWetDry,   ...importedWetDry };
+                chrome.storage.sync.set({ apexFolders: finalFolders, apexSections: finalSections, apexDividers: finalDividers, apexWetDry: finalWetDry }, () => {
                   liveDividers = finalDividers;
+                  liveWetDry   = finalWetDry;
                   rebuildDropdownOrder(finalFolders);
                   renderManageList(finalFolders);
                 });
@@ -3626,7 +3640,7 @@
               }
 
               const modal = document.getElementById('apex-manage-folders-modal');
-              showImportReview(modal, analyses, importedSections, importedDividers, currentFolders, currentSections);
+              showImportReview(modal, analyses, importedSections, importedDividers, importedWetDry, currentFolders, currentSections);
             });
           } catch (err) {
             console.error('[apex-debugger] import error:', err);
