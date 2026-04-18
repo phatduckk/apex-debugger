@@ -1630,7 +1630,8 @@
       [data-apex-widget="wetdry"] .dash-switch-slide.open {
         --bs-btn-bg: #8b8b8f !important; --bs-btn-border-color: #7e7e82 !important;
       }
-      [data-apex-widget="wetdry"] .dash-switch-slide.open::before   { content: "DRY" !important; }
+      [data-apex-widget="wetdry"] .dash-switch-slide.open::before { content: "\uF54C" !important; font-family: 'ApexFusion', var(--bs-body-font-family), sans-serif !important; display: inline-block !important; margin-right: 5px !important; }
+      [data-apex-widget="wetdry"] .dash-switch-slide.open::after  { content: "DRY" !important; }
       .apex-wd-config { display: flex; align-items: center; gap: 4px; }
       .apex-wd-config select { flex: 1; font-size: 11px; height: 22px; padding: 0 4px; min-width: 0; }
       .apex-wd-config button { font-size: 11px; padding: 0 8px; height: 22px; white-space: nowrap; flex-shrink: 0; }
