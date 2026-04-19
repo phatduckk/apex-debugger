@@ -2583,6 +2583,11 @@
         searchInput.focus();
       });
 
+      // Re-apply filter whenever a widget lands in the unused drawer
+      new MutationObserver(mutations => {
+        if (mutations.some(m => m.addedNodes.length)) filterWidgets();
+      }).observe(unusedSection, { childList: true });
+
       // Async: fetch config, stamp data-apex-type on each widget, populate dropdown
       (async () => {
         try {
