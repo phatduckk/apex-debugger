@@ -3118,6 +3118,8 @@
         showWetDryConfig(el, s0);
       });
 
+    document.documentElement.setAttribute('data-apex-folder-mode', 'true');
+
     const all = collectWidgets();
     const frag = detachAllWidgets(all);
 
@@ -3132,8 +3134,6 @@
     if (s0) while (frag.firstChild) s0.appendChild(frag.firstChild);
 
     const unusedContainer = document.getElementById('dash-widget-unused');
-
-    document.documentElement.setAttribute('data-apex-folder-mode', 'true');
     activeFolder = folder.id;
     chrome.storage.local.set({ lastActiveDashboard: folder.id });
     updateFolderToggleLabel(folder);
