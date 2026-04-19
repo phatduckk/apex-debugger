@@ -3166,6 +3166,12 @@
         const icon = document.getElementById('dash-covers-icon');
         if (icon && icon.classList.contains('af-rotate-180')) {
           document.getElementById('dash-lock')?.click();
+          return;
+        }
+        // .com: Tiles button with aria-pressed="false" means drawer is closed
+        const tilesBtn = document.querySelector('#dash-lock [aria-label="Tiles"]');
+        if (tilesBtn && tilesBtn.getAttribute('aria-pressed') === 'false') {
+          tilesBtn.click();
         }
       });
     }
