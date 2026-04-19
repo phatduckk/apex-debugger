@@ -1506,6 +1506,15 @@
       #apex-glyph-grid { max-height: 276px; overflow-y: auto; display: grid;
         grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 4px;
         padding: 8px; background: #f8f8f8; border: 1px solid #dee2e6; border-radius: 4px; }
+      #apex-cleanup-footer { display: flex; align-items: center; justify-content: flex-end; padding: 10px 16px; background: #fff; border-radius: 0 0 calc(0.5rem - 1px) calc(0.5rem - 1px); }
+      #apex-cleanup-btn { background: #e07820; border: none; color: #fff; border-radius: 4px; padding: 6px 14px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+      #apex-cleanup-btn:hover { background: #c96a18; }
+      #apex-cleanup-btn:disabled { background: #ccc; cursor: default; }
+      .apex-cleanup-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 5px; margin-bottom: 6px; }
+      .apex-cleanup-item label { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 14px; color: #333; cursor: pointer; flex: 1; }
+      .apex-cleanup-item input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: #e07820; }
+      .apex-cleanup-count { margin-left: auto; font-size: 12px; color: #999; white-space: nowrap; }
+      .apex-cleanup-count.has-orphans { color: #e07820; font-weight: 600; }
       #apex-manage-folders-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: #fff; border-radius: 0 0 calc(0.5rem - 1px) calc(0.5rem - 1px); }
       #apex-folders-export-link { color: #e07820; text-decoration: none; font-size: 13px; cursor: pointer; background: none; border: none; padding: 0; }
       #apex-folders-export-link:hover { text-decoration: underline; color: #c96a18; }
@@ -3435,6 +3444,8 @@
       const apexSections = sanitizeSections(raw.apexSections);
       const apexDividers = sanitizeDividers(raw.apexDividers);
       const apexWetDry   = sanitizeWetDry(raw.apexWetDry);
+      cleanupDividers();
+      cleanupWetDry();
       liveDividers = { ...apexDividers };
       liveWetDry   = { ...apexWetDry };
       const folder = apexFolders.find(f => f.id === folderId);
@@ -3869,6 +3880,126 @@
     debugLogLines = !debugLogLines;
     console.log(`%c[Apex Debugger] Line evaluation logging ${debugLogLines ? 'ON' : 'OFF'}`, 'color:#f90;font-weight:bold');
   });
+
+  document.addEventListener('apex:cleanupStorage', () => openCleanupModal());
+
+  function openCleanupModal() {
+    const closeCleanup = () => {
+      const el = document.getElementById('apex-cleanup-modal');
+      if (el) { el.classList.remove('show'); el.style.display = 'none'; }
+      document.getElementById('apex-modal-backdrop')?.remove();
+      document.body.classList.remove('modal-open');
+    };
+
+    if (!document.getElementById('apex-cleanup-modal')) {
+      const el = document.createElement('div');
+      el.id = 'apex-cleanup-modal';
+      el.className = 'modal fade';
+      el.tabIndex = -1;
+      el.setAttribute('role', 'dialog');
+      el.innerHTML =
+        '<div class="modal-dialog modal-dialog-centered" style="max-width:400px">' +
+          '<div class="modal-content">' +
+            '<div class="modal-header">' +
+              '<h5 class="modal-title" style="display:flex;align-items:center;gap:8px">' +
+                '<i class="af af-fw" style="font-style:normal">&#xF1F8;</i> Storage Cleanup' +
+              '</h5>' +
+              '<button type="button" class="btn-close" id="apex-cleanup-close-btn"></button>' +
+            '</div>' +
+            '<div class="modal-body">' +
+              '<p style="color:#666;font-size:13px;margin-bottom:12px">Remove orphaned custom widget data — configs not referenced by any dashboard layout.</p>' +
+              '<div class="apex-cleanup-item">' +
+                '<label><input type="checkbox" id="apex-cleanup-dividers" checked>' +
+                  '<span>Dividers</span>' +
+                  '<span class="apex-cleanup-count" id="apex-cleanup-dividers-count">scanning\u2026</span>' +
+                '</label>' +
+              '</div>' +
+              '<div class="apex-cleanup-item">' +
+                '<label><input type="checkbox" id="apex-cleanup-wetdry" checked>' +
+                  '<span>Wet/Dry</span>' +
+                  '<span class="apex-cleanup-count" id="apex-cleanup-wetdry-count">scanning\u2026</span>' +
+                '</label>' +
+              '</div>' +
+            '</div>' +
+            '<hr style="margin:0">' +
+            '<div id="apex-cleanup-footer">' +
+              '<button type="button" id="apex-cleanup-btn" disabled>' +
+                '<i class="af af-fw" style="font-style:normal">&#xF1F8;</i> Clean Up' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(el);
+      el.addEventListener('click', e => { if (e.target === el) closeCleanup(); });
+      el.querySelector('#apex-cleanup-close-btn').addEventListener('click', closeCleanup);
+
+      el.querySelector('#apex-cleanup-btn').addEventListener('click', () => {
+        const cleanDividers = el.querySelector('#apex-cleanup-dividers').checked;
+        const cleanWetDry   = el.querySelector('#apex-cleanup-wetdry').checked;
+        chrome.storage.sync.get({ apexSections: {}, apexDividers: {}, apexWetDry: {} }, (raw) => {
+          const referenced = new Set(
+            Object.values(raw.apexSections).flatMap(cols => cols.flatMap(csv => csv ? csv.split(',') : []))
+          );
+          const updates = {};
+          if (cleanDividers) {
+            const cleaned = {};
+            for (const [id, val] of Object.entries(raw.apexDividers))
+              if (referenced.has(id)) cleaned[id] = val;
+            updates.apexDividers = cleaned;
+            // also strip orphaned apex_div_ refs from sections
+            const sections = {};
+            for (const [fid, cols] of Object.entries(raw.apexSections))
+              sections[fid] = cols.map(csv => (csv || '').split(',').filter(id => !id.startsWith('apex_div_') || cleaned[id]).join(','));
+            updates.apexSections = sections;
+          }
+          if (cleanWetDry) {
+            const cleaned = {};
+            for (const [id, val] of Object.entries(raw.apexWetDry))
+              if (referenced.has(id)) cleaned[id] = val;
+            updates.apexWetDry = cleaned;
+            // also strip orphaned apex_wd_ refs from sections
+            const base = updates.apexSections || raw.apexSections;
+            const sections = {};
+            for (const [fid, cols] of Object.entries(base))
+              sections[fid] = cols.map(csv => (csv || '').split(',').filter(id => !id.startsWith('apex_wd_') || cleaned[id]).join(','));
+            updates.apexSections = sections;
+          }
+          chrome.storage.sync.set(updates, () => {
+            console.log('%c[Apex Debugger] Storage cleanup complete', 'color:#e07820;font-weight:bold', updates);
+            closeCleanup();
+          });
+        });
+      });
+    }
+
+    // Scan for orphans and update counts each time modal opens
+    chrome.storage.sync.get({ apexSections: {}, apexDividers: {}, apexWetDry: {} }, (raw) => {
+      const referenced = new Set(
+        Object.values(raw.apexSections).flatMap(cols => cols.flatMap(csv => csv ? csv.split(',') : []))
+      );
+      const orphanDividers = Object.keys(raw.apexDividers).filter(id => !referenced.has(id));
+      const orphanWetDry   = Object.keys(raw.apexWetDry).filter(id => !referenced.has(id));
+
+      const divCount = document.getElementById('apex-cleanup-dividers-count');
+      const wdCount  = document.getElementById('apex-cleanup-wetdry-count');
+      divCount.textContent = orphanDividers.length ? `${orphanDividers.length} orphan${orphanDividers.length > 1 ? 's' : ''}` : 'clean';
+      wdCount.textContent  = orphanWetDry.length   ? `${orphanWetDry.length} orphan${orphanWetDry.length > 1 ? 's' : ''}`     : 'clean';
+      divCount.classList.toggle('has-orphans', orphanDividers.length > 0);
+      wdCount.classList.toggle('has-orphans',  orphanWetDry.length   > 0);
+
+      const btn = document.getElementById('apex-cleanup-btn');
+      btn.disabled = (orphanDividers.length + orphanWetDry.length) === 0;
+    });
+
+    const modal = document.getElementById('apex-cleanup-modal');
+    modal.style.display = 'block';
+    requestAnimationFrame(() => modal.classList.add('show'));
+    const backdrop = document.createElement('div');
+    backdrop.id = 'apex-modal-backdrop';
+    backdrop.className = 'modal-backdrop fade show';
+    document.body.appendChild(backdrop);
+    document.body.classList.add('modal-open');
+  }
 
   document.addEventListener('apex:showCodeDebug', () => {
     if (!env?.isConfigPage()) {
