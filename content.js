@@ -3882,7 +3882,27 @@
   chrome.storage.sync.get({ hostname: 'apex.local', beefMode: false, theme: 'default', apexFusionEnabled: false }, ({ hostname, beefMode: beef, theme, apexFusionEnabled }) => {
     beefMode = beef;
     env = buildEnv(hostname, apexFusionEnabled);
-    if (!env) return;
+
+    if (!env) {
+      // On the apex picker page (cloud SPA) — wait for navigation to an apex path
+      const retryObserver = new MutationObserver(() => {
+        env = buildEnv(hostname, apexFusionEnabled);
+        if (!env) return;
+        retryObserver.disconnect();
+        injectTheme(theme);
+        injectStyles();
+        initGutterTooltip();
+        const observer = new MutationObserver(() => {
+          try { injectButton(); injectDashIcons(); }
+          catch (_) { observer.disconnect(); }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+        injectButton();
+        injectDashIcons();
+      });
+      retryObserver.observe(document.body, { childList: true, subtree: true });
+      return;
+    }
 
     injectTheme(theme);
     injectStyles();
