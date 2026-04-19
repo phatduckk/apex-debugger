@@ -2489,13 +2489,16 @@
     document.querySelectorAll('.dash-probe-info-config').forEach(el => {
       if (el.querySelector('.apex-dash-icon')) return;
       const icon = makeIcon();
-      icon.style.cssText = 'color:#999;position:absolute;right:24px;top:50%;transform:translateY(-50%);margin:0;cursor:pointer;';
+      icon.style.cursor = 'pointer';
+      icon.style.verticalAlign = '';
       icon.addEventListener('click', e => {
         e.stopPropagation();
         const name = el.closest('.dash-probe')?.querySelector('.dash-probe-info-name')?.innerHTML ?? '';
         openProbePanel(name);
       });
-      el.appendChild(icon);
+      const cog = el.querySelector('.dash-probe-info-config-cog') ?? el.firstElementChild;
+      if (cog) cog.insertAdjacentElement('beforebegin', icon);
+      else el.appendChild(icon);
     });
 
     const unusedSection = document.getElementById('dash-section-0');
