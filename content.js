@@ -2720,7 +2720,7 @@
   function createDividerElement(id, text) {
     const el = document.createElement('div');
     el.className = 'dash-widget';
-    el.style.marginBottom = '4px';
+    el.style.marginBottom = '5px';
     el.id = id;
     el.dataset.apexWidget = 'divider';
     el.dataset.apexType   = 'divider';
