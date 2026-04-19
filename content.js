@@ -1516,6 +1516,8 @@
       .apex-cleanup-count { margin-left: auto; font-size: 12px; color: #999; white-space: nowrap; }
       .apex-cleanup-count.has-orphans { color: #e07820; font-weight: 600; }
       #apex-manage-folders-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: #fff; border-radius: 0 0 calc(0.5rem - 1px) calc(0.5rem - 1px); }
+      .apex-folder-item.apex-folder-active { background-color: #e8e8e8; }
+      .apex-folder-item.apex-folder-active:hover { background-color: #d8d8d8; }
       #apex-folders-export-link { color: #e07820; text-decoration: none; font-size: 13px; cursor: pointer; background: none; border: none; padding: 0; }
       #apex-folders-export-link:hover { text-decoration: underline; color: #c96a18; }
       #apex-folders-import-btn-styled { background: #e07820; border: none; color: #fff; border-radius: 4px; padding: 5px 12px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
@@ -3059,6 +3061,10 @@
     } else {
       toggle.innerHTML = `<i class="af af-fw apex-gp-${folder.glyph.toLowerCase()}"></i> ${folder.name}`;
     }
+    const activeId = folder ? folder.id : 'default';
+    document.querySelectorAll('.apex-folder-item').forEach(el => {
+      el.classList.toggle('apex-folder-active', el.dataset.id === activeId);
+    });
   }
 
   function collectWidgets() {
