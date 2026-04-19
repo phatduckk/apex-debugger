@@ -1713,8 +1713,8 @@
       [data-apex-widget="wetdry"] .dash-switch-slide.open::before { content: "\uF54C" !important; font-family: 'ApexFusion', var(--bs-body-font-family), sans-serif !important; display: inline-block !important; margin-right: 5px !important; }
       [data-apex-widget="wetdry"] .dash-switch-slide.open::after  { content: "DRY" !important; }
 .apex-wd-config { display: flex; align-items: center; gap: 4px; }
-      .apex-wd-config select { flex: 1; font-size: 11px; height: 22px; padding: 0 4px; min-width: 0; }
-      .apex-wd-config button { font-size: 11px; padding: 0 8px; height: 22px; white-space: nowrap; flex-shrink: 0; }
+      .apex-wd-config select { flex: 1; font-size: 13px; height: 26px; padding: 0 4px; min-width: 0; }
+      .apex-wd-config button { font-size: 13px; padding: 0 8px; height: 26px; white-space: nowrap; flex-shrink: 0; }
     `;
     document.head.appendChild(s);
   }
